@@ -7,10 +7,6 @@ A simple plugin system for Python applications
 
 .. image::  ../artwork/yapsy-big.png
 
-.. footer:: |SourceForge.net| Project hosted by `SourceForge <http://sourceforge.net>`_ .
-
-            Last revision on $Date$.
-
 .. |Yapsy| replace:: **Yapsy**
 .. |Yapsy-icon| image:: ../artwork/yapsy.png 
 .. |SourceForge.net| image:: http://sflogo.sourceforge.net/sflogo.php?group_id=203145&type=3
@@ -172,3 +168,6 @@ wanted to implement my own [#older_systems]_.
    libraries.
 
 
+.. footer:: |SourceForge.net| Project hosted by `SourceForge <http://sourceforge.net>`_ .
+
+            Last revision on $Date$.
