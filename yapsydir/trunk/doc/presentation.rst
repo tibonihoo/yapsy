@@ -130,6 +130,8 @@ functionality as in the following instance:
 
   Adds the behaviour of a singleton to the ``PluginManager`` class.
 
+And in the near futur:
+
 ``ConfigurablePluginManager`` 
 
   Implements a ``PluginManager`` that is able to use a confugration
