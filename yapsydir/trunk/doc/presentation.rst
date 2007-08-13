@@ -145,10 +145,10 @@ Development
 -----------
 
 
-|yapsy|'s development has been motivated by the `MathBench
- <http://mathbench.sourceforge.net>`_ project and its development is
- organised within `this same project on sourceforge
- <http://sourceforge.net/projects/mathbench/>`_ .
+|yapsy| 's development has been motivated by 
+the `MathBench <http://mathbench.sourceforge.net>`_ project 
+and its development is organised within 
+`this same project on sourceforge  <http://sourceforge.net/projects/mathbench/>`_ .
 
 The work is BSD licensed in order to make it as easy as possible to be
 reused in other projects. Please note that the icon is not under the
