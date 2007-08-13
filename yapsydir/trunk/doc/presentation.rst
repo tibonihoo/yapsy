@@ -14,7 +14,7 @@ A simple plugin system for Python applications
 Overview
 --------
 
-|Yapsy| basically defines two classes:
+|yapsy| basically defines two classes:
 
 - a fully functional though very simple ``PluginManager`` class
 
@@ -28,7 +28,7 @@ various categories, but this behaviour is optional and if not
 specified elseway all plugins are stored in the same default category.
 
 The provided classes have been designed in order to be as easy as
-possible to extend. If you intend to use Yapsy to build your own
+possible to extend. If you intend to use |yapsy| to build your own
 plugin system, you may be interested in the section about
 `Extensibility`_.
 
@@ -54,7 +54,7 @@ a plugin should contain the following elements:
 
    The extension is customisable at the ``PluginManager``'s
    instanciation, since one may usually prefer the extension to bear
-   the application name rather than |Yapsy|'s.
+   the application name rather than |yapsy|'s.
 
 ``myplugin.py``
 
@@ -65,7 +65,7 @@ a plugin should contain the following elements:
    
 .. note:: 
 
-   When using |Yapsy| in your own software, you'll probably want to
+   When using |yapsy| in your own software, you'll probably want to
    build derived classes of the ``IPlugin`` class as it is no much
    more that a mere interface. Your software's plugins should then
    inherit your very own plugin class (itself derived from
@@ -116,7 +116,7 @@ Here is an example of what such a file should contain::
 _`Extensibility`
 ----------------
 
-The classes defined by |Yapsy| have been build with the minimum number
+The classes defined by |yapsy| have been build with the minimum number
 of functionalities needed for them to achieve their purpose. This has
 been done in order to make it as easy as possible to extend this class
 and adapt them to any specific need.
@@ -141,13 +141,28 @@ And in the near futur:
 
   Combines the previous two functionalities.
 
+Development
+-----------
+
+
+|yapsy|'s development has been motivated by the `MathBench
+ <http://mathbench.sourceforge.net>`_ project and its development is
+ organised within `this same project on sourceforge
+ <http://sourceforge.net/projects/mathbench/>`_ .
+
+The work is BSD licensed in order to make it as easy as possible to be
+reused in other projects. Please note that the icon is not under the
+same license but under the Creative Common Share Alike license.
+
+Any suggestion and help are much welcome !
+
 
 
 _`References`
 -------------
 
 
-Other Python plugin systems already existed before |Yapsy|. |Yapsy|'s
+Other Python plugin systems already existed before |yapsy|. |yapsy|'s
 creation is by no mean a sign that these others plugin systems sucks
 :) It is just the results of me being slighlty lazy and as I had
 already a good idea of how a simple plugin system should look like, I
