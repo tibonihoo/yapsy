@@ -10,6 +10,9 @@ A simple plugin system for Python applications
 .. |Yapsy| replace:: **Yapsy**
 .. |Yapsy-icon| image:: ../artwork/yapsy.png 
 .. |SourceForge.net| image:: http://sflogo.sourceforge.net/sflogo.php?group_id=203145&type=3
+                     :alt: Sourceforge.net
+.. |CC-BYSA| image:: http://i.creativecommons.org/l/by-sa/3.0/88x31.png
+             :alt: Creative Commons License
 
 Overview
 --------
@@ -152,7 +155,7 @@ and its development is organised within
 
 The work is BSD licensed in order to make it as easy as possible to be
 reused in other projects. Please note that the icon is not under the
-same license but under the Creative Common Share Alike license.
+same license but under the Creative Common Attribution-ShareAlike license.
 
 Any suggestion and help are much welcome !
 
@@ -183,6 +186,8 @@ wanted to implement my own [#older_systems]_.
    libraries.
 
 
-.. footer:: |SourceForge.net| Project hosted by `SourceForge <http://sourceforge.net>`_ .
+.. footer:: Last revision on $Date$.
 
-            Last revision on $Date$.
+            |CC-BYSA| Some right reserved.
+
+            |SourceForge.net| Project hosted by `SourceForge <http://sourceforge.net>`_  
