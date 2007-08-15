@@ -11,6 +11,11 @@ import ConfigParser
 
 from IPlugin import IPlugin
 
+
+# A forbiden string that can later be used to describe lists of
+# plugins for instance (see ``ConfigurablePluginManager``)
+PLUGIN_NAME_FORBIDEN_STRING=";;"
+
 class PluginInfo:
 	"""
 	Gather some info about a plugin such as its name, author,
@@ -161,8 +166,13 @@ class PluginManager:
 						continue
 					if not config_parser.has_option("Core","Name") or not config_parser.has_option("Core","Module"):
 						continue
+					# check that the given name is valid
+					name = config_parser.get("Core", "Name")
+					name = name.strip()
+					if PLUGIN_NAME_FORBIDEN_STRING in name:
+						continue				
 					# start collecting essential info
-					plugin_info = PluginInfo(config_parser.get("Core", "Name"), 
+					plugin_info = PluginInfo(name, 
 											 os.path.join(dirpath,config_parser.get("Core", "Module")))
 					# collect additional (but usually quite usefull) information
 					if config_parser.has_section("Documentation"):
@@ -223,8 +233,8 @@ class PluginManager:
 					break
 			if plugin_to_activate is not None:
 				plugin_to_activate.activate()
-				return True			
-		return False
+				return plugin_to_activate			
+		return None
 
 
 	def deactivatePluginByName(self,category,name):
@@ -239,8 +249,8 @@ class PluginManager:
 					break
 			if plugin_to_deactivate is not None:
 				plugin_to_deactivate.deactivate()
-				return True			
-		return False
+				return plugin_to_deactivate			
+		return None
 
 
 class PluginManagerSingleton(PluginManager):
