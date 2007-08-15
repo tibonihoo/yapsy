@@ -107,9 +107,9 @@ Here is an example of what such a file should contain::
  Module = SimplePlugin
 
  [Documentation]
- Author = Thibauld Nion
+ Author = Thibauld
  Version = 0.1
- Website = http://tibonihoo.free.fr 
+ Website = http://mathbench.sourceforge.net 
  Description = A simple plugin usefull for basic testing
 
 
