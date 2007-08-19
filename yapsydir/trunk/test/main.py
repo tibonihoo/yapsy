@@ -15,7 +15,7 @@ import unittest
 
 # load the tests
 import test_SimplePlugin
-
+import test_ConfigPlugin
 
 
 if __name__=="__main__":
@@ -23,7 +23,7 @@ if __name__=="__main__":
 	suite = unittest.TestSuite(
 		[ # add the tests suites below
 			test_SimplePlugin.suite,
-			
+			test_ConfigPlugin.suite,
 			])
 	# launch the testing process
 	unittest.TextTestRunner(verbosity=1).run(suite)

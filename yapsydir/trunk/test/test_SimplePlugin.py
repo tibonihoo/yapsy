@@ -2,8 +2,8 @@ import test_settings
 import unittest
 import os 
 
-from PluginManager import PluginManager, PluginManagerSingleton
-from IPlugin import IPlugin
+from yapsy.PluginManager import PluginManager, PluginManagerSingleton
+#from yapsy.IPlugin import IPlugin
 
 
 class SimpleTestsCase(unittest.TestCase):
