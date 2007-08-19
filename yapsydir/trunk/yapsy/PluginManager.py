@@ -206,7 +206,11 @@ class PluginManager:
 					for element in candidate_globals.values():
 						current_category = None
 						for category_name in self.categories_interfaces.keys():
-							if issubclass(element, self.categories_interfaces[category_name]):
+							try:
+								is_correct_subclass = issubclass(element, self.categories_interfaces[category_name])
+							except:
+								continue
+							if is_correct_subclass:
 								if element is not self.categories_interfaces[category_name]:
 ##									print element
 									current_category = category_name

@@ -90,13 +90,13 @@ class ConfigurablePluginManager(PluginManager):
 		activated.
 		"""
 		# check that the section is here
-		if not self.config_parser.has_section(CONFIG_SECTION_NAME):
-			self.config_parser.add_section(CONFIG_SECTION_NAME)
+		if not self.config_parser.has_section(self.CONFIG_SECTION_NAME):
+			self.config_parser.add_section(self.CONFIG_SECTION_NAME)
 		# check that the category's list of activated plugins is here too
 		option_name = self.__getCategoryOptionsName(category_name)
-		if not self.config_parser.has_option(option_name):
+		if not self.config_parser.has_option(self.CONFIG_SECTION_NAME, option_name):
 			# if there is no list yet add a new one
-			self.config_parser.set(CONFIG_SECTION_NAME,option_name,plugin_name)
+			self.config_parser.set(self.CONFIG_SECTION_NAME,option_name,plugin_name)
 		else:
 			# get the already existing list and append the new
 			# activated plugin to it.
@@ -104,7 +104,7 @@ class ConfigurablePluginManager(PluginManager):
 			past_list = self.__getCategoryPluginsListFromConfig(past_list)
 			past_list.append(plugin_name)
 			new_list_str = self.__getCategoryPluginsConfigFromList(past_list)
-			self.config_parser.set(CONFIG_SECTION_NAME,option_name,new_list_str)
+			self.config_parser.set(self.CONFIG_SECTION_NAME,option_name,new_list_str)
 		self.config_has_changed()
 
 	def __removePluginFromConfig(self,category_name, plugin_name):
@@ -113,8 +113,8 @@ class ConfigurablePluginManager(PluginManager):
 		activated.
 		"""
 		# check that the section is here
-		if not self.config_parser.has_section(CONFIG_SECTION_NAME):
-			self.config_parser.add_section(CONFIG_SECTION_NAME)
+		if not self.config_parser.has_section(self.CONFIG_SECTION_NAME):
+			self.config_parser.add_section(self.CONFIG_SECTION_NAME)
 
 
 	def registerOptionFromPlugin(self, 
@@ -124,7 +124,11 @@ class ConfigurablePluginManager(PluginManager):
 		To be called from a plugin object, register a given option in
 		the name of a given plugin.
 		"""
-		section_name = "%s plugin: %s" % (category_name,plugin_name)
+		section_name = "%s Plugin: %s" % (category_name,plugin_name)
+		# if the plugin's section is not here yet, create it
+		if not self.config_parser.has_section(section_name):
+			self.config_parser.add_section(section_name)
+		# set the required option
 		self.config_parser.set(section_name,option_name,option_value)
 		self.config_has_changed()
 
@@ -134,7 +138,10 @@ class ConfigurablePluginManager(PluginManager):
 		To be called from a plugin object, return True if the option
 		has already been registered.
 		"""
-		section_name = "%s plugin: %s" % (category_name,plugin_name)
+		section_name = "%s Plugin: %s" % (category_name,plugin_name)
+# 		print self.config_parser.has_section(section_name)
+# 		print self.config_parser.has_option(section_name,option_name)
+# 		print self.config_parser.has_section(section_name) and self.config_parser.has_option(section_name,option_name)
 		return self.config_parser.has_section(section_name) and self.config_parser.has_option(section_name,option_name)
 
 	def readOptionFromPlugin(self, 
@@ -143,27 +150,27 @@ class ConfigurablePluginManager(PluginManager):
 		To be called from a plugin object, read a given option in
 		the name of a given plugin.
 		"""
-		section_name = "%s plugin: %s" % (category_name,plugin_name)
+		section_name = "%s Plugin: %s" % (category_name,plugin_name)
 		return self.config_parser.get(section_name,option_name)
 
 
-	def __decoratePluginObject(self, plugin_object):
+	def __decoratePluginObject(self, category_name, plugin_name, plugin_object):
 		"""
 		Add two methods to the plugin objects that will make it
 		possible for it to benefit from this class's api concerning
 		the management of the options.
 		"""
-		plugin_object.setConfigOption = lambda x,y: return self.registerOptionFromPlugin(plugin_object.category,
-																						 plugin_object.name,
-																						 x,y)
+		plugin_object.setConfigOption = lambda x,y: self.registerOptionFromPlugin(category_name,
+																				  plugin_name,
+																				  x,y)
 		plugin_object.setConfigOption.__doc__ = self.registerOptionFromPlugin.__doc__
-		plugin_object.getConfigOption = lambda x: return self.readOptionFromPlugin(plugin_object.category,
-																					 plugin_object.name,
-																					 x)
+		plugin_object.getConfigOption = lambda x: self.readOptionFromPlugin(category_name,
+																			plugin_name,
+																			x)
 		plugin_object.getConfigOption.__doc__ = self.readOptionFromPlugin.__doc__
-		plugin_object.hasConfigOption = lambda x: return self.hasOptionFromPlugin(plugin_object.category,
-																				  plugin_object.name,
-																				  x)
+		plugin_object.hasConfigOption = lambda x: self.hasOptionFromPlugin(category_name,
+																		   plugin_name,
+																		   x)
 		plugin_object.hasConfigOption.__doc__ = self.hasOptionFromPlugin.__doc__
 
 
@@ -185,7 +192,7 @@ class ConfigurablePluginManager(PluginManager):
 		if plugin_object.is_activated:
 			self.__addPluginToConfig(category_name,plugin_name)
 			# now decorate the plugin
-			self.__decoratePluginObject(plugin_object)		
+			self.__decoratePluginObject(category_name,plugin_name,plugin_object)		
 			return plugin_object
 		return None
 
@@ -197,15 +204,15 @@ class ConfigurablePluginManager(PluginManager):
 		"""
 		PluginManager.collectPlugins(self)
 		# now load the plugins according to the recorded configuration
-		if self.config_parser.has_section(CONFIG_SECTION_NAME):
+		if self.config_parser.has_section(self.CONFIG_SECTION_NAME):
 			# browse all the categories
 			for category_name in self.category_mapping.keys():
 				# get the list of plugins to be activated for this
 				# category
 				option_name = "%s_plugins_to_load"%category_name
-				if self.config_parser.has_option(CONFIG_SECTION_NAME,
+				if self.config_parser.has_option(self.CONFIG_SECTION_NAME,
 												 option_name):
-					plugin_list_str = self.config_parser.get(CONFIG_SECTION_NAME,
+					plugin_list_str = self.config_parser.get(self.CONFIG_SECTION_NAME,
 															 option_name)
 					plugin_list = self.__getPluginListFromConfig(plugin_list_str)
 					# activate all the plugins that should be
