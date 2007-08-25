@@ -266,7 +266,7 @@ class PluginManagerSingleton(PluginManager):
 
 	To call one of this class's methods you have to use the ``get``
 	method in the following way:
-	``PluginManagerSingleton.get().theclassname(theargs)``
+	``PluginManagerSingleton.get().themethodname(theargs)``
 
 	To set up the various coonfigurables variables of the
 	PluginManager's behaviour please call explicitly the following
