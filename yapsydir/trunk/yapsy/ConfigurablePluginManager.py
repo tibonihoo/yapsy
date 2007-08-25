@@ -53,16 +53,16 @@ class ConfigurablePluginManager(PluginManager):
 							   categories_filter, 
 							   directories_list, 
 							   plugin_info_ext)
-		self.setConfigParser(configparser_instance)
-		# set the (optional) fucntion to be called when the
-		# configuration is changed:
-		self.config_has_changed = config_change_trigger
+		self.setConfigParser(configparser_instance, config_change_trigger)
 
-	def setConfigParser(self,configparser_instance):
+	def setConfigParser(self,configparser_instance,config_change_trigger):
 		"""
 		Set the ConfigParser instance.
 		"""
 		self.config_parser = configparser_instance
+		# set the (optional) fucntion to be called when the
+		# configuration is changed:
+		self.config_has_changed = config_change_trigger
 		
 	def __getCategoryPluginsListFromConfig(self, plugin_list_str):
 		"""
@@ -221,3 +221,57 @@ class ConfigurablePluginManager(PluginManager):
 						self.activatePluginByName(category_name, plugin_name)
 
 				
+
+
+class ConfigurablePluginManagerSingleton(ConfigurablePluginManager):
+	"""
+	Singleton version of the configurable plugin manager
+
+	Being a singleton, this class should not be initialised
+	explicitly and the ``get``classmethod must be called instead.
+
+	To call one of this class's methods you have to use the ``get``
+	method in the following way:
+	``ConfigurablePluginManagerSingleton.get().themethodname(theargs)``
+
+	To set up the various coonfigurables variables of the
+	ConfigurablePluginManager's behaviour please call explicitly the
+	following methods:
+
+	  - ``setCategoriesFilter`` for ``categories_filter``
+	  - ``setPluginPlaces`` for ``directories_list``
+	  - ``setPluginInfoExtension`` for ``plugin_info_ext``
+	  - ``setConfigParser`` for ``config_parser``
+	"""
+	
+	__instance = None
+	
+
+	def __init__(self):
+		"""
+		Initialisation: this class should not be initialised
+		explicitly and the ``get``classmethod must be called instead.
+
+		To set up the various coonfigurables variables of the
+		ConfigurablePluginManager's behaviour please call explicitly
+		the following methods:
+
+		  - ``setCategoriesFilter`` for ``categories_filter``
+		  - ``setPluginPlaces`` for ``directories_list``
+		  - ``setPluginInfoExtension`` for ``plugin_info_ext``
+		  - ``setConfigParser`` for ``config_parser``
+		"""
+		if self.__instance is not None:
+			raise Exception("Singleton can't be created twice !")
+
+	def get(self):
+		"""
+		Actually create an instance
+		"""
+		if self.__instance is None:
+			self.__instance = ConfigurablePluginManagerSingleton()
+			# also initialise the 'inner' ConfigurablePluginManager
+			ConfigurablePluginManager.__init__(self.__instance)
+		return self.__instance
+	get = classmethod(get)
+		
