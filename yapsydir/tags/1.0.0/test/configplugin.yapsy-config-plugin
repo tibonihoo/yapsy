@@ -1,0 +1,9 @@
+[Core]
+Name = Config Plugin
+Module = ConfigPlugin
+
+[Documentation]
+Author = Thibauld Nion
+Version = 0.1
+Website = http://mathbench.sourceforge.net
+Description = A simple plugin with configuration handling
