@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
 
 """
 Defines the basic interface for a plugin manager.
@@ -36,6 +36,15 @@ class PluginInfo:
 		self.plugin_object = None
 		self.is_activated = False
 		self.category     = None
+
+	def setVersion(self, vstring):
+		"""
+		Set the version of the plugin.
+
+		Used by subclasses to provide different handling of the
+		version number.
+		"""
+		self.version = vstring
 
 class PluginManager:
 	"""
@@ -131,7 +140,7 @@ class PluginManager:
 		"""
 		return self.category_mapping[category_name]
 
-	def collectPlugins(self):
+	def collectPlugins(self, info_class=PluginInfo):
 		"""
 		Walk through the plugins' places and look for plugins.  Then
 		for each plugin candidate look for its category, load it and
@@ -172,14 +181,14 @@ class PluginManager:
 					if PLUGIN_NAME_FORBIDEN_STRING in name:
 						continue				
 					# start collecting essential info
-					plugin_info = PluginInfo(name, 
+					plugin_info = info_class(name, 
 											 os.path.join(dirpath,config_parser.get("Core", "Module")))
 					# collect additional (but usually quite usefull) information
 					if config_parser.has_section("Documentation"):
 						if config_parser.has_option("Documentation","Author"):
 							plugin_info.author	= config_parser.get("Documentation", "Author")
 						if config_parser.has_option("Documentation","Version"):
-							plugin_info.version	= config_parser.get("Documentation", "Version")
+							plugin_info.setVersion(config_parser.get("Documentation", "Version"))
 						if config_parser.has_option("Documentation","Website"): 
 							plugin_info.website	= config_parser.get("Documentation", "Website")
 						if config_parser.has_option("Documentation","Copyright"):
