@@ -16,6 +16,7 @@ import unittest
 # load the tests
 import test_SimplePlugin
 import test_ConfigPlugin
+import test_VersionedPlugin
 
 
 if __name__=="__main__":
@@ -24,6 +25,7 @@ if __name__=="__main__":
 		[ # add the tests suites below
 			test_SimplePlugin.suite,
 			test_ConfigPlugin.suite,
+			test_VersionedPlugin.suite,
 			])
 	# launch the testing process
 	unittest.TextTestRunner(verbosity=1).run(suite)
