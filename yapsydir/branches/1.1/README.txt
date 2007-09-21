@@ -19,3 +19,6 @@ Thibauld Nion
 Site of the project:
 http://mathbench.sourceforge.net/yapsy
 
+List of Contributors:
+Thibauld Nion
+Rob McMullen
