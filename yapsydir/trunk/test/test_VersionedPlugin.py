@@ -1,4 +1,4 @@
-import test_settings
+from test_settings import *
 import unittest
 import os 
 
@@ -38,7 +38,7 @@ class VersionedTestsCase(unittest.TestCase):
             plugins = self.versionedPluginManager.getPluginsOfCategory(sole_category)
             self.plugin_info = None
             for plugin_info in plugins:
-                print "plugin info: %s" % plugin_info
+                TEST_MESSAGE("plugin info: %s" % plugin_info)
                 if plugin_info.name == "Versioned Plugin":
                     self.plugin_info = plugin_info
                     break
@@ -49,7 +49,7 @@ class VersionedTestsCase(unittest.TestCase):
             
             self.assertEqual(len(self.versionedPluginManager.getLatestPluginsOfCategory(sole_category)),1)
             self.plugin_info = self.versionedPluginManager.getLatestPluginsOfCategory(sole_category)[0]
-            print "plugin info: %s" % self.plugin_info
+            TEST_MESSAGE("plugin info: %s" % self.plugin_info)
             # test that the name of the plugin has been correctly defined
             self.assertEqual(self.plugin_info.name,"Versioned Plugin")
             self.assertEqual(sole_category,self.plugin_info.category)
@@ -70,7 +70,7 @@ class VersionedTestsCase(unittest.TestCase):
         """
         self.plugin_loading_check()
         self.assert_(not self.plugin_info.plugin_object.is_activated)
-        print "plugin object = %s" % self.plugin_info.plugin_object
+        TEST_MESSAGE("plugin object = %s" % self.plugin_info.plugin_object)
         self.plugin_info.plugin_object.activate()
         self.assert_(self.plugin_info.plugin_object.is_activated)
         self.plugin_info.plugin_object.deactivate()

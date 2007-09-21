@@ -7,7 +7,7 @@
 This is certainly the second simplest plugin ever.
 """
 
-import test_settings
+from test_settings import *
 import main
 from yapsy.IPlugin import IPlugin
 
@@ -22,7 +22,7 @@ class VersionedPlugin12a1(IPlugin):
 		"""
 		# initialise parent class
 		IPlugin.__init__(self)
-		print "Version 1.2a1"
+		TEST_MESSAGE("Version 1.2a1")
 
 	def activate(self):
 		"""
@@ -30,7 +30,7 @@ class VersionedPlugin12a1(IPlugin):
 		"""
 		# get the automatic procedure from IPlugin
 		IPlugin.activate(self)
-		print "Activated Version 1.2a1!"
+		TEST_MESSAGE("Activated Version 1.2a1!")
 		return
 
 
@@ -40,4 +40,4 @@ class VersionedPlugin12a1(IPlugin):
 		tell everything's ok to the test procedure.
 		"""
 		IPlugin.deactivate(self)
-		print "Deactivated Version 1.2a1!"
+		TEST_MESSAGE("Deactivated Version 1.2a1!")
