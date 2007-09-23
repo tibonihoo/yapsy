@@ -13,6 +13,7 @@ import unittest
 
 # load the tests
 import test_SimplePlugin
+import test_Singleton
 import test_ConfigPlugin
 import test_VersionedPlugin
 
@@ -45,6 +46,7 @@ def main(argv):
 		suite = unittest.TestSuite(
 			[ # add the tests suites below
 				test_SimplePlugin.suite,
+				test_Singleton.suite,
 				test_ConfigPlugin.suite,
 				test_VersionedPlugin.suite,
 				])
