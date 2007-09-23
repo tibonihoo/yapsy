@@ -2,15 +2,38 @@
 # -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
 
 """
-Defines the basic interface for a plugin manager.
+The basic interface and implementation for a plugin manager.
+
+Also define the basic mechanism to add functionalities to the base
+PluginManager. A few "principles" to follow in this case:
+
+If the new functionalities do not overlap the ones already
+implemented, then they must be implemented as a Decorator class of the
+base plugin. This should be done by inheriting the
+``PluginManagerDecorator``.
+
+If this previous way is not possible, then the functionalities should
+be added as a subclass of ``PluginManager``.
+
+The first method is highly prefered since it makes it possible to have
+a more flexible design where one can pick several functionalities and
+litterally *add* them to get an object corresponding to one's precise
+needs.
 """
 
 import sys, os
 import logging
 import ConfigParser
+import types
 
 from IPlugin import IPlugin
 
+# def DEBUG_VERBOSE(txt):
+# 	"""
+# 	mouf
+# 	"""
+# 	print txt
+# logging.debug = DEBUG_VERBOSE
 
 # A forbiden string that can later be used to describe lists of
 # plugins for instance (see ``ConfigurablePluginManager``)
@@ -86,6 +109,7 @@ class PluginManager:
 		You may look at these function's documentation for the meaning
 		of each corresponding arguments.
 		"""
+		self.setPluginInfoClass(PluginInfo)
 		self.setCategoriesFilter(categories_filter)		
 		self.setPluginPlaces(directories_list)
 		self.setPluginInfoExtension(plugin_info_ext)
@@ -110,6 +134,20 @@ class PluginManager:
 			self.category_mapping[categ] = []
 			self._category_file_mapping[categ] = []
 			
+
+	def setPluginInfoClass(self,picls):
+		"""
+		Set the class that holds PluginInfo. The class should inherit
+		from ``PluginInfo``.
+		"""
+		self._plugin_info_cls = picls
+
+	def getPluginInfoClass(self):
+		"""
+		Get the class that holds PluginInfo. The class should inherit
+		from ``PluginInfo``.
+		"""
+		return self._plugin_info_cls
 
 	def setPluginPlaces(self, directories_list):
 		"""
@@ -140,7 +178,7 @@ class PluginManager:
 		"""
 		return self.category_mapping[category_name]
 
-	def collectPlugins(self, info_class=PluginInfo):
+	def collectPlugins(self):
 		"""
 		Walk through the plugins' places and look for plugins.  Then
 		for each plugin candidate look for its category, load it and
@@ -181,8 +219,8 @@ class PluginManager:
 					if PLUGIN_NAME_FORBIDEN_STRING in name:
 						continue				
 					# start collecting essential info
-					plugin_info = info_class(name, 
-											 os.path.join(dirpath,config_parser.get("Core", "Module")))
+					plugin_info = self._plugin_info_cls(name, 
+														os.path.join(dirpath,config_parser.get("Core", "Module")))
 					# collect additional (but usually quite usefull) information
 					if config_parser.has_section("Documentation"):
 						if config_parser.has_option("Documentation","Author"):
@@ -221,7 +259,6 @@ class PluginManager:
 								continue
 							if is_correct_subclass:
 								if element is not self.categories_interfaces[category_name]:
-##									print element
 									current_category = category_name
 									break
 						if current_category is not None:
@@ -245,6 +282,7 @@ class PluginManager:
 					plugin_to_activate = item.plugin_object
 					break
 			if plugin_to_activate is not None:
+				logging.debug("Activating plugin: %s.%s"% (category,name))
 				plugin_to_activate.activate()
 				return plugin_to_activate			
 		return None
@@ -261,12 +299,65 @@ class PluginManager:
 					plugin_to_deactivate = item.plugin_object
 					break
 			if plugin_to_deactivate is not None:
+				logging.debug("Deactivating plugin: %s.%s"% (category,name))
 				plugin_to_deactivate.deactivate()
 				return plugin_to_deactivate			
 		return None
 
 
-class PluginManagerSingleton(PluginManager):
+class PluginManagerDecorator:
+	"""
+	Make it possible to add several responsibilities to a plugin
+	manager object in a more flexible way than by mere
+	subclassing. This is indeed an implementation of the Decorator
+	Design Patterns.
+
+	
+	There is also an additional mechanism that allows for the
+	automatic creation of the object to be decorated when this object
+	is an instance of PluginManager (and not an instance of its
+	subclasses). This way we can keep the plugin managers creation
+	simple when the user don't want to mix a lot of 'enhancements' on
+	the base class.
+	"""
+
+	def __init__(self,decorated_object=None,
+				 # The following args will only be used if we need to
+				 # create a default PluginManager
+				 categories_filter={"Default":IPlugin}, 
+				 directories_list=[os.path.dirname(__file__)], 
+				 plugin_info_ext="yapsy-plugin"):
+		"""
+		Mimics the PluginManager's __init__ method and wraps an
+		instance of this class into this decorator class.
+		
+		- *If the decorated_object is not specified*, then we use the
+		  PluginManager class to create the 'base' manager, and to do
+		  so we will use the arguments: ``categories_filter``,
+		  ``directories_list``, and ``plugin_info_ext`` or their
+		  default value if they are not given.
+
+		- *If the decorated object is given*, these last arguments are
+		  simply **ignored** !
+		"""
+		
+		if decorated_object is None:
+			logging.debug("Creating a default PluginManager instance to be decorated.")
+			decorated_object = PluginManager(categories_filter, 
+											 directories_list,
+											 plugin_info_ext)
+		self._component = decorated_object
+
+	def __getattr__(self,name):
+		"""
+		Decorator trick copied from:
+		http://www.pasteur.fr/formation/infobio/python/ch18s06.html
+		"""
+		return getattr(self._component,name)
+		
+
+
+class PluginManagerSingleton:
 	"""
 	Singleton version of the most basic plugin manager.
 
@@ -288,6 +379,7 @@ class PluginManagerSingleton(PluginManager):
 	
 	__instance = None
 	
+	__decoration_chain = None
 
 	def __init__(self):
 		"""
@@ -304,15 +396,55 @@ class PluginManagerSingleton(PluginManager):
 		"""
 		if self.__instance is not None:
 			raise Exception("Singleton can't be created twice !")
+				
+	def setBehaviour(self,list_of_pmd):
+		"""
+		Set the functionalities handled by the plugin manager by
+		giving a list of PluginManager decorators.
+		
+		This function shouldn't be called several time in a same
+		process, but if it is only the first call will have an effect.
+
+		It also has an effect only if called before the initialisation
+		of the singleton.
+
+		In cases where the function is indeed going to change anything
+		the 'True' value is return, in all other cases, the 'False'
+		value is returned.
+		"""
+		if self.__decoration_chain is None and self.__instance is None:
+			logging.debug("Setting up a specific behaviour for the PluginManagerSingleton")
+			self.__decoration_chain = list_of_pmd
+			return True
+		else:
+			logging.debug("Useless call to setBehaviour: the singleton is already instanciated of already has a behaviour.")
+			return False
+	setBehaviour = classmethod(setBehaviour)
+
 
 	def get(self):
 		"""
 		Actually create an instance
 		"""
 		if self.__instance is None:
-			self.__instance = PluginManagerSingleton()
-			# also initialise the 'inner' PluginManager
-			PluginManager.__init__(self.__instance)
+			if self.__decoration_chain is not None:
+				# Get the obect to be decorated
+				pm = self.__decoration_chain[0]()
+				for cls_item in self.__decoration_chain[1:]:
+					pm = cls_item(pm)
+				# Decorate the whole object
+				self.__instance = pm
+			else:
+				# initialise the 'inner' PluginManagerDecorator
+				self.__instance = PluginManager()			
+			logging.debug("PluginManagerSingleton initialised")
 		return self.__instance
 	get = classmethod(get)
 		
+
+	def __getattr__(self,name):
+		"""
+		Decorator trick copied from:
+		http://www.pasteur.fr/formation/infobio/python/ch18s06.html
+		"""
+		return getattr(self._decorated_object,name)
