@@ -10,7 +10,7 @@ import sys, os
 import logging
 from distutils.version import StrictVersion
 
-from PluginManager import PluginManager, PluginInfo
+from PluginManager import PluginManager, PluginInfo, PluginManagerDecorator
 from IPlugin import IPlugin
 
 class VersionedPluginInfo(PluginInfo):
@@ -32,29 +32,45 @@ class VersionedPluginInfo(PluginInfo):
 		self.version = StrictVersion(vstring)
 
 
-class VersionedPluginManager(PluginManager):
+class VersionedPluginManager(PluginManagerDecorator):
 	"""
 	Manage several plugins by ordering them in several categories with
 	versioning capabilities.
 	"""
 
 	def __init__(self, 
+				 decorated_manager=None,
 				 categories_filter={"Default":IPlugin}, 
 				 directories_list=[os.path.dirname(__file__)], 
 				 plugin_info_ext="yapsy-plugin"):
 		"""
-		Initialize the mapping of the categories and set the list of
-		directories where plugins may be. This can also be set by
-		direct call the methods: 
-		  - ``setCategoriesFilter`` for ``categories_filter``
-		  - ``setPluginPlaces`` for ``directories_list``
-		  - ``setPluginInfoExtension`` for ``plugin_info_ext``
-
-		You may look at these function's documentation for the meaning
-		of each corresponding arguments.
+		Create the plugin manager and record the ConfigParser instance
+		that will be used afterwards.
+		
+		The ``config_change_trigger`` argument can be used to set a
+		specific method to call when the configuration is
+		altered. This will let the client application manage the way
+		they want the configuration to be updated (e.g. write on file
+		at each change or at precise time intervalls or whatever....)
 		"""
-		PluginManager.__init__(self, categories_filter, directories_list,
-							   plugin_info_ext)
+		# Create the base decorator class
+		PluginManagerDecorator.__init__(self,decorated_manager,
+										categories_filter,
+										directories_list,
+										plugin_info_ext)
+		# prepare the mapping of the latest version of each plugin
+		self.setPluginInfoClass(VersionedPluginInfo)
+		self._prepareVersionMapping()
+
+	def _prepareVersionMapping(self):
+		"""
+		Create a mapping that will make it possible to easily provide
+		the latest version of each plugin.
+		"""
+		self.latest_mapping = {}
+		for categ in self._component.categories_interfaces.keys():
+			self.latest_mapping[categ] = []
+		
 
 	def setCategoriesFilter(self, categories_filter):
 		"""
@@ -65,12 +81,14 @@ class VersionedPluginManager(PluginManager):
 		in which the plugins will be stored via its keys and it also
 		defines the interface tha has to be inherited by the actual
 		plugin class belonging to each category.
+
+		A call to this class will also reset the mapping of the latest
+		version for each plugin.
 		"""
-		PluginManager.setCategoriesFilter(self, categories_filter)
+		self._component.setCategoriesFilter(self, categories_filter)
 		# prepare the mapping of the latest version of each plugin
-		self.latest_mapping = {}
-		for categ in self.categories_interfaces.keys():
-			self.latest_mapping[categ] = []
+		self._prepareVersionMapping()
+
 
 	def getLatestPluginsOfCategory(self,category_name):
 		"""
@@ -84,11 +102,11 @@ class VersionedPluginManager(PluginManager):
 		for each plugin candidate look for its category, load it and
 		stores it in the appropriate slot of the category_mapping.
 		"""
-		PluginManager.collectPlugins(self, info_class=VersionedPluginInfo)
+		self._component.collectPlugins()
 		
 		# Search through all the loaded plugins to find the latest
 		# version of each.
-		for categ, items in self.category_mapping.iteritems():
+		for categ, items in self._component.category_mapping.iteritems():
 			unique_items = {}
 			for item in items:
 				if item.name in unique_items:
