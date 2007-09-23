@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
 
 """
 Defines plugin managers that can handle configuration files similar to
@@ -13,12 +13,12 @@ import ConfigParser
 from IPlugin import IPlugin
 
 
-from PluginManager import PluginManager
+from PluginManager import PluginManager,PluginManagerDecorator
 from PluginManager import PLUGIN_NAME_FORBIDEN_STRING
 
 
 
-class ConfigurablePluginManager(PluginManager):
+class ConfigurablePluginManager(PluginManagerDecorator):
 	"""
 	A plugin manager that also manages a configuration file.
 
@@ -33,27 +33,33 @@ class ConfigurablePluginManager(PluginManager):
 	
 	CONFIG_SECTION_NAME = "Plugin Management"
 
+
 	def __init__(self,
+				 configparser_instance=None,
+				 config_change_trigger= lambda x:True,
+				 decorated_manager=None,
+				 # The following args will only be used if we need to
+				 # create a default PluginManager
 				 categories_filter={"Default":IPlugin}, 
 				 directories_list=[os.path.dirname(__file__)], 
-				 plugin_info_ext="yapsy-plugin",
-				 configparser_instance=None,
-				 config_change_trigger= lambda x:True):
+				 plugin_info_ext="yapsy-plugin"):
 		"""
 		Create the plugin manager and record the ConfigParser instance
 		that will be used afterwards.
 		
-		The ``config_change_trigger``argument can be used to set a
+		The ``config_change_trigger`` argument can be used to set a
 		specific method to call when the configuration is
 		altered. This will let the client application manage the way
 		they want the configuration to be updated (e.g. write on file
 		at each change or at precise time intervalls or whatever....)
 		"""
-		PluginManager.__init__(self, 
-							   categories_filter, 
-							   directories_list, 
-							   plugin_info_ext)
+		# Create the base decorator class
+		PluginManagerDecorator.__init__(self,decorated_manager,
+										categories_filter,
+										directories_list,
+										plugin_info_ext)
 		self.setConfigParser(configparser_instance, config_change_trigger)
+
 
 	def setConfigParser(self,configparser_instance,config_change_trigger):
 		"""
@@ -139,9 +145,6 @@ class ConfigurablePluginManager(PluginManager):
 		has already been registered.
 		"""
 		section_name = "%s Plugin: %s" % (category_name,plugin_name)
-# 		print self.config_parser.has_section(section_name)
-# 		print self.config_parser.has_option(section_name,option_name)
-# 		print self.config_parser.has_section(section_name) and self.config_parser.has_option(section_name,option_name)
 		return self.config_parser.has_section(section_name) and self.config_parser.has_option(section_name,option_name)
 
 	def readOptionFromPlugin(self, 
@@ -185,7 +188,7 @@ class ConfigurablePluginManager(PluginManager):
 		can use this class's methods to register its own options.
 		"""
 		# activate the plugin
-		plugin_object = PluginManager.activatePluginByName(self,category_name,plugin_name)
+		plugin_object = self._component.activatePluginByName(category_name,plugin_name)
 		if plugin_object is None:
 			return None
 		# check the activation and then set the config option
@@ -202,11 +205,11 @@ class ConfigurablePluginManager(PluginManager):
 		for each plugin candidate look for its category, load it and
 		stores it in the appropriate slot of the category_mapping.
 		"""
-		PluginManager.collectPlugins(self)
+		self._component.collectPlugins()
 		# now load the plugins according to the recorded configuration
 		if self.config_parser.has_section(self.CONFIG_SECTION_NAME):
 			# browse all the categories
-			for category_name in self.category_mapping.keys():
+			for category_name in self._component.category_mapping.keys():
 				# get the list of plugins to be activated for this
 				# category
 				option_name = "%s_plugins_to_load"%category_name
@@ -218,60 +221,8 @@ class ConfigurablePluginManager(PluginManager):
 					# activate all the plugins that should be
 					# activated
 					for plugin_name in plugin_list:
-						self.activatePluginByName(category_name, plugin_name)
+						self._component.activatePluginByName(category_name, plugin_name)
 
 				
 
-
-class ConfigurablePluginManagerSingleton(ConfigurablePluginManager):
-	"""
-	Singleton version of the configurable plugin manager
-
-	Being a singleton, this class should not be initialised
-	explicitly and the ``get``classmethod must be called instead.
-
-	To call one of this class's methods you have to use the ``get``
-	method in the following way:
-	``ConfigurablePluginManagerSingleton.get().themethodname(theargs)``
-
-	To set up the various coonfigurables variables of the
-	ConfigurablePluginManager's behaviour please call explicitly the
-	following methods:
-
-	  - ``setCategoriesFilter`` for ``categories_filter``
-	  - ``setPluginPlaces`` for ``directories_list``
-	  - ``setPluginInfoExtension`` for ``plugin_info_ext``
-	  - ``setConfigParser`` for ``config_parser``
-	"""
-	
-	__instance = None
-	
-
-	def __init__(self):
-		"""
-		Initialisation: this class should not be initialised
-		explicitly and the ``get``classmethod must be called instead.
-
-		To set up the various coonfigurables variables of the
-		ConfigurablePluginManager's behaviour please call explicitly
-		the following methods:
-
-		  - ``setCategoriesFilter`` for ``categories_filter``
-		  - ``setPluginPlaces`` for ``directories_list``
-		  - ``setPluginInfoExtension`` for ``plugin_info_ext``
-		  - ``setConfigParser`` for ``config_parser``
-		"""
-		if self.__instance is not None:
-			raise Exception("Singleton can't be created twice !")
-
-	def get(self):
-		"""
-		Actually create an instance
-		"""
-		if self.__instance is None:
-			self.__instance = ConfigurablePluginManagerSingleton()
-			# also initialise the 'inner' ConfigurablePluginManager
-			ConfigurablePluginManager.__init__(self.__instance)
-		return self.__instance
-	get = classmethod(get)
 		
