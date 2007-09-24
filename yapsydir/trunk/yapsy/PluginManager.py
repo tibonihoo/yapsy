@@ -39,7 +39,7 @@ from IPlugin import IPlugin
 # plugins for instance (see ``ConfigurablePluginManager``)
 PLUGIN_NAME_FORBIDEN_STRING=";;"
 
-class PluginInfo:
+class PluginInfo(object):
 	"""
 	Gather some info about a plugin such as its name, author,
 	description...
@@ -69,7 +69,7 @@ class PluginInfo:
 		"""
 		self.version = vstring
 
-class PluginManager:
+class PluginManager(object):
 	"""
 	Manage several plugins by ordering them in several categories.
 
@@ -305,7 +305,7 @@ class PluginManager:
 		return None
 
 
-class PluginManagerDecorator:
+class PluginManagerDecorator(object):
 	"""
 	Make it possible to add several responsibilities to a plugin
 	manager object in a more flexible way than by mere
@@ -357,7 +357,7 @@ class PluginManagerDecorator:
 		
 
 
-class PluginManagerSingleton:
+class PluginManagerSingleton(object):
 	"""
 	Singleton version of the most basic plugin manager.
 
