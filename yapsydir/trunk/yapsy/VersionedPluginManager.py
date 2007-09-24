@@ -97,7 +97,7 @@ class VersionedPluginManager(PluginManagerDecorator):
 # 		print "%s.getLatestPluginsOfCategory" % self.__class__
 		return self.latest_mapping[category_name]
 
-	def loadPlugins(self):
+	def loadPlugins(self, callback=None):
 		"""
 		Load the candidate plugins that have been identified through a
 		previous call to locatePlugins.
@@ -106,7 +106,7 @@ class VersionedPluginManager(PluginManagerDecorator):
 		needs to find the latest version of each plugin.
 		"""
 # 		print "%s.loadPlugins" % self.__class__
-		self._component.loadPlugins()
+		self._component.loadPlugins(callback)
 		
 		# Search through all the loaded plugins to find the latest
 		# version of each.
