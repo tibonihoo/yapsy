@@ -94,15 +94,19 @@ class VersionedPluginManager(PluginManagerDecorator):
 		"""
 		Return the list of all plugins belonging to a category.
 		"""
+# 		print "%s.getLatestPluginsOfCategory" % self.__class__
 		return self.latest_mapping[category_name]
 
-	def collectPlugins(self):
+	def loadPlugins(self):
 		"""
-		Walk through the plugins' places and look for plugins.  Then
-		for each plugin candidate look for its category, load it and
-		stores it in the appropriate slot of the category_mapping.
+		Load the candidate plugins that have been identified through a
+		previous call to locatePlugins.
+
+		In addition to the baseclass functionality, this subclass also
+		needs to find the latest version of each plugin.
 		"""
-		self._component.collectPlugins()
+# 		print "%s.loadPlugins" % self.__class__
+		self._component.loadPlugins()
 		
 		# Search through all the loaded plugins to find the latest
 		# version of each.

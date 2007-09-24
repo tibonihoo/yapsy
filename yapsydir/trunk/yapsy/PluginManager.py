@@ -178,12 +178,14 @@ class PluginManager(object):
 		"""
 		return self.category_mapping[category_name]
 
-	def collectPlugins(self):
+	def locatePlugins(self):
 		"""
-		Walk through the plugins' places and look for plugins.  Then
-		for each plugin candidate look for its category, load it and
-		stores it in the appropriate slot of the category_mapping.
+		Walk through the plugins' places and look for plugins.
+
+		Return the number of plugins found.
 		"""
+# 		print "%s.locatePlugins" % self.__class__
+		self._candidates = []
 		for directory in map(os.path.abspath,self.plugins_places):
 			# first of all, is it a directory :)
 			if not os.path.isdir(directory):
@@ -239,37 +241,75 @@ class PluginManager(object):
 						candidate_filepath = os.path.join(plugin_info.path,"__init__.py")
 					else:
 						candidate_filepath = plugin_info.path
-					# now execute the file and get its content into a
-					# specific dictionnary
-					candidate_globals = {}
+					self._candidates.append((candidate_infofile, candidate_filepath, plugin_info))
+		return len(self._candidates)
+
+	def loadPlugins(self, callback=None):
+		"""
+		Load the candidate plugins that have been identified through a
+		previous call to locatePlugins.  For each plugin candidate
+		look for its category, load it and store it in the appropriate
+		slot of the category_mapping.
+
+		If a callback function is specified, call it before every load
+		attempt.  The plugin_info instance is passed as an argument to
+		the callback.
+		"""
+# 		print "%s.loadPlugins" % self.__class__		
+		if not hasattr(self, '_candidates'):
+			raise ValueError("locatePlugins must be called before loadPlugins")
+
+		for candidate_infofile, candidate_filepath, plugin_info in self._candidates:
+			# if a callback exists, call it before attempting to load
+			# the plugin so that a message can be displayed to the
+			# user
+			if callback is not None:
+				callback(plugin_info)
+
+			# now execute the file and get its content into a
+			# specific dictionnary
+			candidate_globals = {}
+			try:
+				execfile(candidate_filepath+".py",candidate_globals)
+			except Exception,e:
+				logging.debug("Unable to execute the code in plugin: %s" % candidate_filepath)
+				logging.debug("\t The following problem occured: %s %s " % (os.linesep, e))
+
+			# now try to find and initialise the first subclass of the correct plugin interface
+			for element in candidate_globals.values():
+				current_category = None
+				for category_name in self.categories_interfaces.keys():
 					try:
-						execfile(candidate_filepath+".py",candidate_globals)
-					except Exception,e:
-						logging.debug("Unable to execute the code in plugin: %s" % candidate_filepath)
-						logging.debug("\t The following problem occured: %s %s " % (os.linesep, e))
-
-
-					# now try to find and initialise the first subclass of the correct plugin interface
-					for element in candidate_globals.values():
-						current_category = None
-						for category_name in self.categories_interfaces.keys():
-							try:
-								is_correct_subclass = issubclass(element, self.categories_interfaces[category_name])
-							except:
-								continue
-							if is_correct_subclass:
-								if element is not self.categories_interfaces[category_name]:
-									current_category = category_name
-									break
-						if current_category is not None:
-							if not (candidate_infofile in self._category_file_mapping[current_category]): 
-								# we found a new plugin: initialise it and search for the next one
-								plugin_info.plugin_object = element()
-								plugin_info.category = current_category
-								self.category_mapping[current_category].append(plugin_info)
-								self._category_file_mapping[current_category].append(candidate_infofile)
-								current_category = None
+						is_correct_subclass = issubclass(element, self.categories_interfaces[category_name])
+					except:
+						continue
+					if is_correct_subclass:
+						if element is not self.categories_interfaces[category_name]:
+							current_category = category_name
 							break
+				if current_category is not None:
+					if not (candidate_infofile in self._category_file_mapping[current_category]): 
+						# we found a new plugin: initialise it and search for the next one
+						plugin_info.plugin_object = element()
+						plugin_info.category = current_category
+						self.category_mapping[current_category].append(plugin_info)
+						self._category_file_mapping[current_category].append(candidate_infofile)
+						current_category = None
+					break
+
+		# Remove candidates list since we don't need them any more and
+		# don't need to take up the space
+		delattr(self, '_candidates')
+
+	def collectPlugins(self):
+		"""
+		Walk through the plugins' places and look for plugins.  Then
+		for each plugin candidate look for its category, load it and
+		stores it in the appropriate slot of the category_mapping.
+		"""
+# 		print "%s.collectPlugins" % self.__class__		
+		self.locatePlugins()
+		self.loadPlugins()
 
 	def activatePluginByName(self,category,name):
 		"""
@@ -353,8 +393,21 @@ class PluginManagerDecorator(object):
 		Decorator trick copied from:
 		http://www.pasteur.fr/formation/infobio/python/ch18s06.html
 		"""
+# 		print "looking for %s in %s" % (name, self.__class__)
 		return getattr(self._component,name)
 		
+		
+	def collectPlugins(self):
+		"""
+		This function will usually be a shortcut to successively call
+		``self.locatePlugins`` and then ``self.loadPlugins`` which are
+		very likely to be redefined in each new decorator.
+
+		So in order for this to keep on being a "shortcut" and not a
+		real pain, I'm redefining it here.
+		"""
+		self.locatePlugins()
+		self.loadPlugins()
 
 
 class PluginManagerSingleton(object):
@@ -440,11 +493,3 @@ class PluginManagerSingleton(object):
 			logging.debug("PluginManagerSingleton initialised")
 		return self.__instance
 	get = classmethod(get)
-		
-
-	def __getattr__(self,name):
-		"""
-		Decorator trick copied from:
-		http://www.pasteur.fr/formation/infobio/python/ch18s06.html
-		"""
-		return getattr(self._decorated_object,name)
