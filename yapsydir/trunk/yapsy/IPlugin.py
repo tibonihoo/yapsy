@@ -17,7 +17,7 @@ plugin interfaces that inherit the following interfaces.
 """
 
 
-class IPlugin:
+class IPlugin(object):
 	"""
 	The most simple interface to be inherited when creating a plugin.
 	"""
