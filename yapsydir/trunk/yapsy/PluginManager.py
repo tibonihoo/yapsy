@@ -56,6 +56,7 @@ class PluginInfo(object):
 		self.version	= "?.?"
 		self.website	= "None"
 		self.copyright	= "Unknown"
+		self.description = ""
 		self.plugin_object = None
 		self.is_activated = False
 		self.category     = None
@@ -233,6 +234,8 @@ class PluginManager(object):
 							plugin_info.website	= config_parser.get("Documentation", "Website")
 						if config_parser.has_option("Documentation","Copyright"):
 							plugin_info.copyright	= config_parser.get("Documentation", "Copyright")
+						if config_parser.has_option("Documentation","Description"):
+							plugin_info.description = config_parser.get("Documentation", "Description")
 					
 					# now determine the path of the file to execute,
 					# depending on wether the path indicated is a
