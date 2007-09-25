@@ -199,7 +199,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 			return plugin_object
 		return None
 
-	def loadPlugins(self):
+	def loadPlugins(self,callback=None):
 		"""
 		Walk through the plugins' places and look for plugins.  Then
 		for each plugin candidate look for its category, load it and
