@@ -10,6 +10,8 @@ import sys
 import os 
 import getopt
 import unittest
+import logging
+
 
 # load the tests
 import test_SimplePlugin
@@ -22,10 +24,15 @@ def usage():
 	"""
 	Show/explain the options.
 	"""
-	return """python [OPTIONS] main.py
+	return """python main.py [OPTIONS]
+
 Options:
 
-- or --help Print this help text
+	-h or --help Print this help text
+
+	-d Switch the logger to DEBUG mode.
+
+	-v Switch the test to verbose mode.
 """
 
 
@@ -34,28 +41,38 @@ def main(argv):
 	Launch all the test.
 	"""
 	try:                                
-		opts, args = getopt.getopt(argv, "vh", ["help"])
+		opts, args = getopt.getopt(argv[1:], "vdh", ["help"])
 	except getopt.GetoptError:
 		print usage()
 		sys.exit(2)	
-		
-	if opts in ("h","help"):
-		print usage()
-	else:
-		# add them to a common test suite
-		suite = unittest.TestSuite(
-			[ # add the tests suites below
-				test_SimplePlugin.suite,
-				test_Singleton.suite,
-				test_ConfigPlugin.suite,
-				test_VersionedPlugin.suite,
-				])
-		# launch the testing process
-		unittest.TextTestRunner(verbosity=1).run(suite)
+	loglevel = logging.ERROR
+	test_verbosity = 1
+	for o,a in opts:
+		if o in ("-h","--help"):
+			print usage()
+			sys.exit(0)
+		elif o == "-d":
+			loglevel = logging.DEBUG
+		elif o == "-v":
+			test_verbosity = 2
+	logging.basicConfig(level= loglevel,
+						format='%(asctime)s %(levelname)s %(message)s')
+	
+	# add them to a common test suite
+	suite = unittest.TestSuite(
+		[ # add the tests suites below
+			test_SimplePlugin.suite,
+			test_Singleton.suite,
+			test_ConfigPlugin.suite,
+			test_VersionedPlugin.suite,
+			])
+	# launch the testing process
+	unittest.TextTestRunner(verbosity=test_verbosity).run(suite)
 	
 
 	
 if __name__=="__main__":
 	main(sys.argv)
+	
 
 		
