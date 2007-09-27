@@ -28,12 +28,6 @@ import types
 
 from IPlugin import IPlugin
 
-# def DEBUG_VERBOSE(txt):
-# 	"""
-# 	mouf
-# 	"""
-# 	print txt
-# logging.debug = DEBUG_VERBOSE
 
 # A forbiden string that can later be used to describe lists of
 # plugins for instance (see ``ConfigurablePluginManager``)
@@ -58,8 +52,15 @@ class PluginInfo(object):
 		self.copyright	= "Unknown"
 		self.description = ""
 		self.plugin_object = None
-		self.is_activated = False
 		self.category     = None
+
+	def _getIsActivated(self):
+		"""
+		Return the activated state of the plugin object.
+		Makes it possible to define a property.
+		"""
+		return self.plugin_object.is_activated
+	is_activated = property(fget=_getIsActivated)
 
 	def setVersion(self, vstring):
 		"""
