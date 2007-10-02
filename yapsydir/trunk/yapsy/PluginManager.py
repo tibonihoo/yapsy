@@ -242,7 +242,7 @@ class PluginManager(object):
 					# depending on wether the path indicated is a
 					# directory or a file
 					if os.path.isdir(plugin_info.path):
-						candidate_filepath = os.path.join(plugin_info.path,"__init__.py")
+						candidate_filepath = os.path.join(plugin_info.path,"__init__")
 					else:
 						candidate_filepath = plugin_info.path
 					self._candidates.append((candidate_infofile, candidate_filepath, plugin_info))
@@ -272,7 +272,7 @@ class PluginManager(object):
 
 			# now execute the file and get its content into a
 			# specific dictionnary
-			candidate_globals = {}
+			candidate_globals = {"__file__":candidate_filepath+".py"}
 			try:
 				execfile(candidate_filepath+".py",candidate_globals)
 			except Exception,e:
