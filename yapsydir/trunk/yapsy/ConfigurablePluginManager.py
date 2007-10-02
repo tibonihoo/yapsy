@@ -29,6 +29,10 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 	sections for some plugins that will start with [Plugin:***] (only
 	the plugins that explicitly requires to save configuration options
 	will have this kind of section).
+
+	*Warning* when giving/building the list of plugins to activate by
+     default, there must not be any space in the list (neither in the
+     names nor in between)
 	"""
 	
 	CONFIG_SECTION_NAME = "Plugin Management"
@@ -75,7 +79,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 		Parse the string describing the list of plugins to activate,
 		to discover their actual names and return them.
 		"""
-		return plugin_list_str.strip(" %s"%PLUGIN_NAME_FORBIDEN_STRING)
+		return plugin_list_str.strip(" ").split("%s"%PLUGIN_NAME_FORBIDEN_STRING)
 
 	def __getCategoryPluginsConfigFromList(self, plugin_list):
 		"""
@@ -217,7 +221,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 												 option_name):
 					plugin_list_str = self.config_parser.get(self.CONFIG_SECTION_NAME,
 															 option_name)
-					plugin_list = self.__getPluginListFromConfig(plugin_list_str)
+					plugin_list = self.__getCategoryPluginsListFromConfig(plugin_list_str)
 					# activate all the plugins that should be
 					# activated
 					for plugin_name in plugin_list:
