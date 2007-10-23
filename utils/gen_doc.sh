@@ -5,17 +5,20 @@
 export PYTHONPATH=$HOME/libs/docutils-0.4:$HOME/libs/docutils-0.4/extras:$PYTHONPATH
 
 # the sources of all sources
-PROJECT_CODE_REPOS=https://yapsy.svn.sourceforge.net/svnroot/yapsy
-YAPSY_SRC_REPO=yapsydir/trunk/
+PROJECT_CODE_REPOS=https://yapsy.svn.sourceforge.net/svnroot/yapsy/yapsydir
+SRC_BRANCH=trunk/
 
 # the destination of the doc
 DOC_DEST=/home/groups/y/ya/yapsy/htdocs
-YAPSY_DEST=yapsy
 
-# get the latest version of the docs
-svn co $PROJECT_CODE_REPOS/$YAPSY_SRC_REPO/doc $DOC_DEST/$YAPSY_DEST/doc
-svn co  $PROJECT_CODE_REPOS/$YAPSY_SRC_REPO/artwork $DOC_DEST/$YAPSY_DEST/artwork
+# get the latest version of the docs (yapsy is not big hence that should be ok to doanload it all)
+install -d $DOC_DEST/src
+svn co $PROJECT_CODE_REPOS/$SRC_BRANCH/yapsy $DOC_DEST/src/
 
 # generate the doc
-cd $DOC_DEST/$YAPSY_DEST/doc && for f in `ls *rst`; do rst2html $f `basename $f .rst`.html; done;
+cd $DOC_DEST && epydoc -o epydoc --no-frames --name=yapsy --url=http://yapsy.sourceforge.net yapsy
+
+rm -r $DOC_DEST/src
+
+
 
