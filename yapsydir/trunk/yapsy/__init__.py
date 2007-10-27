@@ -10,8 +10,8 @@ A simple plugin system for Python applications
 
 .. |Yapsy| replace:: **Yapsy**
 .. |Yapsy-icon| image:: artwork/yapsy.png 
-.. |SourceForge.net| image:: http://sflogo.sourceforge.net/sflogo.php?group_id=203145&type=3
-                     :alt: Sourceforge.net
+.. |SourceForge.net| image:: http://sflogo.sourceforge.net/sflogo.php?group_id=208383&type=5
+                     :alt: SourceForge.net
 .. |CC-BYSA| image:: http://i.creativecommons.org/l/by-sa/3.0/88x31.png
              :alt: Creative Commons License
 
@@ -27,8 +27,7 @@ a lot of libraries. Yapsy only depends on Python's standard library.
 
 - a fully functional though very simple ``PluginManager`` class
 
-- an interface ``IPlugin`` for classes implementing plugins for this
-  PluginManager.
+- an interface ``IPlugin`` for classes implementing plugins for this PluginManager.
 
 The ``PluginManager`` will load plugins that enforce the `Plugin
 Description Policy`_, and offer the most simple methods to activate
@@ -42,9 +41,8 @@ plugin system, you may be interested in the section about
 `Extensibility`_.
 
 
-_`Plugin Description Policy`
-----------------------------
-
+Plugin Description Policy
+-------------------------
 
 When creating a ``PluginManager`` instance, one should provide it with
 a list of directories where plugins may be found. In each directory,
@@ -96,8 +94,8 @@ a plugin should contain the following elements:
 
 
 
-_`Plugin Info File Format`
---------------------------
+Plugin Info File Format
+-----------------------
 
 
 The plugin info file gathers, as its name suggests, some basic
@@ -116,12 +114,12 @@ Here is an example of what such a file should contain::
  [Documentation]
  Author = Thibauld
  Version = 0.1
- Website = http://mathbench.sourceforge.net 
+ Website = http://yapsy.sourceforge.net 
  Description = A simple plugin usefull for basic testing
 
 
-_`Extensibility`
-----------------
+Extensibility
+-------------
 
 The classes defined by |yapsy| have been build with the minimum number
 of functionalities needed for them to achieve their purpose. This has
@@ -141,8 +139,10 @@ And in the near futur:
 ``ConfigurablePluginManager`` 
 
   Implements a ``PluginManager`` that is able to use a confugration
-  file through an interface compatible with the standard `ConfigParser
-  <http://docs.python.org/lib/module-ConfigParser.html>`_ module.
+  file through an interface compatible with the standard ConfigParser_
+  module.
+
+.. _ConfigParser: http://docs.python.org/lib/module-ConfigParser.html
 
 ``ConfigurablePluginManagerSingleton``
 
@@ -152,10 +152,15 @@ Development
 -----------
 
 
-|yapsy| 's development has been motivated by 
-the `MathBench <http://mathbench.sourceforge.net>`_ project 
-and its development is organised within 
-`this same project on sourceforge  <http://sourceforge.net/projects/mathbench/>`_ .
+|yapsy| 's development has been motivated by the MathBench_ project
+but it is now used in other (more advanced) projects like peppy_.
+
+.. _MathBench: http://mathbench.sourceforge.net
+.. _peppy: http://www.flipturn.org/peppy/
+
+Its development is hosted `on Sourceforge`_.
+
+.. _`on Sourceforge`: http://sourceforge.net/projects/yapsy/
 
 The work is BSD licensed in order to make it as easy as possible to be
 reused in other projects. Please note that the icon is not under the
@@ -164,8 +169,8 @@ same license but under the Creative Common Attribution-ShareAlike license.
 Any suggestion and help are much welcome !
 
 
-_`References`
--------------
+References
+----------
 
 
 Other Python plugin systems already existed before |yapsy|. |yapsy|'s
@@ -175,23 +180,35 @@ already a good idea of how a simple plugin system should look like, I
 wanted to implement my own [#older_systems]_.
 
 
-- `Sprinkles <http://termie.pbwiki.com/SprinklesPy>`_ seems to be also
-  quite lightweight and simple but just maybe too far away from the
-  design I had in mind.
+- setuptools_ seems to be designed to allow applications to have a
+  plugin system.
 
-- `PlugBoard <http://developer.berlios.de/projects/plugboard/>`_
-  Certainly quite good also but too complex for me. It also depends on
-  zope which considered what I want to do here is way too much.
+.. _setuptools: http://cheeseshop.python.org/pypi/setuptools 
 
+
+- Sprinkles_ seems to be also quite lightweight and simple but just
+  maybe too far away from the design I had in mind.
+
+.. _Sprinkles: http://termie.pbwiki.com/SprinklesPy 
+
+
+- PlugBoard_ is certainly quite good also but too complex for me. It also
+  depends on zope which considered what I want to do here is way too
+  much.
+
+.. _PlugBoard: http://developer.berlios.de/projects/plugboard/ 
 
 .. [#older_systems] All the more because it seems that my modest
    design ideas slightly differ from what has been done in other
    libraries.
 
+----------
 
-|CC-BYSA| Some right reserved.
+Project hosted by SourceForge_
 
-|SourceForge.net| Project hosted by `SourceForge <http://sourceforge.net>`_  
+|SourceForge.net| 
+
+.. _SourceForge: http://sourceforge.net
 
 """
 

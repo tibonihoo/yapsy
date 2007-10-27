@@ -82,18 +82,16 @@ class PluginManager(object):
 	The file describing a plugin should be written in the sytax
 	compatible with Python's ConfigParser module as in the following
 	example:
-	
-	'
-	 [Core Information]
-	 Name= My plugin Name
-	 Module=the_name_of_the_pluginto_load_with_no_py_ending
-
-	 [Documentation]
-	 Description=What my plugin broadly does
-	 Author= My very own name
-	 Website= My very own website
-	 Version=the_version_number_of_the_plugin	
-    '
+	::
+	  [Core Information]
+	  Name= My plugin Name
+	  Module=the_name_of_the_pluginto_load_with_no_py_ending
+       
+	  [Documentation]
+	  Description=What my plugin broadly does
+	  Author= My very own name
+	  Website= My very own website
+	  Version=the_version_number_of_the_plugin
 	"""
 
 	def __init__(self, 
@@ -375,14 +373,14 @@ class PluginManagerDecorator(object):
 		Mimics the PluginManager's __init__ method and wraps an
 		instance of this class into this decorator class.
 		
-		- *If the decorated_object is not specified*, then we use the
-		  PluginManager class to create the 'base' manager, and to do
-		  so we will use the arguments: ``categories_filter``,
-		  ``directories_list``, and ``plugin_info_ext`` or their
-		  default value if they are not given.
+		  - *If the decorated_object is not specified*, then we use the
+		    PluginManager class to create the 'base' manager, and to do
+		    so we will use the arguments: ``categories_filter``,
+		    ``directories_list``, and ``plugin_info_ext`` or their
+		    default value if they are not given.
 
-		- *If the decorated object is given*, these last arguments are
-		  simply **ignored** !
+		  - *If the decorated object is given*, these last arguments are
+		    simply **ignored** !
 		"""
 		
 		if decorated_object is None:

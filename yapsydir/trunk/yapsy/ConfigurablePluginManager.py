@@ -31,8 +31,8 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 	will have this kind of section).
 
 	*Warning* when giving/building the list of plugins to activate by
-     default, there must not be any space in the list (neither in the
-     names nor in between)
+	default, there must not be any space in the list (neither in the
+	names nor in between)
 	"""
 	
 	CONFIG_SECTION_NAME = "Plugin Management"
