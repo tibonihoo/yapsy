@@ -26,7 +26,8 @@ class ConfigTestCase(unittest.TestCase):
 		self.plugin_info = None
 		# create the plugin manager
 		self.pluginManager = ConfigurablePluginManager(
-			directories_list=[os.path.dirname(os.path.abspath(__file__))],
+			directories_list=[os.path.join(
+					os.path.dirname(os.path.abspath(__file__)),"plugins")],
 			plugin_info_ext="yapsy-config-plugin",
 			configparser_instance=self.config_parser,
 			config_change_trigger=self.update_config)
@@ -48,7 +49,8 @@ class ConfigTestCase(unittest.TestCase):
 		self.assert_(self.config_parser.has_option("Plugin Management", 
 												   "default_plugins_to_load"))
 		self.pluginManager = ConfigurablePluginManager(
-			directories_list=[os.path.dirname(os.path.abspath(__file__))],
+			directories_list=[os.path.join(
+					os.path.dirname(os.path.abspath(__file__)),"plugins")],
 			plugin_info_ext="yapsy-config-plugin",
 			configparser_instance=self.config_parser,
 			config_change_trigger=self.update_config)

@@ -16,7 +16,9 @@ class SimpleTestsCase(unittest.TestCase):
 		init
 		"""
 		# create the plugin manager
-		self.simplePluginManager = PluginManager(directories_list=[os.path.dirname(os.path.abspath(__file__))])
+		self.simplePluginManager = PluginManager(directories_list=[
+				os.path.join(
+					os.path.dirname(os.path.abspath(__file__)),"plugins")])
 		# load the plugins that may be found
 		self.simplePluginManager.collectPlugins()
 		# Will be used later
