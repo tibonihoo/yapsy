@@ -13,12 +13,7 @@ import unittest
 import logging
 
 
-# load the tests
-import test_SimplePlugin
-import test_Singleton
-import test_ConfigPlugin
-import test_VersionedPlugin
-
+from test_All import MainTestSuite
 
 def usage():
 	"""
@@ -58,16 +53,8 @@ def main(argv):
 	logging.basicConfig(level= loglevel,
 						format='%(asctime)s %(levelname)s %(message)s')
 	
-	# add them to a common test suite
-	suite = unittest.TestSuite(
-		[ # add the tests suites below
-			test_SimplePlugin.suite,
-			test_Singleton.suite,
-			test_ConfigPlugin.suite,
-			test_VersionedPlugin.suite,
-			])
 	# launch the testing process
-	unittest.TextTestRunner(verbosity=test_verbosity).run(suite)
+	unittest.TextTestRunner(verbosity=test_verbosity).run(MainTestSuite)
 	
 
 	
