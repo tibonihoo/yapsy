@@ -96,7 +96,7 @@ class PluginManager(object):
 
 	def __init__(self, 
 				 categories_filter={"Default":IPlugin}, 
-				 directories_list=[os.path.dirname(__file__)], 
+				 directories_list=None, 
 				 plugin_info_ext="yapsy-plugin"):
 		"""
 		Initialize the mapping of the categories and set the list of
@@ -153,6 +153,8 @@ class PluginManager(object):
 		"""
 		Set the list of directories where to look for plugin places.
 		"""
+		if directories_list is None:
+			directories_list = [os.path.dirname(__file__)]
 		self.plugins_places = directories_list
 
 	def setPluginInfoExtension(self,plugin_info_ext):
