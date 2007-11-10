@@ -313,16 +313,24 @@ class PluginManager(object):
 		self.locatePlugins()
 		self.loadPlugins()
 
+
+	def getPluginByName(self,category,name):
+		"""
+		Get the plugin correspoding to a given category and name
+		"""
+		if self.category_mapping.has_key(category):
+			for item in self.category_mapping[category]:
+				if item.name == name:
+					return item
+		return None
+
 	def activatePluginByName(self,category,name):
 		"""
 		Activate a plugin corresponding to a given category + name.
 		"""
-		if self.category_mapping.has_key(category):
-			plugin_to_activate = None
-			for item in self.category_mapping[category]:
-				if item.name == name:
-					plugin_to_activate = item.plugin_object
-					break
+		pta_item = self.getPluginByName(category,name)
+		if pta_item is not None:
+			plugin_to_activate = pta_item.plugin_object
 			if plugin_to_activate is not None:
 				logging.debug("Activating plugin: %s.%s"% (category,name))
 				plugin_to_activate.activate()
