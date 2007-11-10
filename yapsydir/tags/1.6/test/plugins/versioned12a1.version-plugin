@@ -1,0 +1,9 @@
+[Core]
+Name = Versioned Plugin
+Module = VersionedPlugin12a1
+
+[Documentation]
+Author = Rob McMullen
+Version = 1.2a1
+Website = http://mathbench.sourceforge.net
+Description = A simple plugin for version testing
