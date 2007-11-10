@@ -22,7 +22,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "Yapsy",
-    version = "1.5",
+    version = "1.6",
     packages = find_packages(),
 
 	# the unit tests
