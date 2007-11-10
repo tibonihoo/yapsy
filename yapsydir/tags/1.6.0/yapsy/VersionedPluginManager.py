@@ -41,7 +41,7 @@ class VersionedPluginManager(PluginManagerDecorator):
 	def __init__(self, 
 				 decorated_manager=None,
 				 categories_filter={"Default":IPlugin}, 
-				 directories_list=[os.path.dirname(__file__)], 
+				 directories_list=None, 
 				 plugin_info_ext="yapsy-plugin"):
 		"""
 		Create the plugin manager and record the ConfigParser instance
