@@ -107,15 +107,18 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 		if not self.config_parser.has_option(self.CONFIG_SECTION_NAME, option_name):
 			# if there is no list yet add a new one
 			self.config_parser.set(self.CONFIG_SECTION_NAME,option_name,plugin_name)
+			return self.config_has_changed()
 		else:
 			# get the already existing list and append the new
 			# activated plugin to it.
-			past_list_str = self.config_parser.get_option(option_name)
-			past_list = self.__getCategoryPluginsListFromConfig(past_list)
-			past_list.append(plugin_name)
-			new_list_str = self.__getCategoryPluginsConfigFromList(past_list)
-			self.config_parser.set(self.CONFIG_SECTION_NAME,option_name,new_list_str)
-		self.config_has_changed()
+			past_list_str = self.config_parser.get(self.CONFIG_SECTION_NAME,option_name)
+			past_list = self.__getCategoryPluginsListFromConfig(past_list_str)
+			# make sure we don't add it twice
+			if plugin_name not in past_list: 
+				past_list.append(plugin_name)
+				new_list_str = self.__getCategoryPluginsConfigFromList(past_list)
+				self.config_parser.set(self.CONFIG_SECTION_NAME,option_name,new_list_str)
+				return self.config_has_changed()
 
 	def __removePluginFromConfig(self,category_name, plugin_name):
 		"""
@@ -124,7 +127,23 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 		"""
 		# check that the section is here
 		if not self.config_parser.has_section(self.CONFIG_SECTION_NAME):
-			self.config_parser.add_section(self.CONFIG_SECTION_NAME)
+			# then nothing to remove :)
+			return 
+		# check that the category's list of activated plugins is here too
+		option_name = self.__getCategoryOptionsName(category_name)
+		if not self.config_parser.has_option(self.CONFIG_SECTION_NAME, option_name):
+			# if there is no list still nothing to do
+			return
+		else:
+			# get the already existing list
+			past_list_str = self.config_parser.get(self.CONFIG_SECTION_NAME,option_name)
+			past_list = self.__getCategoryPluginsListFromConfig(past_list_str)
+			if plugin_name in past_list:
+				past_list.remove(plugin_name)
+				new_list_str = self.__getCategoryPluginsConfigFromList(past_list)
+				self.config_parser.set(self.CONFIG_SECTION_NAME,option_name,new_list_str)
+				self.config_has_changed()		
+			
 
 
 	def registerOptionFromPlugin(self, 
@@ -180,27 +199,52 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 																		   x)
 		plugin_object.hasConfigOption.__doc__ = self.hasOptionFromPlugin.__doc__
 
-
-	def activatePluginByName(self, category_name, plugin_name):
+	def activatePluginByName(self, category_name, plugin_name, save_state=True):
 		"""
-		Activate a plugin, if you want the plugin's activation to be
-		registered in the config file it is crucial to use this method
-		to activate a plugin and not call the plugin object's
-		``activate`` method.
+		Activate a plugin, , and remember it (in the config file).
 
-		This method will also "decorate" the plugin object so that it
-		can use this class's methods to register its own options.
+		If you want the plugin to benefit from the configuration
+		utility defined by this manager, it is crucial to use this
+		method to activate a plugin and not call the plugin object's
+		``activate`` method. In fact, this method will also "decorate"
+		the plugin object so that it can use this class's methods to
+		register its own options.
+		
+		By default, the plugin's activation is registered in the
+		config file but if you d'ont want this set the 'save_state'
+		argument to False.
 		"""
+		# first decorate the plugin
+		pta = self._component.getPluginByName(category_name,plugin_name)
+		if pta is None:
+			return None
+		self.__decoratePluginObject(category_name,plugin_name,pta.plugin_object)		
 		# activate the plugin
 		plugin_object = self._component.activatePluginByName(category_name,plugin_name)
+		# check the activation and then optionally set the config option
+		if plugin_object.is_activated:
+			if save_state:
+				self.__addPluginToConfig(category_name,plugin_name)
+			return plugin_object
+		return None
+
+	def deactivatePluginByName(self, category_name, plugin_name,save_state=True):
+		"""
+		Deactivate a plugin, and remember it (in the config file).
+
+		By default, the plugin's deactivation is registered in the
+		config file but if you d'ont want this set the 'save_state'
+		argument to False.
+		"""
+		# activate the plugin
+		plugin_object = self._component.deactivatePluginByName(category_name,plugin_name)
 		if plugin_object is None:
 			return None
-		# check the activation and then set the config option
-		if plugin_object.is_activated:
-			self.__addPluginToConfig(category_name,plugin_name)
-			# now decorate the plugin
-			self.__decoratePluginObject(category_name,plugin_name,plugin_object)		
-			return plugin_object
+		# check the deactivation and then optionnally set the config option
+		if not plugin_object.is_activated:
+			if save_state:
+				self.__removePluginFromConfig(category_name,plugin_name)
+				return plugin_object
 		return None
 
 	def loadPlugins(self,callback=None):
@@ -209,7 +253,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 		for each plugin candidate look for its category, load it and
 		stores it in the appropriate slot of the category_mapping.
 		"""
-		self._component.loadPlugins()
+ 		self._component.loadPlugins()
 		# now load the plugins according to the recorded configuration
 		if self.config_parser.has_section(self.CONFIG_SECTION_NAME):
 			# browse all the categories
@@ -225,7 +269,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 					# activate all the plugins that should be
 					# activated
 					for plugin_name in plugin_list:
-						self._component.activatePluginByName(category_name, plugin_name)
+						self.activatePluginByName(category_name, plugin_name)
 
 				
 
