@@ -13,12 +13,12 @@ TEMP_CONFIG_FILE_NAME=os.path.join(
 	"tempconfig")
 
 # set correct loading path for yapsy's files
-sys.path.append(
+sys.path.insert(0,
 	os.path.dirname(
 		os.path.dirname(
 			os.path.abspath(__file__))))
 
-sys.path.append(
+sys.path.insert(0,
 	os.path.dirname(
 		os.path.dirname(
 			os.path.dirname(
