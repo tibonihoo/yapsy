@@ -5,7 +5,6 @@ import unittest
 import ConfigParser
 
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
-from yapsy.PluginManager import PluginManagerSingleton
 
 class ConfigTestCase(unittest.TestCase):
 	"""
