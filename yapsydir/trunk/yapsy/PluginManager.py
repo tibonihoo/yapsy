@@ -180,6 +180,74 @@ class PluginManager(object):
 		"""
 		return self.category_mapping[category_name]
 
+
+	def _gatherCorePluginInfo(self, directory, filename):
+		"""
+		Gather the core information (name, and module to be loaded)
+		about a plugin described by it's info file (found at
+		'directory/filename').
+
+		Return an instance of `self.plugin_info_cls` and the
+		config_parser used to gather the core data *in a tuple*, if the
+		required info could be localised, else return `(None,None)`.
+		
+		.. note:: This is supposed to be used internally by subclasses
+		and decorators.
+		"""
+		# now we can consider the file as a serious candidate
+		candidate_infofile = os.path.join(dirpath,filename)
+		# parse the information file to get info about the plugin
+		config_parser = ConfigParser.SafeConfigParser()
+		try:
+			config_parser.read(candidate_infofile)
+		except:
+			logging.debug("Could not parse the plugin file %s" % candidate_infofile)					
+			return (None, None)
+		# check if the basic info is available
+		if not config_parser.has_section("Core"):
+			return (None, None)
+		if not config_parser.has_option("Core","Name") or not config_parser.has_option("Core","Module"):
+			return (None, None)
+		# check that the given name is valid
+		name = config_parser.get("Core", "Name")
+		name = name.strip()
+		if PLUGIN_NAME_FORBIDEN_STRING in name:
+			return (None, None)
+		# start collecting essential info
+		plugin_info = self._plugin_info_cls(name, 
+											os.path.join(dirpath,config_parser.get("Core", "Module")))
+		return (plugin_info,config_parser)
+
+	def gatherBasicPluginInfo(self, directory,filename):
+		"""
+		Gather some basic documentation about the plugin described by
+		it's info file (found at 'directory/filename').
+
+		Return an instance of `self.plugin_info_cls` gathering the
+		required informations.
+
+		See also:
+		
+		  `self._gatherCorePluginInfo`
+		"""
+		plugin_info,config_parser = self._gatherCorePluginInfo(directory, filename)
+		if plugin_info is None:
+			return None
+		name = config_parser.get("Core", "Name")		
+		# collect additional (but usually quite usefull) information
+		if config_parser.has_section("Documentation"):
+			if config_parser.has_option("Documentation","Author"):
+				plugin_info.author	= config_parser.get("Documentation", "Author")
+			if config_parser.has_option("Documentation","Version"):
+				plugin_info.setVersion(config_parser.get("Documentation", "Version"))
+			if config_parser.has_option("Documentation","Website"): 
+				plugin_info.website	= config_parser.get("Documentation", "Website")
+			if config_parser.has_option("Documentation","Copyright"):
+				plugin_info.copyright	= config_parser.get("Documentation", "Copyright")
+			if config_parser.has_option("Documentation","Description"):
+				plugin_info.description = config_parser.get("Documentation", "Description")
+		return plugin_info
+
 	def locatePlugins(self):
 		"""
 		Walk through the plugins' places and look for plugins.
@@ -201,50 +269,19 @@ class PluginManager(object):
 					# eliminate the obvious non plugin files
 					if not filename.endswith(".%s" % self.plugin_info_ext):
 						continue
-					# now we can consider the file as a serious candidate
 					candidate_infofile = os.path.join(dirpath,filename)
 					logging.debug("""%s found a candidate: 
 	%s""" % (self.__class__.__name__, candidate_infofile))
-					# parse the information file to get info about the plugin
-					config_parser = ConfigParser.SafeConfigParser()
-					try:
-						config_parser.read(candidate_infofile)
-					except:
-						logging.debug("Could not parse the plugin file %s" % candidate_infofile)					
- 						continue
-					# check if the basic info is available
-					if not config_parser.has_section("Core"):
-						continue
-					if not config_parser.has_option("Core","Name") or not config_parser.has_option("Core","Module"):
-						continue
-					# check that the given name is valid
-					name = config_parser.get("Core", "Name")
-					name = name.strip()
-					if PLUGIN_NAME_FORBIDEN_STRING in name:
-						continue				
-					# start collecting essential info
-					plugin_info = self._plugin_info_cls(name, 
-														os.path.join(dirpath,config_parser.get("Core", "Module")))
-					# collect additional (but usually quite usefull) information
-					if config_parser.has_section("Documentation"):
-						if config_parser.has_option("Documentation","Author"):
-							plugin_info.author	= config_parser.get("Documentation", "Author")
-						if config_parser.has_option("Documentation","Version"):
-							plugin_info.setVersion(config_parser.get("Documentation", "Version"))
-						if config_parser.has_option("Documentation","Website"): 
-							plugin_info.website	= config_parser.get("Documentation", "Website")
-						if config_parser.has_option("Documentation","Copyright"):
-							plugin_info.copyright	= config_parser.get("Documentation", "Copyright")
-						if config_parser.has_option("Documentation","Description"):
-							plugin_info.description = config_parser.get("Documentation", "Description")
-					
+					plugin_info = self.gatherBasicPluginInfo(directory,filename)
 					# now determine the path of the file to execute,
 					# depending on wether the path indicated is a
 					# directory or a file
 					if os.path.isdir(plugin_info.path):
 						candidate_filepath = os.path.join(plugin_info.path,"__init__")
-					else:
+					elif os.path.isfile(plugin_info.path):
 						candidate_filepath = plugin_info.path
+					else:
+						continue
 					self._candidates.append((candidate_infofile, candidate_filepath, plugin_info))
 		return len(self._candidates)
 
