@@ -282,12 +282,12 @@ class PluginManager(object):
 					candidate_infofile = os.path.join(dirpath,filename)
 					logging.debug("""%s found a candidate: 
 	%s""" % (self.__class__.__name__, candidate_infofile))
+#					print candidate_infofile
 					plugin_info = self.gatherBasicPluginInfo(dirpath,filename)
 					if plugin_info is None:
 						logging.debug("""Candidate rejected: 
 	%s""" % candidate_infofile)						
 						continue
-					
 					# now determine the path of the file to execute,
 					# depending on wether the path indicated is a
 					# directory or a file
@@ -298,6 +298,7 @@ class PluginManager(object):
 						candidate_filepath = plugin_info.path
 					else:
 						continue
+#					print candidate_filepath
 					self._candidates.append((candidate_infofile, candidate_filepath, plugin_info))
 		return len(self._candidates)
 
@@ -322,7 +323,6 @@ class PluginManager(object):
 			# user
 			if callback is not None:
 				callback(plugin_info)
-
 			# now execute the file and get its content into a
 			# specific dictionnary
 			candidate_globals = {"__file__":candidate_filepath+".py"}
@@ -333,9 +333,12 @@ class PluginManager(object):
 			except Exception,e:
 				logging.debug("Unable to execute the code in plugin: %s" % candidate_filepath)
 				logging.debug("\t The following problem occured: %s %s " % (os.linesep, e))
-
+				if "__init__" in  os.path.basename(candidate_filepath):
+					sys.path.remove(plugin_info.path)
+				continue
+			
 			if "__init__" in  os.path.basename(candidate_filepath):
-				sys.path.remove(plugin_info.path)				
+				sys.path.remove(plugin_info.path)
 			# now try to find and initialise the first subclass of the correct plugin interface
 			for element in candidate_globals.values():
 				current_category = None
