@@ -14,7 +14,7 @@ class ConfigTestCase(unittest.TestCase):
 	commands.
 	"""
 
-	CONFIG_FILE = os.tempnam()
+	CONFIG_FILE = test_settings.TEMP_CONFIG_FILE_NAME
 	
 	def setUp(self):
 		"""
@@ -33,6 +33,13 @@ class ConfigTestCase(unittest.TestCase):
 			config_change_trigger=self.update_config)
 		# load the plugins that may be found
 		self.pluginManager.collectPlugins()
+
+	def tearDown(self):
+		"""
+		When the test has been performed erase the temp file.
+		"""
+		if os.path.isfile(self.config_file):
+			os.remove(self.config_file)
 
 	def testConfigurationFileExistence(self):
 		"""
