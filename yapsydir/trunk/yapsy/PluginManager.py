@@ -43,6 +43,13 @@ class PluginInfo(object):
 		"""
 		Set the namle and path of the plugin as well as the default
 		values for other usefull variables.
+
+		.. warning:: The `path` attribute is the full path to the
+		    plugin if it is organised as a directory or the full path
+		    to a file without the '.py' extension if the plugin is
+		    defined by a simple file. In the later case, the actual
+		    plugin is reached via `plugin_info.path+'.py'`.
+			
 		"""
 		self.name = plugin_name
 		self.path = plugin_path
@@ -195,7 +202,7 @@ class PluginManager(object):
 		and decorators.
 		"""
 		# now we can consider the file as a serious candidate
-		candidate_infofile = os.path.join(dirpath,filename)
+		candidate_infofile = os.path.join(directory,filename)
 		# parse the information file to get info about the plugin
 		config_parser = ConfigParser.SafeConfigParser()
 		try:
@@ -205,17 +212,21 @@ class PluginManager(object):
 			return (None, None)
 		# check if the basic info is available
 		if not config_parser.has_section("Core"):
+			logging.debug("Plugin info file has no 'Core' section (in %s)" % candidate_infofile)					
 			return (None, None)
 		if not config_parser.has_option("Core","Name") or not config_parser.has_option("Core","Module"):
+			logging.debug("Plugin info file has no 'Name' or 'Module' section (in %s)" % candidate_infofile)
 			return (None, None)
 		# check that the given name is valid
 		name = config_parser.get("Core", "Name")
 		name = name.strip()
 		if PLUGIN_NAME_FORBIDEN_STRING in name:
+			logging.debug("Plugin name contains forbiden character: %s (in %s)" % (PLUGIN_NAME_FORBIDEN_STRING,
+																				   candidate_infofile))
 			return (None, None)
 		# start collecting essential info
 		plugin_info = self._plugin_info_cls(name, 
-											os.path.join(dirpath,config_parser.get("Core", "Module")))
+											os.path.join(directory,config_parser.get("Core", "Module")))
 		return (plugin_info,config_parser)
 
 	def gatherBasicPluginInfo(self, directory,filename):
@@ -233,7 +244,6 @@ class PluginManager(object):
 		plugin_info,config_parser = self._gatherCorePluginInfo(directory, filename)
 		if plugin_info is None:
 			return None
-		name = config_parser.get("Core", "Name")		
 		# collect additional (but usually quite usefull) information
 		if config_parser.has_section("Documentation"):
 			if config_parser.has_option("Documentation","Author"):
@@ -272,13 +282,19 @@ class PluginManager(object):
 					candidate_infofile = os.path.join(dirpath,filename)
 					logging.debug("""%s found a candidate: 
 	%s""" % (self.__class__.__name__, candidate_infofile))
-					plugin_info = self.gatherBasicPluginInfo(directory,filename)
+					plugin_info = self.gatherBasicPluginInfo(dirpath,filename)
+					if plugin_info is None:
+						logging.debug("""Candidate rejected: 
+	%s""" % candidate_infofile)						
+						continue
+					
 					# now determine the path of the file to execute,
 					# depending on wether the path indicated is a
 					# directory or a file
+#					print plugin_info.path
 					if os.path.isdir(plugin_info.path):
 						candidate_filepath = os.path.join(plugin_info.path,"__init__")
-					elif os.path.isfile(plugin_info.path):
+					elif os.path.isfile(plugin_info.path+".py"):
 						candidate_filepath = plugin_info.path
 					else:
 						continue
@@ -310,12 +326,16 @@ class PluginManager(object):
 			# now execute the file and get its content into a
 			# specific dictionnary
 			candidate_globals = {"__file__":candidate_filepath+".py"}
+			if "__init__" in  os.path.basename(candidate_filepath):
+				sys.path.append(plugin_info.path)				
 			try:
 				execfile(candidate_filepath+".py",candidate_globals)
 			except Exception,e:
 				logging.debug("Unable to execute the code in plugin: %s" % candidate_filepath)
 				logging.debug("\t The following problem occured: %s %s " % (os.linesep, e))
 
+			if "__init__" in  os.path.basename(candidate_filepath):
+				sys.path.remove(plugin_info.path)				
 			# now try to find and initialise the first subclass of the correct plugin interface
 			for element in candidate_globals.values():
 				current_category = None
