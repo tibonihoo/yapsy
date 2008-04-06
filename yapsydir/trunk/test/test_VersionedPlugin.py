@@ -16,7 +16,7 @@ class VersionedTestsCase(unittest.TestCase):
         init
         """
         # create the plugin manager
-        print os.path.join(os.path.dirname(os.path.abspath(__file__)),"plugins")
+#        print os.path.join(os.path.dirname(os.path.abspath(__file__)),"plugins")
         self.versionedPluginManager = VersionedPluginManager(
             directories_list=[os.path.join(
 					os.path.dirname(os.path.abspath(__file__)),"plugins")],
