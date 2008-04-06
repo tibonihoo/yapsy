@@ -199,7 +199,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 																		   x)
 		plugin_object.hasConfigOption.__doc__ = self.hasOptionFromPlugin.__doc__
 
-	def activatePluginByName(self, category_name, plugin_name, save_state=True):
+	def activatePluginByName(self, plugin_name, category_name="Default", save_state=True):
 		"""
 		Activate a plugin, , and remember it (in the config file).
 
@@ -215,12 +215,12 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 		argument to False.
 		"""
 		# first decorate the plugin
-		pta = self._component.getPluginByName(category_name,plugin_name)
+		pta = self._component.getPluginByName(plugin_name,category_name)
 		if pta is None:
 			return None
 		self.__decoratePluginObject(category_name,plugin_name,pta.plugin_object)		
 		# activate the plugin
-		plugin_object = self._component.activatePluginByName(category_name,plugin_name)
+		plugin_object = self._component.activatePluginByName(plugin_name,category_name)
 		# check the activation and then optionally set the config option
 		if plugin_object.is_activated:
 			if save_state:
@@ -228,7 +228,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 			return plugin_object
 		return None
 
-	def deactivatePluginByName(self, category_name, plugin_name,save_state=True):
+	def deactivatePluginByName(self, plugin_name, category_name="Default", save_state=True):
 		"""
 		Deactivate a plugin, and remember it (in the config file).
 
@@ -237,7 +237,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 		argument to False.
 		"""
 		# activate the plugin
-		plugin_object = self._component.deactivatePluginByName(category_name,plugin_name)
+		plugin_object = self._component.deactivatePluginByName(plugin_name,category_name)
 		if plugin_object is None:
 			return None
 		# check the deactivation and then optionnally set the config option
@@ -269,7 +269,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 					# activate all the plugins that should be
 					# activated
 					for plugin_name in plugin_list:
-						self.activatePluginByName(category_name, plugin_name)
+						self.activatePluginByName(plugin_name,category_name)
 
 				
 

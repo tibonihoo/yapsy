@@ -54,11 +54,11 @@ class SimpleTestsCase(unittest.TestCase):
 		"""
 		self.plugin_loading_check()
 		self.assert_(not self.plugin_info.plugin_object.is_activated)
-		self.simplePluginManager.activatePluginByName(self.plugin_info.category,
-													  self.plugin_info.name)
+		self.simplePluginManager.activatePluginByName(self.plugin_info.name,
+													  self.plugin_info.category)
 		self.assert_(self.plugin_info.plugin_object.is_activated)
-		self.simplePluginManager.deactivatePluginByName(self.plugin_info.category,
-														 self.plugin_info.name)
+		self.simplePluginManager.deactivatePluginByName(self.plugin_info.name,
+														self.plugin_info.category)
 		self.assert_(not self.plugin_info.plugin_object.is_activated)
 
 

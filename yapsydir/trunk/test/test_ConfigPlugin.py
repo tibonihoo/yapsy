@@ -75,8 +75,8 @@ class ConfigTestCase(unittest.TestCase):
 		Test if the activation/deactivaion procedures work.
 		"""
 		self.plugin_activate()
-		self.pluginManager.deactivatePluginByName(self.plugin_info.category,
-												  self.plugin_info.name)
+		self.pluginManager.deactivatePluginByName(self.plugin_info.name,
+												  self.plugin_info.category)
 		self.assert_(not self.plugin_info.plugin_object.is_activated)
 
 	def testPluginOptions(self):
@@ -116,8 +116,8 @@ class ConfigTestCase(unittest.TestCase):
 		"""
 		self.plugin_loading_check()
 		self.assert_(not self.plugin_info.plugin_object.is_activated)
-		self.pluginManager.activatePluginByName(self.plugin_info.category,
-													  self.plugin_info.name)
+		self.pluginManager.activatePluginByName(self.plugin_info.name,
+												self.plugin_info.category)
 		self.assert_(self.plugin_info.plugin_object.is_activated)
 		
 

@@ -94,7 +94,6 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 			try:
 				shutil.copytree(plugin_info.path,
 								os.path.join(self.install_dir,os.path.basename(plugin_info.path)))
-				print "TREE"
 				shutil.copy(os.path.join(directory, plugin_info_filename),
 							self.install_dir)
 			except:

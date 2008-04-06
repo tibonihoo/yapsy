@@ -373,7 +373,7 @@ class PluginManager(object):
 		self.loadPlugins()
 
 
-	def getPluginByName(self,category,name):
+	def getPluginByName(self,name,category="Default"):
 		"""
 		Get the plugin correspoding to a given category and name
 		"""
@@ -383,11 +383,11 @@ class PluginManager(object):
 					return item
 		return None
 
-	def activatePluginByName(self,category,name):
+	def activatePluginByName(self,name,category="Default"):
 		"""
 		Activate a plugin corresponding to a given category + name.
 		"""
-		pta_item = self.getPluginByName(category,name)
+		pta_item = self.getPluginByName(name,category)
 		if pta_item is not None:
 			plugin_to_activate = pta_item.plugin_object
 			if plugin_to_activate is not None:
@@ -397,7 +397,7 @@ class PluginManager(object):
 		return None
 
 
-	def deactivatePluginByName(self,category,name):
+	def deactivatePluginByName(self,name,category="Default"):
 		"""
 		Desactivate a plugin corresponding to a given category + name.
 		"""

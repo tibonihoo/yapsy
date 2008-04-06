@@ -71,8 +71,8 @@ class ConfigSingletonTestsCase(unittest.TestCase):
 		Test if the activation/deactivaion procedures work.
 		"""
 		self.plugin_activate()
-		PluginManagerSingleton.get().deactivatePluginByName(self.plugin_info.category,
-													  self.plugin_info.name)
+		PluginManagerSingleton.get().deactivatePluginByName(self.plugin_info.name,
+															self.plugin_info.category)
 		self.assert_(not self.plugin_info.plugin_object.is_activated)
 
 	def testPluginOptions(self):
@@ -113,8 +113,8 @@ class ConfigSingletonTestsCase(unittest.TestCase):
 		"""
 		self.plugin_loading_check()
 		if not self.plugin_info.plugin_object.is_activated:
-			PluginManagerSingleton.get().activatePluginByName(self.plugin_info.category,
-															  self.plugin_info.name)
+			PluginManagerSingleton.get().activatePluginByName(self.plugin_info.name,
+															  self.plugin_info.category)
 		self.assert_(self.plugin_info.plugin_object.is_activated)
 		
 

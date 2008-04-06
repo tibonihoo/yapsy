@@ -39,25 +39,25 @@ class AutoInstallTestsCase(unittest.TestCase):
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "autoinstallplugin.yapsy-autoinstall-plugin"))
 		except OSError,e:
-			print e
+#			print e
 			pass
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "AutoInstallPlugin.py"))
 		except OSError,e:
-			print e
+#			print e
 			pass
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "autoinstalldirplugin.yapsy-autoinstall-plugin"))
 		except OSError,e:
-			print e
+#			print e
 			pass
 		try:
 			shutil.rmtree(os.path.join(self.pluginManager.plugins_places[0],
 									   "autoinstalldirplugin"))
 		except OSError,e:
-			print e
+#			print e
 			pass
 			
 
@@ -126,16 +126,12 @@ class AutoInstallTestsCase(unittest.TestCase):
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check("Auto Install Plugin")
 		self.assert_(not self.plugin_info.plugin_object.is_activated)
-		self.pluginManager.activatePluginByName(self.plugin_info.category,
-													  self.plugin_info.name)
+		self.pluginManager.activatePluginByName(self.plugin_info.name,
+												self.plugin_info.category)
 		self.assert_(self.plugin_info.plugin_object.is_activated)
-		self.pluginManager.deactivatePluginByName(self.plugin_info.category,
-														 self.plugin_info.name)
+		self.pluginManager.deactivatePluginByName(self.plugin_info.name,
+												  self.plugin_info.category)
 		self.assert_(not self.plugin_info.plugin_object.is_activated)
-# 		os.remove(os.path.join(self.pluginManager.plugins_places[0],
-# 							   "autoinstallplugin.yapsy-autoinstall-plugin"))
-# 		os.remove(os.path.join(self.pluginManager.plugins_places[0],
-# 							   "AutoInstallPlugin.py"))
 
 
 
