@@ -17,6 +17,7 @@ import test_SimplePlugin
 import test_Singleton
 import test_ConfigPlugin
 import test_VersionedPlugin
+import test_AutoInstallPlugin
 
 
 # add them to a common test suite
@@ -26,5 +27,6 @@ MainTestSuite = unittest.TestSuite(
 		test_Singleton.suite,
 		test_ConfigPlugin.suite,
 		test_VersionedPlugin.suite,
+		test_AutoInstallPlugin.suite,
 		])
 
