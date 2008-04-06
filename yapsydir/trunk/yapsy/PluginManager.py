@@ -556,10 +556,10 @@ class PluginManagerSingleton(object):
 		if self.__instance is None:
 			if self.__decoration_chain is not None:
 				# Get the object to be decorated
-				print self.__decoration_chain
+#				print self.__decoration_chain
 				pm = self.__decoration_chain[0]()
 				for cls_item in self.__decoration_chain[1:]:
-					print cls_item
+#					print cls_item
 					pm = cls_item(decorated_manager=pm)
 				# Decorate the whole object
 				self.__instance = pm
