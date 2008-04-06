@@ -448,6 +448,11 @@ class PluginManagerDecorator(object):
 
 		  - *If the decorated object is given*, these last arguments are
 		    simply **ignored** !
+
+		All classes (and especially subclasses of this one) that want
+		to be a decorator must accept the decorated manager as an
+		object passed to the init function under the exact keyword
+		`decorated_object`.
 		"""
 		
 		if decorated_object is None:
@@ -508,7 +513,7 @@ class PluginManagerSingleton(object):
 		Initialisation: this class should not be initialised
 		explicitly and the ``get``classmethod must be called instead.
 
-		To set up the various coonfigurables variables of the
+		To set up the various configurables variables of the
 		PluginManager's behaviour please call explicitly the following
 		methods:
 
@@ -550,10 +555,12 @@ class PluginManagerSingleton(object):
 		"""
 		if self.__instance is None:
 			if self.__decoration_chain is not None:
-				# Get the obect to be decorated
+				# Get the object to be decorated
+				print self.__decoration_chain
 				pm = self.__decoration_chain[0]()
 				for cls_item in self.__decoration_chain[1:]:
-					pm = cls_item(pm)
+					print cls_item
+					pm = cls_item(decorated_manager=pm)
 				# Decorate the whole object
 				self.__instance = pm
 			else:

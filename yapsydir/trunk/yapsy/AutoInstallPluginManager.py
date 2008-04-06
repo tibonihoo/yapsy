@@ -28,7 +28,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 
 
 	def __init__(self,
-				 plugin_install_dir,
+				 plugin_install_dir=None,
 				 decorated_manager=None,
 				 # The following args will only be used if we need to
 				 # create a default PluginManager
