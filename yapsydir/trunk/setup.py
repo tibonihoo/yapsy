@@ -12,17 +12,21 @@ To use the generated .egg file then:
 easy_install Yapsy-{yapsy version}-py{python version}.egg
 
 Automagical stuff:
-- test everything
-python setup.py test
-- build the packages (sources an egg) and upload all the stuff to pypi
-python setup.py register sdist bdist_egg upload
+
+  - test everything::
+
+      python setup.py test
+
+  - build the packages (sources an egg) and upload all the stuff to pypi::
+
+      python setup.py register sdist bdist_egg upload
 """
 
 from setuptools import setup, find_packages
 
 setup(
     name = "Yapsy",
-    version = "1.6",
+    version = "1.7",
     packages = find_packages(),
 
 	# the unit tests
@@ -30,7 +34,7 @@ setup(
 
     # metadata for upload to PyPI
     author = "Thibauld Nion",
-    author_email = "tibonihoo_\\'a_yahoo.fr",
+    author_email = "tibonihoo @at@ yahoo .dot. fr",
     description = "Yet another plugin system",
     license = "BSD",
     keywords = "plugin manager",
