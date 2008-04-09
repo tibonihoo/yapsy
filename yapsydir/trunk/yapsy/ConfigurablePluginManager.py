@@ -26,13 +26,13 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 	derivated object. The file can be used for other purpose by the
 	application using this plugin manager as it will only add a new
 	specific section ``[Plugin Management]`` for itself and also new
-	sections for some plugins that will start with [Plugin:***] (only
-	the plugins that explicitly requires to save configuration options
-	will have this kind of section).
+	sections for some plugins that will start with ``[Plugin:...]``
+	(only the plugins that explicitly requires to save configuration
+	options will have this kind of section).
 
-	*Warning* when giving/building the list of plugins to activate by
-	default, there must not be any space in the list (neither in the
-	names nor in between)
+	.. warning:: when giving/building the list of plugins to activate by
+	    default, there must not be any space in the list (neither in the
+	    names nor in between)
 	"""
 	
 	CONFIG_SECTION_NAME = "Plugin Management"
@@ -233,7 +233,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 		Deactivate a plugin, and remember it (in the config file).
 
 		By default, the plugin's deactivation is registered in the
-		config file but if you d'ont want this set the 'save_state'
+		config file but if you d'ont want this set the ``save_state``
 		argument to False.
 		"""
 		# activate the plugin
@@ -251,7 +251,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 		"""
 		Walk through the plugins' places and look for plugins.  Then
 		for each plugin candidate look for its category, load it and
-		stores it in the appropriate slot of the category_mapping.
+		stores it in the appropriate slot of the ``category_mapping``.
 		"""
  		self._component.loadPlugins()
 		# now load the plugins according to the recorded configuration

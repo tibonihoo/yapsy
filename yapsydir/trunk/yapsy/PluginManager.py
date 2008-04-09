@@ -5,7 +5,7 @@
 The basic interface and implementation for a plugin manager.
 
 Also define the basic mechanism to add functionalities to the base
-PluginManager. A few "principles" to follow in this case:
+PluginManager. A few *principles* to follow in this case:
 
 If the new functionalities do not overlap the ones already
 implemented, then they must be implemented as a Decorator class of the
@@ -44,11 +44,11 @@ class PluginInfo(object):
 		Set the namle and path of the plugin as well as the default
 		values for other usefull variables.
 
-		.. warning:: The `path` attribute is the full path to the
+		.. warning:: The ``path`` attribute is the full path to the
 		    plugin if it is organised as a directory or the full path
-		    to a file without the '.py' extension if the plugin is
+		    to a file without the ``.py`` extension if the plugin is
 		    defined by a simple file. In the later case, the actual
-		    plugin is reached via `plugin_info.path+'.py'`.
+		    plugin is reached via ``plugin_info.path+'.py'``.
 			
 		"""
 		self.name = plugin_name
@@ -88,12 +88,12 @@ class PluginManager(object):
 
 	The file describing a plugin should be written in the sytax
 	compatible with Python's ConfigParser module as in the following
-	example:
-	::
+	example::
+	  
 	  [Core Information]
 	  Name= My plugin Name
 	  Module=the_name_of_the_pluginto_load_with_no_py_ending
-       
+         
 	  [Documentation]
 	  Description=What my plugin broadly does
 	  Author= My very own name
@@ -109,9 +109,10 @@ class PluginManager(object):
 		Initialize the mapping of the categories and set the list of
 		directories where plugins may be. This can also be set by
 		direct call the methods: 
-		  - ``setCategoriesFilter`` for ``categories_filter``
-		  - ``setPluginPlaces`` for ``directories_list``
-		  - ``setPluginInfoExtension`` for ``plugin_info_ext``
+		
+		- ``setCategoriesFilter`` for ``categories_filter``
+		- ``setPluginPlaces`` for ``directories_list``
+		- ``setPluginInfoExtension`` for ``plugin_info_ext``
 
 		You may look at these function's documentation for the meaning
 		of each corresponding arguments.
@@ -194,12 +195,13 @@ class PluginManager(object):
 		about a plugin described by it's info file (found at
 		'directory/filename').
 
-		Return an instance of `self.plugin_info_cls` and the
+		Return an instance of ``self.plugin_info_cls`` and the
 		config_parser used to gather the core data *in a tuple*, if the
-		required info could be localised, else return `(None,None)`.
+		required info could be localised, else return ``(None,None)``.
 		
 		.. note:: This is supposed to be used internally by subclasses
-		and decorators.
+		    and decorators.
+		
 		"""
 		# now we can consider the file as a serious candidate
 		candidate_infofile = os.path.join(directory,filename)
@@ -234,12 +236,12 @@ class PluginManager(object):
 		Gather some basic documentation about the plugin described by
 		it's info file (found at 'directory/filename').
 
-		Return an instance of `self.plugin_info_cls` gathering the
+		Return an instance of ``self.plugin_info_cls`` gathering the
 		required informations.
 
 		See also:
 		
-		  `self._gatherCorePluginInfo`
+		  ``self._gatherCorePluginInfo``
 		"""
 		plugin_info,config_parser = self._gatherCorePluginInfo(directory, filename)
 		if plugin_info is None:
@@ -307,10 +309,10 @@ class PluginManager(object):
 		Load the candidate plugins that have been identified through a
 		previous call to locatePlugins.  For each plugin candidate
 		look for its category, load it and store it in the appropriate
-		slot of the category_mapping.
+		slot of the ``category_mapping``.
 
 		If a callback function is specified, call it before every load
-		attempt.  The plugin_info instance is passed as an argument to
+		attempt.  The ``plugin_info`` instance is passed as an argument to
 		the callback.
 		"""
 # 		print "%s.loadPlugins" % self.__class__		
@@ -455,7 +457,7 @@ class PluginManagerDecorator(object):
 		All classes (and especially subclasses of this one) that want
 		to be a decorator must accept the decorated manager as an
 		object passed to the init function under the exact keyword
-		`decorated_object`.
+		``decorated_object``.
 		"""
 		
 		if decorated_object is None:
@@ -491,8 +493,8 @@ class PluginManagerSingleton(object):
 	"""
 	Singleton version of the most basic plugin manager.
 
-	Being a singleton, this class should not be initialised
-	explicitly and the ``get``classmethod must be called instead.
+	Being a singleton, this class should not be initialised explicitly
+	and the ``get`` classmethod must be called instead.
 
 	To call one of this class's methods you have to use the ``get``
 	method in the following way:
@@ -514,7 +516,7 @@ class PluginManagerSingleton(object):
 	def __init__(self):
 		"""
 		Initialisation: this class should not be initialised
-		explicitly and the ``get``classmethod must be called instead.
+		explicitly and the ``get`` classmethod must be called instead.
 
 		To set up the various configurables variables of the
 		PluginManager's behaviour please call explicitly the following
@@ -530,7 +532,7 @@ class PluginManagerSingleton(object):
 	def setBehaviour(self,list_of_pmd):
 		"""
 		Set the functionalities handled by the plugin manager by
-		giving a list of PluginManager decorators.
+		giving a list of ``PluginManager`` decorators.
 		
 		This function shouldn't be called several time in a same
 		process, but if it is only the first call will have an effect.
@@ -539,7 +541,7 @@ class PluginManagerSingleton(object):
 		of the singleton.
 
 		In cases where the function is indeed going to change anything
-		the 'True' value is return, in all other cases, the 'False'
+		the ``True`` value is return, in all other cases, the ``False``
 		value is returned.
 		"""
 		if self.__decoration_chain is None and self.__instance is None:

@@ -48,7 +48,23 @@ When creating a ``PluginManager`` instance, one should provide it with
 a list of directories where plugins may be found. In each directory,
 a plugin should contain the following elements:
 
-"One file" plugin
+*Standard* plugin
+~~~~~~~~~~~~~~~~~~~~
+
+ ``myplugin.yapsy-plugin`` 
+
+     A *plugin info file* identical to the one previously described.
+
+ ``myplugin``
+
+     A directory ontaining an actual Python plugin (ie with a
+     ``__init__.py`` file that makes it importable). The upper
+     namespace of the plugin should present a class inheriting the
+     ``IPlugin`` interface (the same remarks apply here as in the
+     previous case).
+
+
+*One file* plugin
 ~~~~~~~~~~~~~~~~~
 
 ``myplugin.yapsy-plugin`` 
@@ -76,20 +92,6 @@ a plugin should contain the following elements:
    inherit your very own plugin class (itself derived from
    ``IPlugin``).
 
-"Module like" plugin
-~~~~~~~~~~~~~~~~~~~~
-
- ``myplugin.yapsy-plugin`` 
-
-     A *plugin info file* identical to the one previously described.
-
- ``myplugin``
-
-     A directory ontaining an actual Python plugin (ie with a
-     ``__init__.py`` file that makes it importable). The upper
-     namespace of the plugin should present a class inheriting the
-     ``IPlugin`` interface (the same remarks apply here as in the
-     previous case).
  
 
 
@@ -134,19 +136,29 @@ functionality as in the following instance:
 
   Adds the behaviour of a singleton to the ``PluginManager`` class.
 
-And in the near futur:
 
 ``ConfigurablePluginManager`` 
 
-  Implements a ``PluginManager`` that is able to use a confugration
+  Implements a ``PluginManager`` that is able to use a configuration
   file through an interface compatible with the standard ConfigParser_
   module.
 
 .. _ConfigParser: http://docs.python.org/lib/module-ConfigParser.html
 
-``ConfigurablePluginManagerSingleton``
 
-  Combines the previous two functionalities.
+``VersionedPluginManager`` 
+
+  Able to manage several versions of a same plugin. 
+
+
+``AutoInstallPluginManager`` 
+
+  Automatically copy the plugin files to the right plugin directory. 
+
+.. _PluginManagerDecorator: ./yapsy.PluginManager.PluginManagerDecorator-class.html
+
+See PluginManagerDecorator_ 's subclasses for more.
+
 
 Development
 -----------
@@ -162,9 +174,12 @@ Its development is hosted `on Sourceforge`_.
 
 .. _`on Sourceforge`: http://sourceforge.net/projects/yapsy/
 
-The work is BSD licensed in order to make it as easy as possible to be
-reused in other projects. Please note that the icon is not under the
-same license but under the Creative Common Attribution-ShareAlike license.
+.. _BSD: http://www.opensource.org/licenses/bsd-license.php
+
+The work is licensed under the simplified BSD_ in order to make it as
+easy as possible to be reused in other projects. Please note that the
+icon is not under the same license but under the Creative Common
+Attribution-ShareAlike license.
 
 Any suggestion and help are much welcome !
 

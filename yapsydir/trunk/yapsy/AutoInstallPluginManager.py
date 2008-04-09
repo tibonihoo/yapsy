@@ -41,13 +41,12 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 
 		Arguments
 		
-		  `plugin_install_dir`
+		  ``plugin_install_dir``
 		    The directory where new plugins to be installed will be copied.
 
-		*Warning*
-
-		  If `plugin_install_dir` does not correspond to an element of
-		  the `directories_list`, it is appended to the later.
+		.. warning:: If ``plugin_install_dir`` does not correspond to
+		    an element of the ``directories_list``, it is appended to
+		    the later.
 		    
 		"""
 		# Create the base decorator class
@@ -57,6 +56,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 										directories_list,
 										plugin_info_ext)
 		# set the directory for new plugins
+		self.plugins_places=[]
 		self.setInstallDir(plugin_install_dir)
 
 	def setInstallDir(self,plugin_install_dir):
@@ -75,12 +75,12 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 
 	def install(self, directory, plugin_info_filename):
 		"""
-		Giving the plugin's info file (e.g. 'myplugin.yapsy-plugin'),
+		Giving the plugin's info file (e.g. ``myplugin.yapsy-plugin``),
 		and the directory where it is located, get all the files that
 		define the plugin and copy them into the correct directory.
 		
-		Return `True` if the installation is a success, `False` if it
-		is a failure.
+		Return ``True`` if the installation is a success, ``False`` if
+		it is a failure.
 		"""
 		# start collecting essential info about the new plugin
 		plugin_info, config_parser = self._gatherCorePluginInfo(directory, plugin_info_filename)
