@@ -29,16 +29,33 @@ a lot of libraries. Yapsy only depends on Python's standard library.
 
 - an interface ``IPlugin`` for classes implementing plugins for this PluginManager.
 
+The ``PluginManager``
+~~~~~~~~~~~~~~~~~~~~~
+
 The ``PluginManager`` will load plugins that enforce the `Plugin
-Description Policy`_, and offer the most simple methods to activate
-and deactivate the loaded plugins. It may also classify the plugins in
-various categories, but this behaviour is optional and if not
-specified elseway all plugins are stored in the same default category.
+Description Policy`_, and offers the most simple methods to activate
+and deactivate the loaded plugins.
+
+It may also classify the plugins in various categories, but this
+behaviour is optional and if not specified elseway all plugins are
+stored in the same default category.
 
 The provided classes have been designed in order to be as easy as
-possible to extend. If you intend to use |yapsy| to build your own
-plugin system, you may be interested in the section about
-`Extensibility`_.
+possible to extend_.
+
+
+The ``IPlugin`` base class
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When using |yapsy| in your own software, you'll probably want to build
+derived classes of the ``IPlugin`` class as it is a mere interface
+with no specific functionality. 
+
+Your software's plugins should then inherit your very own plugin class
+(itself derived from ``IPlugin``).
+
+Where and how to code these plugins is explained in the section about
+`Plugin Description Policy`_ .
 
 
 Plugin Description Policy
@@ -49,51 +66,42 @@ a list of directories where plugins may be found. In each directory,
 a plugin should contain the following elements:
 
 *Standard* plugin
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
- ``myplugin.yapsy-plugin`` 
-
-     A *plugin info file* identical to the one previously described.
-
- ``myplugin``
-
-     A directory ontaining an actual Python plugin (ie with a
-     ``__init__.py`` file that makes it importable). The upper
-     namespace of the plugin should present a class inheriting the
-     ``IPlugin`` interface (the same remarks apply here as in the
-     previous case).
+  ``myplugin.yapsy-plugin`` 
+ 
+      A *plugin info file* identical to the one previously described.
+ 
+  ``myplugin``
+ 
+      A directory ontaining an actual Python plugin (ie with a
+      ``__init__.py`` file that makes it importable). The upper
+      namespace of the plugin should present a class inheriting the
+      ``IPlugin`` interface (the same remarks apply here as in the
+      previous case).
 
 
 *One file* plugin
 ~~~~~~~~~~~~~~~~~
 
-``myplugin.yapsy-plugin`` 
-     
-  A *plugin info file* which is identified thanks to its extension,
-  see the `Plugin Info File Format`_ to see what should be in this
-  file.
+  ``myplugin.yapsy-plugin`` 
+       
+    A *plugin info file* which is identified thanks to its extension,
+    see the `Plugin Info File Format`_ to see what should be in this
+    file.
+    
   
-
-  The extension is customisable at the ``PluginManager``'s
-  instanciation, since one may usually prefer the extension to bear
-  the application name rather than |yapsy|'s.
-
-``myplugin.py``
-
-   The source of the plugin. This file should at least define a class
-   inheriting the ``IPlugin`` interface. This class will be
-   instanciated at plugin loading and it will be notified the
-   activation/deactivation events.
+    The extension is customisable at the ``PluginManager``'s
+    instanciation, since one may usually prefer the extension to bear
+    the application name rather than |yapsy|'s.
+  
+  ``myplugin.py``
+  
+     The source of the plugin. This file should at least define a class
+     inheriting the ``IPlugin`` interface. This class will be
+     instanciated at plugin loading and it will be notified the
+     activation/deactivation events.
    
-
-   When using |yapsy| in your own software, you'll probably want to
-   build derived classes of the ``IPlugin`` class as it is no much
-   more that a mere interface. Your software's plugins should then
-   inherit your very own plugin class (itself derived from
-   ``IPlugin``).
-
- 
-
 
 
 Plugin Info File Format
@@ -119,6 +127,7 @@ Here is an example of what such a file should contain::
  Website = http://yapsy.sourceforge.net 
  Description = A simple plugin usefull for basic testing
 
+.. _extend:
 
 Extensibility
 -------------
@@ -176,10 +185,10 @@ Its development is hosted `on Sourceforge`_.
 
 .. _BSD: http://www.opensource.org/licenses/bsd-license.php
 
-The work is licensed under the simplified BSD_ in order to make it as
-easy as possible to be reused in other projects. Please note that the
-icon is not under the same license but under the Creative Common
-Attribution-ShareAlike license.
+The work is placed under the simplified BSD_ license in order to make
+it as easy as possible to be reused in other projects. Please note
+that the icon is not under the same license but under the Creative
+Common Attribution-ShareAlike license.
 
 Any suggestion and help are much welcome !
 
