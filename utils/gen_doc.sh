@@ -1,6 +1,9 @@
 #!/bin/sh
 # -*- coding: utf-8 -*-
 
+
+
+
 # Set appropriate paths
 export PYTHONPATH=$HOME/libs/docutils-0.4:$HOME/libs/docutils-0.4/extras:$PYTHONPATH
 
@@ -16,9 +19,12 @@ install -d $DOC_DEST/src
 svn co $PROJECT_CODE_REPOS/$SRC_BRANCH/yapsy $DOC_DEST/src/
 
 # generate the doc
-cd $DOC_DEST && epydoc -o epydoc --no-frames --name=yapsy --url=http://yapsy.sourceforge.net yapsy
+cd $DOC_DEST && epydoc -o epydoc --no-frames --docformat restructuredtext --name=yapsy --url=http://yapsy.sourceforge.net yapsy
 
 rm -r $DOC_DEST/src
 
+# alternatively, run epydoc locally and update the whole stuff:
+# $ scp epydoc/* tibonihoo@shell.sourceforge.net:/home/groups/y/ya/yapsy/htdocs/
+# $ scp -r artwork tibonihoo@shell.sourceforge.net:/home/groups/y/ya/yapsy/htdocs/
 
 
