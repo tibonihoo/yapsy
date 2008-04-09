@@ -6,7 +6,7 @@ Yapsy: Yet Another Plugin SYstem
 A simple plugin system for Python applications
 ==============================================
 
-.. image::  ../artwork/yapsy-big.png
+.. image::  artwork/yapsy-big.png
 
 .. |Yapsy| replace:: **Yapsy**
 .. |Yapsy-icon| image:: artwork/yapsy.png 
