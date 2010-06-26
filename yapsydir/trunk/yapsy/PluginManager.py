@@ -200,8 +200,8 @@ class PluginManager(object):
 		"""
 		Return the list of all plugins belonging to a category.
 		"""
-		return self.category_mapping[category_name]
-
+		return self.category_mapping[category_name][:]
+	
 
 	def _gatherCorePluginInfo(self, directory, filename):
 		"""
@@ -289,7 +289,7 @@ class PluginManager(object):
 		"""
 		if not hasattr(self, '_candidates'):
 			raise ValueError("locatePlugins must be called before getPluginCandidates")
-		return self._candidates
+		return self._candidates[:]
 
 	def removePluginCandidate(self,candidateTuple):
 		"""
