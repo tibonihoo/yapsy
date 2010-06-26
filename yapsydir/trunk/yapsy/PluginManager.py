@@ -24,7 +24,6 @@ needs.
 import sys, os
 import logging
 import ConfigParser
-import types
 
 from IPlugin import IPlugin
 
@@ -67,6 +66,7 @@ class PluginInfo(object):
 		Makes it possible to define a property.
 		"""
 		return self.plugin_object.is_activated
+	
 	is_activated = property(fget=_getIsActivated)
 
 	def setVersion(self, vstring):
@@ -181,7 +181,21 @@ class PluginManager(object):
 		Return the list of all categories.
 		"""
 		return self.category_mapping.keys()
+	
+	def removePluginFromCategory(self,plugin,category_name):
+		"""
+		Remove a plugin from the category where it's assumed to belong.
+		"""
+		self.category_mapping[category_name].remove(plugin)
+		
+		
+	def appendPluginToCategory(self,plugin,category_name):
+		"""
+		Append a new plugin to the given category.
+		"""
+		self.category_mapping[category_name].append(plugin)
 
+	
 	def getPluginsOfCategory(self,category_name):
 		"""
 		Return the list of all plugins belonging to a category.
@@ -260,6 +274,50 @@ class PluginManager(object):
 				plugin_info.description = config_parser.get("Documentation", "Description")
 		return plugin_info
 
+
+
+
+
+	def getPluginCandidates(self):
+		"""
+		Return the list of possible plugins.
+
+		Each possible plugin (ie a candidate) is described by a 3-uple:
+		(info file path, python file path, plugin info instance)
+
+		.. warning: locatePlugins must be call before !
+		"""
+		if not hasattr(self, '_candidates'):
+			raise ValueError("locatePlugins must be called before getPluginCandidates")
+		return self._candidates
+
+	def removePluginCandidate(self,candidateTuple):
+		"""
+		Remove a given candidate from the list of plugins that should be loaded.
+
+		The candidate must be represented by the same tuple described
+		in ``getPluginCandidates``.
+		
+		.. warning: locatePlugins must be call before !
+		"""
+		if not hasattr(self, '_candidates'):
+			raise ValueError("locatePlugins must be called before removePluginCandidate")
+		self._candidates.remove(candidateTuple)
+
+	def appendPluginCandidate(self,candidateTuple):
+		"""
+		Append a new candidate to the list of plugins that should be loaded.
+		
+		The candidate must be represented by the same tuple described
+		in ``getPluginCandidates``.
+		
+		.. warning: locatePlugins must be call before !
+		"""
+		if not hasattr(self, '_candidates'):
+			raise ValueError("locatePlugins must be called before removePluginCandidate")
+		self._candidates.append(candidateTuple)
+		
+		
 	def locatePlugins(self):
 		"""
 		Walk through the plugins' places and look for plugins.
@@ -419,6 +477,7 @@ class PluginManager(object):
 		return None
 
 
+	
 class PluginManagerDecorator(object):
 	"""
 	Make it possible to add several responsibilities to a plugin
