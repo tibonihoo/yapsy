@@ -6,14 +6,11 @@ Defines plugin managers that can handle configuration files similar to
 the ini files manipulated by Python's ConfigParser module.
 """
 
-import sys, os
-import logging
-import ConfigParser
 
 from IPlugin import IPlugin
 
 
-from PluginManager import PluginManager,PluginManagerDecorator
+from PluginManager import PluginManagerDecorator
 from PluginManager import PLUGIN_NAME_FORBIDEN_STRING
 
 
