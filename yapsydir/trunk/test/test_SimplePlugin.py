@@ -48,6 +48,14 @@ class SimpleTestsCase(unittest.TestCase):
 		Test if the correct plugin has been loaded.
 		"""
 		self.plugin_loading_check()
+
+	def testGetAll(self):
+		"""
+		Test if the correct plugin has been loaded.
+		"""
+		self.plugin_loading_check()
+		self.assertEqual(len(self.simplePluginManager.getAllPlugins()),1)
+		self.assertEqual(self.simplePluginManager.getAllPlugins()[0],self.plugin_info)
 		
 
 	def testActivationAndDeactivation(self):

@@ -2,104 +2,151 @@
 # -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
 
 """
-The basic interface and implementation for a plugin manager.
+Role
+====
 
-Also define the basic mechanism to add functionalities to the base
-PluginManager. A few *principles* to follow in this case:
+The ``PluginManager`` loads plugins that enforce the `Plugin
+Description Policy`_, and offers the most simple methods to activate
+and deactivate the plugins once they are loaded.
+
+.. note:: It may also classify the plugins in various categories, but
+          this behaviour is optional and if not specified elseway all
+          plugins are stored in the same default category.
+
+.. note:: It is often more useful to have the plugin manager behave
+          like singleton, this functionality is provided by
+          ``PluginManagerSingleton``
+
+
+Plugin Description Policy
+=========================
+
+When creating a ``PluginManager`` instance, one should provide it with
+a list of directories where plugins may be found. In each directory,
+a plugin should contain the following elements:
+
+For a  *Standard* plugin:
+
+  ``myplugin.yapsy-plugin`` 
+ 
+      A *plugin info file* identical to the one previously described.
+ 
+  ``myplugin``
+ 
+      A directory ontaining an actual Python plugin (ie with a
+      ``__init__.py`` file that makes it importable). The upper
+      namespace of the plugin should present a class inheriting the
+      ``IPlugin`` interface (the same remarks apply here as in the
+      previous case).
+
+
+For a *Single file* plugin:
+
+  ``myplugin.yapsy-plugin`` 
+       
+    A *plugin info file* which is identified thanks to its extension,
+    see the `Plugin Info File Format`_ to see what should be in this
+    file.
+    
+  
+    The extension is customisable at the ``PluginManager``'s
+    instanciation, since one may usually prefer the extension to bear
+    the application name.
+  
+  ``myplugin.py``
+  
+     The source of the plugin. This file should at least define a class
+     inheriting the ``IPlugin`` interface. This class will be
+     instanciated at plugin loading and it will be notified the
+     activation/deactivation events.
+
+
+Plugin Info File Format
+-----------------------
+
+The plugin info file gathers, as its name suggests, some basic
+information about the plugin.
+
+- it gives crucial information needed to be able to load the plugin
+
+- it provides some documentation like information like the plugin
+  author's name and a short description fo the plugin functionality.
+
+Here is an example of what such a file should contain::
+
+	  [Core]
+	  Name = My plugin Name
+	  Module = the_name_of_the_pluginto_load_with_no_py_ending
+         
+	  [Documentation]
+	  Description = What my plugin broadly does
+	  Author = My very own name
+	  Version = 0.1
+	  Website = My very own website
+	  Version = the_version_number_of_the_plugin
+	  
+	 
+.. note:: From such plugin descriptions, the ``PluginManager`` will
+          built its own representations of the plugins as instances of
+          the :doc:`PluginInfo` class.
+
+
+Extensibility
+=============
+
+Several mechanisms have been put up to help extending the basic
+functionalities of the proivided classes.
+
+A few *hints* to help you extend those classes:
 
 If the new functionalities do not overlap the ones already
-implemented, then they must be implemented as a Decorator class of the
+implemented, then they should be implemented as a Decorator class of the
 base plugin. This should be done by inheriting the
 ``PluginManagerDecorator``.
 
 If this previous way is not possible, then the functionalities should
 be added as a subclass of ``PluginManager``.
 
-The first method is highly prefered since it makes it possible to have
-a more flexible design where one can pick several functionalities and
-litterally *add* them to get an object corresponding to one's precise
-needs.
+.. note:: The first method is highly prefered since it makes it
+          possible to have a more flexible design where one can pick
+          several functionalities and litterally *add* them to get an
+          object corresponding to one's precise needs.
+
+API
+===
+
 """
 
-import sys, os
+import sys
+import os
 import logging
 import ConfigParser
 
-from IPlugin import IPlugin
+from yapsy.IPlugin import IPlugin
+from yapsy.PluginInfo import PluginInfo
 
 
-# A forbiden string that can later be used to describe lists of
-# plugins for instance (see ``ConfigurablePluginManager``)
 PLUGIN_NAME_FORBIDEN_STRING=";;"
+"""
+.. warning:: This string (';;' by default) is forbidden in plugin
+             names, and will be usable to describe lists of plugins
+             for instance (see :doc:`ConfigurablePluginManager`)
+"""
 
-class PluginInfo(object):
-	"""
-	Gather some info about a plugin such as its name, author,
-	description...
-	"""
-	
-	def __init__(self, plugin_name, plugin_path):
-		"""
-		Set the namle and path of the plugin as well as the default
-		values for other usefull variables.
-
-		.. warning:: The ``path`` attribute is the full path to the
-		    plugin if it is organised as a directory or the full path
-		    to a file without the ``.py`` extension if the plugin is
-		    defined by a simple file. In the later case, the actual
-		    plugin is reached via ``plugin_info.path+'.py'``.
-			
-		"""
-		self.name = plugin_name
-		self.path = plugin_path
-		self.author		= "Unknown"
-		self.version	= "?.?"
-		self.website	= "None"
-		self.copyright	= "Unknown"
-		self.description = ""
-		self.plugin_object = None
-		self.category     = None
-
-	def _getIsActivated(self):
-		"""
-		Return the activated state of the plugin object.
-		Makes it possible to define a property.
-		"""
-		return self.plugin_object.is_activated
-	
-	is_activated = property(fget=_getIsActivated)
-
-	def setVersion(self, vstring):
-		"""
-		Set the version of the plugin.
-
-		Used by subclasses to provide different handling of the
-		version number.
-		"""
-		self.version = vstring
 
 class PluginManager(object):
 	"""
-	Manage several plugins by ordering them in several categories.
-
+	Manage several plugins by ordering them in categories.
+	
 	The mechanism for searching and loading the plugins is already
 	implemented in this class so that it can be used directly (hence
 	it can be considered as a bit more than a mere interface)
-
-	The file describing a plugin should be written in the sytax
-	compatible with Python's ConfigParser module as in the following
-	example::
-	  
-	  [Core Information]
-	  Name= My plugin Name
-	  Module=the_name_of_the_pluginto_load_with_no_py_ending
-         
-	  [Documentation]
-	  Description=What my plugin broadly does
-	  Author= My very own name
-	  Website= My very own website
-	  Version=the_version_number_of_the_plugin
+	
+	The file describing a plugin must be written in the syntax
+	compatible with Python's ConfigParser module as in the
+	`Plugin Info File Format`_  
 	"""
+	
 
 	def __init__(self, 
 				 categories_filter={"Default":IPlugin}, 
@@ -202,7 +249,15 @@ class PluginManager(object):
 		"""
 		return self.category_mapping[category_name][:]
 	
-
+	def getAllPlugins(self):
+		"""
+		Return the list of all plugins (belonging to all categories).
+		"""
+		allPlugins = []
+		for pluginsOfOneCategory in self.category_mapping.values():
+				allPlugins.extend(pluginsOfOneCategory)
+		return allPlugins
+	
 	def _gatherCorePluginInfo(self, directory, filename):
 		"""
 		Gather the core information (name, and module to be loaded)
@@ -277,7 +332,7 @@ class PluginManager(object):
 
 
 
-
+	
 	def getPluginCandidates(self):
 		"""
 		Return the list of possible plugins.
@@ -285,7 +340,7 @@ class PluginManager(object):
 		Each possible plugin (ie a candidate) is described by a 3-uple:
 		(info file path, python file path, plugin info instance)
 
-		.. warning: locatePlugins must be call before !
+		.. warning: locatePlugins must be called before !
 		"""
 		if not hasattr(self, '_candidates'):
 			raise ValueError("locatePlugins must be called before getPluginCandidates")
@@ -298,7 +353,7 @@ class PluginManager(object):
 		The candidate must be represented by the same tuple described
 		in ``getPluginCandidates``.
 		
-		.. warning: locatePlugins must be call before !
+		.. warning: locatePlugins must be called before !
 		"""
 		if not hasattr(self, '_candidates'):
 			raise ValueError("locatePlugins must be called before removePluginCandidate")
@@ -311,7 +366,7 @@ class PluginManager(object):
 		The candidate must be represented by the same tuple described
 		in ``getPluginCandidates``.
 		
-		.. warning: locatePlugins must be call before !
+		.. warning: locatePlugins must be called before !
 		"""
 		if not hasattr(self, '_candidates'):
 			raise ValueError("locatePlugins must be called before removePluginCandidate")
@@ -477,77 +532,6 @@ class PluginManager(object):
 		return None
 
 
-	
-class PluginManagerDecorator(object):
-	"""
-	Make it possible to add several responsibilities to a plugin
-	manager object in a more flexible way than by mere
-	subclassing. This is indeed an implementation of the Decorator
-	Design Patterns.
-
-	
-	There is also an additional mechanism that allows for the
-	automatic creation of the object to be decorated when this object
-	is an instance of PluginManager (and not an instance of its
-	subclasses). This way we can keep the plugin managers creation
-	simple when the user don't want to mix a lot of 'enhancements' on
-	the base class.
-	"""
-
-	def __init__(self,decorated_object=None,
-				 # The following args will only be used if we need to
-				 # create a default PluginManager
-				 categories_filter={"Default":IPlugin}, 
-				 directories_list=[os.path.dirname(__file__)], 
-				 plugin_info_ext="yapsy-plugin"):
-		"""
-		Mimics the PluginManager's __init__ method and wraps an
-		instance of this class into this decorator class.
-		
-		  - *If the decorated_object is not specified*, then we use the
-		    PluginManager class to create the 'base' manager, and to do
-		    so we will use the arguments: ``categories_filter``,
-		    ``directories_list``, and ``plugin_info_ext`` or their
-		    default value if they are not given.
-
-		  - *If the decorated object is given*, these last arguments are
-		    simply **ignored** !
-
-		All classes (and especially subclasses of this one) that want
-		to be a decorator must accept the decorated manager as an
-		object passed to the init function under the exact keyword
-		``decorated_object``.
-		"""
-		
-		if decorated_object is None:
-			logging.debug("Creating a default PluginManager instance to be decorated.")
-			decorated_object = PluginManager(categories_filter, 
-											 directories_list,
-											 plugin_info_ext)
-		self._component = decorated_object
-
-	def __getattr__(self,name):
-		"""
-		Decorator trick copied from:
-		http://www.pasteur.fr/formation/infobio/python/ch18s06.html
-		"""
-# 		print "looking for %s in %s" % (name, self.__class__)
-		return getattr(self._component,name)
-		
-		
-	def collectPlugins(self):
-		"""
-		This function will usually be a shortcut to successively call
-		``self.locatePlugins`` and then ``self.loadPlugins`` which are
-		very likely to be redefined in each new decorator.
-
-		So in order for this to keep on being a "shortcut" and not a
-		real pain, I'm redefining it here.
-		"""
-		self.locatePlugins()
-		self.loadPlugins()
-
-
 class PluginManagerSingleton(object):
 	"""
 	Singleton version of the most basic plugin manager.
@@ -633,3 +617,9 @@ class PluginManagerSingleton(object):
 			logging.debug("PluginManagerSingleton initialised")
 		return self.__instance
 	get = classmethod(get)
+
+
+# For backward compatility import the most basic decorator (it changed
+# place as of v1.8)
+from yapsy.PluginManagerDecorator import PluginManagerDecorator
+
