@@ -2,16 +2,21 @@
 # -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
 
 """
+Role
+====
+
 Defines plugin managers that can handle configuration files similar to
 the ini files manipulated by Python's ConfigParser module.
+
+API
+===
 """
 
+from yapsy.IPlugin import IPlugin
 
-from IPlugin import IPlugin
 
-
-from PluginManager import PluginManagerDecorator
-from PluginManager import PLUGIN_NAME_FORBIDEN_STRING
+from yapsy.PluginManagerDecorator import PluginManagerDecorator
+from yapsy.PluginManager import PLUGIN_NAME_FORBIDEN_STRING
 
 
 

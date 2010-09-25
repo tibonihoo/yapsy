@@ -3,17 +3,35 @@
 
 
 """
+Role
+====
+
 Defines the basic interfaces for a plugin. These interfaces are
 inherited by the *core* class of a plugin. The *core* class of a
 plugin is then the one that will be notified the
 activation/deactivation of a plugin via the ``activate/deactivate``
 methods.
 
+
 For simple (near trivial) plugin systems, one can directly use the
 following interfaces.
 
-When designing a non-trivial plugin system, one should create new
-plugin interfaces that inherit the following interfaces.
+Extensibility
+=============
+
+In your own software, you'll probably want to build derived classes of
+the ``IPlugin`` class as it is a mere interface with no specific
+functionality.
+
+Your software's plugins should then inherit your very own plugin class
+(itself derived from ``IPlugin``).
+
+Where and how to code these plugins is explained in the section about
+the :doc:`PluginManager`.
+
+
+API
+===
 """
 
 

@@ -2,15 +2,22 @@
 # -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
 
 """
+Role
+====
+
 Defines the basic interface for a plugin manager that also keeps track
 of versions of plugins
+
+API
+===
 """
 
 
 from distutils.version import StrictVersion
 
-from PluginManager import PluginInfo, PluginManagerDecorator
-from IPlugin import IPlugin
+from yapsy.PluginInfo import PluginInfo
+from yapsy.IPlugin import IPlugin
+from yapsy.PluginManagerDecorator import PluginManagerDecorator
 
 
 class VersionedPluginInfo(PluginInfo):

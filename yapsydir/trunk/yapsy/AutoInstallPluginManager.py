@@ -2,21 +2,25 @@
 # -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
 
 """
+Role
+====
+
 Defines plugin managers that can handle the installation of plugin
 files into the right place. Then the end-user does not have to browse
 to the plugin directory to install them.
+
+API
+===
 """
 
-import sys, os
+import os
 import logging
-import ConfigParser
 import shutil
 
-from IPlugin import IPlugin
+from yapsy.IPlugin import IPlugin
 
 
-from PluginManager import PluginManager,PluginManagerDecorator
-from PluginManager import PLUGIN_NAME_FORBIDEN_STRING
+from yapsy.PluginManagerDecorator import PluginManagerDecorator
 
 
 
