@@ -174,7 +174,7 @@ class PluginManager(object):
 		"""
 		Set the categories of plugins to be looked for as well as the
 		way to recognise them.
-
+		
 		The ``categories_filter`` first defines the various categories
 		in which the plugins will be stored via its keys and it also
 		defines the interface tha has to be inherited by the actual
@@ -186,7 +186,7 @@ class PluginManager(object):
 		# also maps the plugin info files (useful to avoid loading
 		# twice the same plugin...)
 		self._category_file_mapping = {}
-		for categ in categories_filter.keys():
+		for categ in categories_filter:
 			self.category_mapping[categ] = []
 			self._category_file_mapping[categ] = []
 			
@@ -255,7 +255,7 @@ class PluginManager(object):
 		Return the list of all plugins (belonging to all categories).
 		"""
 		allPlugins = []
-		for pluginsOfOneCategory in self.category_mapping.values():
+		for pluginsOfOneCategory in self.category_mapping.itervalues():
 				allPlugins.extend(pluginsOfOneCategory)
 		return allPlugins
 	
@@ -457,9 +457,9 @@ class PluginManager(object):
 			if "__init__" in  os.path.basename(candidate_filepath):
 				sys.path.remove(plugin_info.path)
 			# now try to find and initialise the first subclass of the correct plugin interface
-			for element in candidate_globals.values():
+			for element in candidate_globals.itervalues():
 				current_category = None
-				for category_name in self.categories_interfaces.keys():
+				for category_name in self.categories_interfaces:
 					try:
 						is_correct_subclass = issubclass(element, self.categories_interfaces[category_name])
 					except:
