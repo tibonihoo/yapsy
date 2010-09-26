@@ -3,10 +3,6 @@
 
 
 
-
-# Set appropriate paths
-export PYTHONPATH=$HOME/libs/docutils-0.4:$HOME/libs/docutils-0.4/extras:$PYTHONPATH
-
 # the sources of all sources
 PROJECT_CODE_REPOS=https://yapsy.svn.sourceforge.net/svnroot/yapsy/yapsydir
 SRC_BRANCH=trunk/
