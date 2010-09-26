@@ -1,3 +1,4 @@
+
 #!/usr/bin/python
 # -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
 
@@ -444,7 +445,8 @@ class PluginManager(object):
 			if "__init__" in  os.path.basename(candidate_filepath):
 				sys.path.append(plugin_info.path)				
 			try:
-				execfile(candidate_filepath+".py",candidate_globals)
+				candidateMainFile = open(candidate_filepath+".py","r")	
+				exec(candidateMainFile,candidate_globals)
 			except Exception,e:
 				logging.debug("Unable to execute the code in plugin: %s" % candidate_filepath)
 				logging.debug("\t The following problem occured: %s %s " % (os.linesep, e))
@@ -495,7 +497,7 @@ class PluginManager(object):
 		"""
 		Get the plugin correspoding to a given category and name
 		"""
-		if self.category_mapping.has_key(category):
+		if category in self.category_mapping:
 			for item in self.category_mapping[category]:
 				if item.name == name:
 					return item
@@ -519,7 +521,7 @@ class PluginManager(object):
 		"""
 		Desactivate a plugin corresponding to a given category + name.
 		"""
-		if self.category_mapping.has_key(category):
+		if category in self.category_mapping:
 			plugin_to_deactivate = None
 			for item in self.category_mapping[category]:
 				if item.name == name:
