@@ -73,9 +73,6 @@ is in itself a appreciable contribution :)
 Trivia
 ------
 
-Its development is hosted `on Sourceforge`_.
-
-.. _`on Sourceforge`: http://sourceforge.net/projects/yapsy/
 
 .. _BSD: http://www.opensource.org/licenses/bsd-license.php
 
@@ -83,6 +80,13 @@ The work is placed under the simplified BSD_ license in order to make
 it as easy as possible to be reused in other projects. Please note
 that the icon is not under the same license but under the Creative
 Common Attribution-ShareAlike license.
+
+The project is hosted by `Sourceforge`_.
+
+.. _`Sourceforge`: http://sourceforge.net/projects/yapsy/
+
+|SourceForge.net| 
+
 
 Any suggestion and help are much welcome !
 
@@ -119,15 +123,6 @@ wanted to implement my own [#older_systems]_.
 .. [#older_systems] All the more because it seems that my modest
    design ideas slightly differ from what has been done in other
    libraries.
-
-----------
-
-Project hosted by SourceForge_
-
-|SourceForge.net| 
-
-.. _SourceForge: http://sourceforge.net
-
 
 Indices and tables
 ==================

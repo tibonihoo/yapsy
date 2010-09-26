@@ -105,6 +105,8 @@ html_theme_options = {
     "relbarbgcolor" : "#999",
     "relbarlinkcolor": "#e0cede",
     "footerbgcolor" : "#777",
+    "headtextcolor" : "#5c3566",
+    "linkcolor": "#5c3566",
     }
 
 # Add any paths that contain custom themes here, relative to this directory.
