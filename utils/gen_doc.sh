@@ -2,25 +2,30 @@
 # -*- coding: utf-8 -*-
 
 
+cd ../package/doc/
+make clean html
+scp -r _build/html/* tibonihoo,yapsy@web.sourceforge.net:/home/groups/y/ya/yapsy/htdocs/
 
-# the sources of all sources
-PROJECT_CODE_REPOS=https://yapsy.svn.sourceforge.net/svnroot/yapsy/yapsydir
-SRC_BRANCH=trunk/
+# alternatively, generate documentation directly on sourceforge:
+# # the sources of all sources
+# PROJECT_CODE_REPOS=http://yapsy.hg.sourceforge.net:8000/hgroot/yapsy/yapsy
 
-# the destination of the doc
-DOC_DEST=/home/groups/y/ya/yapsy/htdocs
+# # the destination of the doc
+# DOC_DEST=/home/groups/y/ya/yapsy/htdocs
 
-# get the latest version of the docs (yapsy is not big hence that should be ok to doanload it all)
-install -d $DOC_DEST/src
-svn co $PROJECT_CODE_REPOS/$SRC_BRANCH/yapsy $DOC_DEST/src/
+# # get the latest version of the docs (yapsy is not big hence that
+# # should be ok to download it all)
+# install -d ./tmp
+# pushd ./tmp
+# hg clone $PROJECT_CODE_REPOS 
 
-# generate the doc
-cd $DOC_DEST && epydoc -o epydoc --no-frames --docformat restructuredtext --name=yapsy --url=http://yapsy.sourceforge.net yapsy
+# # generate the documentation
+# pushd ./yapsy/package/doc
+# make clean html
+# cp -r _build/html/* DOC_DEST/
+# popd
+# popd
+# rm -r ./tmp
 
-rm -r $DOC_DEST/src
-
-# alternatively, run epydoc locally and update the whole stuff:
-# $ scp epydoc/* tibonihoo@shell.sourceforge.net:/home/groups/y/ya/yapsy/htdocs/
-# $ scp -r artwork tibonihoo@shell.sourceforge.net:/home/groups/y/ya/yapsy/htdocs/
 
 
