@@ -1,0 +1,11 @@
+======
+ TODO
+======
+
+
+- doc: sample code for filtering plugins
+- code: consider making the filter and versionned plugin into plugin
+  manager child classes (instead of decorators)
+- code: find a correct design to make extending the plugin "loading"
+  easier and chainable (policies/mixins, traits ?)
+ 
