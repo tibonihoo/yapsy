@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
+
 """
 The setup.py script needed to build a .egg for an easier distribution
 and installation of yapsy.
@@ -25,20 +28,20 @@ Automagical stuff:
 from setuptools import setup, find_packages
 
 setup(
-    name = "Yapsy",
-    version = "1.7",
-    packages = find_packages(),
-
+	name = "Yapsy",
+	version = "1.8",
+	packages = find_packages(),
+	
 	# the unit tests
 	test_suite = "test.test_All.MainTestSuite",
-
-    # metadata for upload to PyPI
-    author = "Thibauld Nion",
-    author_email = "tibonihoo @at@ yahoo .dot. fr",
-    description = "Yet another plugin system",
-    license = "BSD",
-    keywords = "plugin manager",
-    url = "http://yapsy.sourceforge.net",   # project home page, if any
+	
+	# metadata for upload to PyPI
+	author = "Thibauld Nion",
+	author_email = "tibonihoo @at@ yahoo .dot. fr",
+	description = "Yet another plugin system",
+	license = "BSD",
+	keywords = "plugin manager",
+	url = "http://yapsy.sourceforge.net",   # project home page, if any
 
 	# more details
 	long_description = """Yapsy is a small library implementing the core mechanisms needed to build a plugin system into a wider application.
@@ -51,5 +54,5 @@ The main purpose is to depend only on Python's standard libraries (at least vers
 				 'Programming Language :: Python',
 				 'Topic :: Software Development :: Libraries :: Python Modules'],
 	platforms='All',
-)
+	)
 
