@@ -46,11 +46,15 @@ Brief history
 
 |yapsy| 's development has been originally motivated by the MathBench_
 project but it is now used in other (more advanced) projects like
-peppy_.
+peppy_ and MysteryMachine_ for instance.
 
 .. _MathBench: http://mathbench.sourceforge.net
 .. _peppy: http://www.flipturn.org/peppy/
 .. _MysteryMachine: http://trac.backslashat.org/MysteryMachine
+
+Nowadays, the development is clearly motivated by such external projects and the enthusiast developpers who use the library. Some of them going as far as writing very nice tutorials such as `Making your app modular: Yapsy`_ which is obviously useful and motivating :)
+
+.. _`Making your app modular: Yapsy`: http://lateral.netmanagers.com.ar/weblog/posts/BB923.html
 
 Contributing or forking ?
 -------------------------
