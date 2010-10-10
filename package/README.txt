@@ -5,7 +5,7 @@ The main purpose is to depend only on Python's standard libraries (at
 least version 2.3) and to implement only the basic functionalities
 needed to detect, load and keep track of several plugins.
 
-For more info see doc/presentation.rst
+For more info see doc/index.rst
 
 To use yapsy, make sure that the "yapsy" directory is in your Python
 loading path and just import the needed class from yapsy (e.g. "from
@@ -17,8 +17,9 @@ Please let me know if you find this usefull.
 Thibauld Nion
 
 Site of the project:
-http://mathbench.sourceforge.net/yapsy
+http://yapsy.sourceforge.net/
 
 List of Contributors:
 Thibauld Nion
 Rob McMullen
+Roger Gammans
