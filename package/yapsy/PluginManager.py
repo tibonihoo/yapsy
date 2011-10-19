@@ -254,9 +254,9 @@ class PluginManager(object):
 		"""
 		Return the list of all plugins (belonging to all categories).
 		"""
-		allPlugins = []
+		allPlugins = set()
 		for pluginsOfOneCategory in self.category_mapping.itervalues():
-				allPlugins.extend(pluginsOfOneCategory)
+				allPlugins = allPlugins.union(pluginsOfOneCategory)
 		return allPlugins
 	
 	def _gatherCorePluginInfo(self, directory, filename):
