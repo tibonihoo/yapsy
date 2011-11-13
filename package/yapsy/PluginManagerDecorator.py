@@ -31,6 +31,7 @@ import logging
 
 from yapsy.IPlugin import IPlugin
 
+logger = logging.getLogger("yapsy")
 
 class PluginManagerDecorator(object):
 	"""
@@ -73,7 +74,7 @@ class PluginManagerDecorator(object):
 		"""
 		
 		if decorated_object is None:
-			logging.debug("Creating a default PluginManager instance to be decorated.")
+			logger.debug("Creating a default PluginManager instance to be decorated.")
 			from yapsy.PluginManager import PluginManager
 			decorated_object = PluginManager(categories_filter, 
 											 directories_list,

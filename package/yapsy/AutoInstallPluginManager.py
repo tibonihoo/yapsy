@@ -22,7 +22,7 @@ from yapsy.IPlugin import IPlugin
 
 from yapsy.PluginManagerDecorator import PluginManagerDecorator
 
-
+logger = logging.getLogger("yapsy")
 
 class AutoInstallPluginManager(PluginManagerDecorator):
 	"""
@@ -92,7 +92,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 		# depending on wether the path indicated is a
 		# directory or a file
 		if not (os.path.exists(plugin_info.path) or os.path.exists(plugin_info.path+".py") ):
-			logging.warning("Could not find the plugin's implementation for %s." % plugin_info.name)
+			logger.warning("Could not find the plugin's implementation for %s." % plugin_info.name)
 			return False
 		if os.path.isdir(plugin_info.path):
 			try:
@@ -101,7 +101,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 				shutil.copy(os.path.join(directory, plugin_info_filename),
 							self.install_dir)
 			except:
-				logging.error("Could not install plugin: %s." % plugin_info.name)
+				logger.error("Could not install plugin: %s." % plugin_info.name)
 				return False
 			else:
 				return True
@@ -112,7 +112,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 				shutil.copy(os.path.join(directory, plugin_info_filename),
 						   self.install_dir)
 			except:
-				logging.error("Could not install plugin: %s." % plugin_info.name)
+				logger.error("Could not install plugin: %s." % plugin_info.name)
 				return False
 			else:
 				return True
