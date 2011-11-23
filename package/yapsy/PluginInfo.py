@@ -37,7 +37,7 @@ class PluginInfo(object):
 		self.copyright	= "Unknown"
 		self.description = ""
 		self.plugin_object = None
-		self.category     = None
+		self.categories    = []
 
 	def _getIsActivated(self):
 		"""

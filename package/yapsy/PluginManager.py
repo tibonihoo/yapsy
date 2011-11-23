@@ -473,8 +473,8 @@ class PluginManager(object):
 							# we found a new plugin: initialise it and search for the next one
 							if not plugin_info_reference:
 								plugin_info.plugin_object = element()
-								plugin_info.category = current_category
 								plugin_info_reference = plugin_info
+							plugin_info.categories.append(current_category)
 							self.category_mapping[current_category].append(plugin_info_reference)
 							self._category_file_mapping[current_category].append(candidate_infofile)
 							current_category = None
