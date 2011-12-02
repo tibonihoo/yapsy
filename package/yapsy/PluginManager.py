@@ -458,7 +458,7 @@ class PluginManager(object):
 			if "__init__" in  os.path.basename(candidate_filepath):
 				sys.path.remove(plugin_info.path)
 			# now try to find and initialise the first subclass of the correct plugin interface
-			for element in candidate_globals.itervalues():
+			for element in sorted(candidate_globals.values()):
 				current_category = None
 				plugin_info_reference = None
 				for category_name in self.categories_interfaces:
