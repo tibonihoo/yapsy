@@ -401,8 +401,7 @@ class PluginManager(object):
 #					print candidate_infofile
 					plugin_info = self.gatherBasicPluginInfo(dirpath,filename)
 					if plugin_info is None:
-						logging.debug("""Candidate rejected: 
-	%s""" % candidate_infofile)						
+						logging.info("Plugin candidate rejected: '%s'" % candidate_infofile)
 						continue
 					# now determine the path of the file to execute,
 					# depending on wether the path indicated is a
@@ -413,6 +412,7 @@ class PluginManager(object):
 					elif os.path.isfile(plugin_info.path+".py"):
 						candidate_filepath = plugin_info.path
 					else:
+						logging.info("Plugin candidate rejected: '%s'" % candidate_infofile) 
 						continue
 #					print candidate_filepath
 					self._candidates.append((candidate_infofile, candidate_filepath, plugin_info))
