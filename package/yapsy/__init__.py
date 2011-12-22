@@ -35,16 +35,18 @@ should get you a fully working plugin management system::
    # Activate all loaded plugins
    for pluginInfo in simplePluginManager.getAllPlugins():
       simplePluginManager.activatePluginByName(pluginInfo.name)
-   
-.. note:: The ``plugin_info`` object (typically an instance of
-``IPlugin``) plays as *the entry point of each plugin*. That's also
-where |yapsy| ceases to guide you: it's up to you to define what your
-plugins can do and how you want to talk to them ! Talking to your
-plugin will then look very much like the following::
 
-   # Trigger 'some action' from the loaded plugins
-   for pluginInfo in simplePluginManager.getAllPlugins():
-      pluginInfo.plugin_object.doSomething(...)
+
+.. note:: The ``plugin_info`` object (typically an instance of
+          ``IPlugin``) plays as *the entry point of each
+          plugin*. That's also where |yapsy| ceases to guide you: it's
+          up to you to define what your plugins can do and how you
+          want to talk to them ! Talking to your plugin will then look
+          very much like the following::
+
+             # Trigger 'some action' from the loaded plugins
+             for pluginInfo in simplePluginManager.getAllPlugins():
+                pluginInfo.plugin_object.doSomething(...)
 
 
 
@@ -84,13 +86,15 @@ the manager about that before collecting plugins::
       "SongInfo" : ISongInfoPlugin,
       "Visualization" : IVisualisation,
       })
-    
-.. note:: Communicating with the plugins belonging to a given category
-might then be achieved with some code looking like the following::
 
-   # Trigger 'some action' from the "Visualization" plugins 
-   for pluginInfo in simplePluginManager.getPluginsOfCategory("Visualization"):
-      pluginInfo.plugin_object.doSomething(...)
+
+.. note:: Communicating with the plugins belonging to a given category
+          might then be achieved with some code looking like the
+          following::
+
+             # Trigger 'some action' from the "Visualization" plugins 
+             for pluginInfo in simplePluginManager.getPluginsOfCategory("Visualization"):
+                pluginInfo.plugin_object.doSomething(...)
 
       
 Enhance the manager's interface
