@@ -29,7 +29,7 @@ from setuptools import setup, find_packages
 
 setup(
 	name = "Yapsy",
-	version = "1.8",
+	version = "1.9",
 	packages = find_packages(),
 	
 	# the unit tests
@@ -37,7 +37,7 @@ setup(
 	
 	# metadata for upload to PyPI
 	author = "Thibauld Nion",
-	author_email = "tibonihoo @at@ yahoo .dot. fr",
+	author_email = "tibonihoo@users.sourceforge.net",
 	description = "Yet another plugin system",
 	license = "BSD",
 	keywords = "plugin manager",
