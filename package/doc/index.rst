@@ -53,7 +53,7 @@ peppy_, MysteryMachine_ and Aranduka_ for instance.
 .. _MysteryMachine: http://trac.backslashat.org/MysteryMachine
 .. _Aranduka: http://code.google.com/p/aranduka/
 
-Nowadays, the development is clearly motivated by such external projects and the enthusiast developpers who use the library. Some of them going as far as writing very nice tutorials such as `Making your app modular: Yapsy`_ which is obviously useful and motivating :)
+Nowadays, the development is clearly motivated by such external projects and the enthusiast developpers who use the library. Some of them going as far as writing *very nice tutorials* such as `Making your app modular: Yapsy`_ which is obviously useful and motivating :)
 
 .. _`Making your app modular: Yapsy`: http://lateral.netmanagers.com.ar/weblog/posts/BB923.html
 
