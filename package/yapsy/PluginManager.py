@@ -259,6 +259,54 @@ class PluginManager(object):
 				allPlugins.extend(pluginsOfOneCategory)
 		return allPlugins
 	
+	def _getPluginNameAndModuleFromStream(self, infoFileObject, candidate_infofile="<buffered info>"):
+		"""
+		Extract the name and module of a plugin from the
+		content of the info file that describes it and which
+		is stored in infoFileObject.
+
+		.. note:: Prefer using ``_gatherCorePluginInfo``
+		instead, whenever possible...
+                
+                .. warning:: ``infoFileObject`` must be a file-like
+                object: either an opened file for instance or a string
+                buffer wrapped in a StringIO instance as another
+                example.
+
+                .. note:: ``candidate_infofile`` must be provided
+                whenever possible to get better error messages.
+                
+		Return a 3-uple with the name of the plugin, its
+		module and the config_parser used to gather the core
+		data *in a tuple*, if the required info could be
+		localised, else return ``(None,None,None)``.
+		
+		.. note:: This is supposed to be used internally by subclasses
+		    and decorators.
+                """
+		# parse the information buffer to get info about the plugin
+		config_parser = ConfigParser.SafeConfigParser()
+		try:
+			config_parser.readfp(infoFileObject)
+		except Exception,e:
+			logging.debug("Could not parse the plugin file '%s' (exception raised was '%s')" % (candidate_infofile,e))
+			return (None, None, None)
+		# check if the basic info is available
+		if not config_parser.has_section("Core"):
+			logging.debug("Plugin info file has no 'Core' section (in '%s')" % candidate_infofile)					
+			return (None, None, None)
+		if not config_parser.has_option("Core","Name") or not config_parser.has_option("Core","Module"):
+			logging.debug("Plugin info file has no 'Name' or 'Module' section (in '%s')" % candidate_infofile)
+			return (None, None, None)
+		# check that the given name is valid
+		name = config_parser.get("Core", "Name")
+		name = name.strip()
+		if PLUGIN_NAME_FORBIDEN_STRING in name:
+			logging.debug("Plugin name contains forbiden character: %s (in '%s')" % (PLUGIN_NAME_FORBIDEN_STRING,
+																				   candidate_infofile))
+			return (None, None, None)
+		return (name,config_parser.get("Core", "Module"), config_parser)
+        
 	def _gatherCorePluginInfo(self, directory, filename):
 		"""
 		Gather the core information (name, and module to be loaded)
@@ -276,29 +324,12 @@ class PluginManager(object):
 		# now we can consider the file as a serious candidate
 		candidate_infofile = os.path.join(directory,filename)
 		# parse the information file to get info about the plugin
-		config_parser = ConfigParser.SafeConfigParser()
-		try:
-			config_parser.read(candidate_infofile)
-		except:
-			logging.debug("Could not parse the plugin file %s" % candidate_infofile)					
-			return (None, None)
-		# check if the basic info is available
-		if not config_parser.has_section("Core"):
-			logging.debug("Plugin info file has no 'Core' section (in %s)" % candidate_infofile)					
-			return (None, None)
-		if not config_parser.has_option("Core","Name") or not config_parser.has_option("Core","Module"):
-			logging.debug("Plugin info file has no 'Name' or 'Module' section (in %s)" % candidate_infofile)
-			return (None, None)
-		# check that the given name is valid
-		name = config_parser.get("Core", "Name")
-		name = name.strip()
-		if PLUGIN_NAME_FORBIDEN_STRING in name:
-			logging.debug("Plugin name contains forbiden character: %s (in %s)" % (PLUGIN_NAME_FORBIDEN_STRING,
-																				   candidate_infofile))
-			return (None, None)
+		name,moduleName,config_parser = self._getPluginNameAndModuleFromStream(open(candidate_infofile),
+                                                                                       candidate_infofile)
+		if (name,moduleName,config_parser)==(None,None,None):
+                        return (None,None)
 		# start collecting essential info
-		plugin_info = self._plugin_info_cls(name, 
-											os.path.join(directory,config_parser.get("Core", "Module")))
+		plugin_info = self._plugin_info_cls(name,os.path.join(directory,moduleName))
 		return (plugin_info,config_parser)
 
 	def gatherBasicPluginInfo(self, directory,filename):
