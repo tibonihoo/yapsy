@@ -29,7 +29,7 @@ from setuptools import setup, find_packages
 
 setup(
 	name = "Yapsy",
-	version = "1.9",
+	version = "1.9-python3",
 	packages = find_packages(),
 	
 	# the unit tests
