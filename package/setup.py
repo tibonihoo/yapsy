@@ -52,6 +52,7 @@ The main purpose is to depend only on Python's standard libraries (at least vers
 				 'License :: OSI Approved :: BSD License',
 				 'Operating System :: OS Independent',
 				 'Programming Language :: Python',
+				 'Programming Language :: Python :: 3',
 				 'Topic :: Software Development :: Libraries :: Python Modules'],
 	platforms='All',
 	)
