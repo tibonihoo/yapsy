@@ -255,11 +255,11 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 		for each plugin candidate look for its category, load it and
 		stores it in the appropriate slot of the ``category_mapping``.
 		"""
- 		self._component.loadPlugins()
+		self._component.loadPlugins()
 		# now load the plugins according to the recorded configuration
 		if self.config_parser.has_section(self.CONFIG_SECTION_NAME):
 			# browse all the categories
-			for category_name in self._component.category_mapping.keys():
+			for category_name in list(self._component.category_mapping.keys()):
 				# get the list of plugins to be activated for this
 				# category
 				option_name = "%s_plugins_to_load"%category_name

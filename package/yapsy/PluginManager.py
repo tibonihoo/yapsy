@@ -65,8 +65,9 @@ For a *Single file* plugin:
 Plugin Info File Format
 -----------------------
 
-The plugin info file gathers, as its name suggests, some basic
-information about the plugin.
+The plugin info file is a text file *encoded in ASCII or UTF-8* and
+gathering, as its name suggests, some basic information about the
+plugin.
 
 - it gives crucial information needed to be able to load the plugin
 
@@ -121,7 +122,7 @@ API
 import sys
 import os
 import logging
-import ConfigParser
+import configparser
 
 from yapsy.IPlugin import IPlugin
 from yapsy.PluginInfo import PluginInfo
@@ -228,7 +229,7 @@ class PluginManager(object):
 		"""
 		Return the list of all categories.
 		"""
-		return self.category_mapping.keys()
+		return list(self.category_mapping.keys())
 	
 	def removePluginFromCategory(self,plugin,category_name):
 		"""
@@ -255,7 +256,7 @@ class PluginManager(object):
 		Return the list of all plugins (belonging to all categories).
 		"""
 		allPlugins = []
-		for pluginsOfOneCategory in self.category_mapping.itervalues():
+		for pluginsOfOneCategory in self.category_mapping.values():
 				allPlugins.extend(pluginsOfOneCategory)
 		return allPlugins
 	
@@ -285,24 +286,24 @@ class PluginManager(object):
 		    and decorators.
                 """
 		# parse the information buffer to get info about the plugin
-		config_parser = ConfigParser.SafeConfigParser()
+		config_parser = configparser.SafeConfigParser()
 		try:
 			config_parser.readfp(infoFileObject)
-		except Exception,e:
-			logging.debug("Could not parse the plugin file '%s' (exception raised was '%s')" % (candidate_infofile,e))
+		except Exception as e:
+			logging.warning("Could not parse the plugin file '%s' (exception raised was '%s')" % (candidate_infofile,e))
 			return (None, None, None)
 		# check if the basic info is available
 		if not config_parser.has_section("Core"):
-			logging.debug("Plugin info file has no 'Core' section (in '%s')" % candidate_infofile)					
+			logging.warning("Plugin info file has no 'Core' section (in '%s')" % candidate_infofile)					
 			return (None, None, None)
 		if not config_parser.has_option("Core","Name") or not config_parser.has_option("Core","Module"):
-			logging.debug("Plugin info file has no 'Name' or 'Module' section (in '%s')" % candidate_infofile)
+			logging.warning("Plugin info file has no 'Name' or 'Module' section (in '%s')" % candidate_infofile)
 			return (None, None, None)
 		# check that the given name is valid
 		name = config_parser.get("Core", "Name")
 		name = name.strip()
 		if PLUGIN_NAME_FORBIDEN_STRING in name:
-			logging.debug("Plugin name contains forbiden character: %s (in '%s')" % (PLUGIN_NAME_FORBIDEN_STRING,
+			logging.warning("Plugin name contains forbiden character: %s (in '%s')" % (PLUGIN_NAME_FORBIDEN_STRING,
 																				   candidate_infofile))
 			return (None, None, None)
 		return (name,config_parser.get("Core", "Module"), config_parser)
@@ -477,9 +478,9 @@ class PluginManager(object):
 				sys.path.append(plugin_info.path)				
 			try:
 				candidateMainFile = open(candidate_filepath+".py","r")	
-				exec(candidateMainFile,candidate_globals)
-			except Exception,e:
-				logging.debug("Unable to execute the code in plugin: %s" % candidate_filepath)
+				exec(candidateMainFile.read(),candidate_globals)
+			except Exception as e:
+				logging.warning("Unable to execute the code in plugin: %s" % candidate_filepath)
 				logging.debug("\t The following problem occured: %s %s " % (os.linesep, e))
 				if "__init__" in  os.path.basename(candidate_filepath):
 					sys.path.remove(plugin_info.path)
@@ -488,7 +489,7 @@ class PluginManager(object):
 			if "__init__" in  os.path.basename(candidate_filepath):
 				sys.path.remove(plugin_info.path)
 			# now try to find and initialise the first subclass of the correct plugin interface
-			for element in candidate_globals.itervalues():
+			for element in candidate_globals.values():
 				current_category = None
 				for category_name in self.categories_interfaces:
 					try:

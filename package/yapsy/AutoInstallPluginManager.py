@@ -17,7 +17,7 @@ import os
 import logging
 import shutil
 import zipfile
-import StringIO
+import io
 
 from yapsy.IPlugin import IPlugin
 
@@ -133,12 +133,12 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 		"""
 		if not os.path.isfile(plugin_ZIP_filename):
 			logging.warning("Could not find the plugin's zip file at '%s'." % plugin_ZIP_filename)
-			print "Could not find the plugin's zip file at '%s'." % plugin_ZIP_filename
+			print("Could not find the plugin's zip file at '%s'." % plugin_ZIP_filename)
 			return False
 		candidateZipFile = zipfile.ZipFile(plugin_ZIP_filename)
 		if candidateZipFile.testzip() is not None:
 			logging.warning("Corruption detected in Zip file '%s'." % plugin_ZIP_filename)
-			print "Corruption detected in Zip file '%s'." % plugin_ZIP_filename
+			print("Corruption detected in Zip file '%s'." % plugin_ZIP_filename)
 			return False
 		zipContent = candidateZipFile.namelist()
 		logging.info("Investigating the content of a zip file containing: '%s'" % zipContent)
@@ -178,7 +178,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 		for infoFileName in infoFileCandidates:
 			infoFile = candidateZipFile.read(infoFileName)
 			logging.info("Assuming the zipped plugin info file to be '%s'" % infoFileName)
-			pluginName,moduleName,_ = self._getPluginNameAndModuleFromStream(StringIO.StringIO(infoFile))
+			pluginName,moduleName,_ = self._getPluginNameAndModuleFromStream(io.StringIO(str(infoFile,encoding="utf-8")))
 			if moduleName is None:
 					continue
 			logging.info("Checking existence of the expected module '%s' in the zip file" % moduleName)

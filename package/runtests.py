@@ -13,7 +13,7 @@ import unittest
 import logging
 
 
-from test_All import MainTestSuite
+from test.test_All import MainTestSuite
 
 def usage():
 	"""
@@ -38,13 +38,13 @@ def main(argv):
 	try:                                
 		opts, args = getopt.getopt(argv[1:], "vdh", ["help"])
 	except getopt.GetoptError:
-		print usage()
+		print(usage())
 		sys.exit(2)	
 	loglevel = logging.ERROR
 	test_verbosity = 1
 	for o,a in opts:
 		if o in ("-h","--help"):
-			print usage()
+			print(usage())
 			sys.exit(0)
 		elif o == "-d":
 			loglevel = logging.DEBUG

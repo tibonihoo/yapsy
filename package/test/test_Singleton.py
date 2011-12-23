@@ -1,8 +1,10 @@
-import test_settings
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
+
+from . import test_settings
 
 import os 
 import unittest
-import ConfigParser
+import configparser
 
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.VersionedPluginManager import VersionedPluginManager
@@ -26,8 +28,8 @@ class ConfigSingletonTestsCase(unittest.TestCase):
 		init
 		"""
 		# create a config file
- 		self.config_file = self.CONFIG_FILE
-		self.config_parser = ConfigParser.SafeConfigParser()
+		self.config_file = self.CONFIG_FILE
+		self.config_parser = configparser.SafeConfigParser()
 		self.plugin_info = None
 
 		# create the plugin manager

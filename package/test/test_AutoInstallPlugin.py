@@ -1,4 +1,4 @@
-import test_settings
+from . import test_settings
 import unittest
 import os 
 import shutil
@@ -38,25 +38,25 @@ class AutoInstallTestsCase(unittest.TestCase):
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "autoinstallplugin.yapsy-autoinstall-plugin"))
-		except OSError,e:
+		except OSError as e:
 #			print e
 			pass
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "AutoInstallPlugin.py"))
-		except OSError,e:
+		except OSError as e:
 #			print e
 			pass
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "autoinstalldirplugin.yapsy-autoinstall-plugin"))
-		except OSError,e:
+		except OSError as e:
 #			print e
 			pass
 		try:
 			shutil.rmtree(os.path.join(self.pluginManager.plugins_places[0],
 									   "autoinstalldirplugin"))
-		except OSError,e:
+		except OSError as e:
 #			print e
 			pass
 			
@@ -165,13 +165,13 @@ class AutoInstallZIPTestsCase(unittest.TestCase):
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "autoinstallzipplugin.yapsy-autoinstall-plugin"))
-		except OSError,e:
+		except OSError as e:
 #			print e
 			pass
 		try:
 			shutil.rmtree(os.path.join(self.pluginManager.plugins_places[0],
 									   "autoinstallzipplugin"))
-		except OSError,e:
+		except OSError as e:
 #			print e
 			pass
 			

@@ -1,5 +1,5 @@
-import test_settings
-from test_settings import TEST_MESSAGE
+from . import test_settings
+from .test_settings import TEST_MESSAGE
 import unittest
 import os 
 

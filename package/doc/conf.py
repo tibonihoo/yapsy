@@ -40,8 +40,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Yapsy'
-copyright = u'2010-2011, Thibauld Nion'
+project = 'Yapsy'
+copyright = '2010-2011, Thibauld Nion'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -183,8 +183,8 @@ htmlhelp_basename = 'Yapsydoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'Yapsy.tex', u'Yapsy Documentation',
-   u'Thibauld Nion', 'manual'),
+  ('index', 'Yapsy.tex', 'Yapsy Documentation',
+   'Thibauld Nion', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

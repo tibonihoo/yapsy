@@ -7,8 +7,6 @@
 This is certainly the second simplest plugin ever.
 """
 
-import test_settings
-import main
 from yapsy.IPlugin import IPlugin
 
 class SimplePlugin(IPlugin):

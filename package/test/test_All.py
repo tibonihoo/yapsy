@@ -13,12 +13,12 @@ sys.path.append(
 
 
 # load the tests
-import test_SimplePlugin
-import test_Singleton
-import test_ConfigPlugin
-import test_VersionedPlugin
-import test_AutoInstallPlugin
-import test_FilterPlugin
+from . import test_SimplePlugin
+from . import test_Singleton
+from . import test_ConfigPlugin
+from . import test_VersionedPlugin
+from . import test_AutoInstallPlugin
+from . import test_FilterPlugin
 
 
 # add them to a common test suite
