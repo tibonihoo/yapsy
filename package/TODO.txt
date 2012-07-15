@@ -5,7 +5,15 @@
 
 - doc: sample code for filtering plugins
 - code: consider making the filter and versionned plugin into plugin
-  manager child classes (instead of decorators)
+  manager child classes (instead of decorators), err or maybe strategies ?
 - code: find a correct design to make extending the plugin "loading"
   easier and chainable (policies/mixins, traits ?)
- 
+- code: go through  https://bitbucket.org/matclab/yapsy-mcl to look for possible improvements to yapsy
+- code: use strategies to change the way plugins are "described" (eg. separated text file or all info emebedded in the same python file/module), cf mhavel.
+- doc: highlight the existence of tutorial and link to these ones:
+  * http://www.micahcarrick.com/python-gtk-plugins-with-yapsy.html 
+  * http://stackoverflow.com/questions/5333128/yapsy-minimal-example
+- code: use callbacks to report errors when loading (asked for http://gbin.github.com/err/)
+- code: embed the ConfigParser output to the plugin_info (asked by A.N. and see also 3028110  and 3517524)
+- code: issue 3538516 "locatePlugins() toggle between os.walk() and absolute path"
+
