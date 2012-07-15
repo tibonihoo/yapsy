@@ -22,15 +22,21 @@ Automagical stuff:
 
   - build the packages (sources an egg) and upload all the stuff to pypi::
 
-      python setup.py register sdist bdist_egg upload
+      python setup.py sdist bdist_egg upload
+
+  - build the documentation
+   
+      python setup.py build_sphinx
 """
 
-from setuptools import setup, find_packages
+from setuptools import setup
+
 
 setup(
-	name = "Yapsy",
-	version = "1.9-python3",
-	packages = find_packages(),
+    name = "Yapsy",
+	version = __import__("yapsy").__version__,
+	packages = ['yapsy'],
+	package_dir = {'yapsy':'yapsy'},
 	
 	# the unit tests
 	test_suite = "test.test_All.MainTestSuite",
@@ -41,12 +47,9 @@ setup(
 	description = "Yet another plugin system",
 	license = "BSD",
 	keywords = "plugin manager",
-	url = "http://yapsy.sourceforge.net",   # project home page, if any
-
+	url = "http://yapsy.sourceforge.net",
 	# more details
-	long_description = """Yapsy is a small library implementing the core mechanisms needed to build a plugin system into a wider application.
-
-The main purpose is to depend only on Python's standard libraries (at least version 2.3) and to implement only the basic functionalities needed to detect, load and keep track of several plugins.""",
+	long_description = open("README.txt").read(),
 	classifiers=['Development Status :: 5 - Production/Stable',
 				 'Intended Audience :: Developers',
 				 'License :: OSI Approved :: BSD License',
