@@ -1,0 +1,9 @@
+include README.txt
+include LICENSE.txt
+include TODO.txt
+
+recursive-include test *.py *-plugin *.zip
+
+recursive-include artwork *
+recursive-include doc *
+prune doc/_build
