@@ -34,7 +34,7 @@ from setuptools import setup
 
 setup(
     name = "Yapsy",
-	version = __import__("yapsy").__version__,
+	version = __import__("yapsy").__version__+"-python3",
 	packages = ['yapsy'],
 	package_dir = {'yapsy':'yapsy'},
 	
