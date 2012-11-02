@@ -7,7 +7,6 @@ Main file to launch the tests.
 """
 
 import sys
-import os 
 import getopt
 import unittest
 import logging
