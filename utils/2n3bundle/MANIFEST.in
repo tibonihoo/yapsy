@@ -6,6 +6,8 @@ include src2/package/TODO.txt
 
 recursive-include src2/package/test *.py *-plugin *.zip
 
+recursive-include src2/package/yapsy *.py
+
 recursive-include src2/package/artwork *
 recursive-include src2/package/doc *
 prune src2/package/doc/_build
@@ -18,6 +20,8 @@ include src3/package/TODO.txt
 include src3/package/runtests.py
 
 recursive-include src3/package/test *.py *-plugin *.zip
+
+recursive-include src3/package/yapsy *.py
 
 recursive-include src3/package/artwork *
 recursive-include src3/package/doc *
