@@ -1,9 +1,13 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
 
+# Uses the content of 2n3bundle to build a source package that holds
+# both sources and also requires that the default and
+# python3_transition branches are checkdout at paths corresponding to
+# the variables below.
 
 PY2_YAPSY_DIR="../../default"
-PY3_YAPSY_DIR="../../python3-transition/package"
+PY3_YAPSY_DIR="../../python3-transition"
 BUNDLE_DIR="./2n3bundle"
 
 if [ -d $PY2_YAPSY_DIR ]; then
