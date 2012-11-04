@@ -38,6 +38,7 @@ class PluginInfo(object):
 		self.description = ""
 		self.plugin_object = None
 		self.category     = None
+		self.error = None
 
 	def _getIsActivated(self):
 		"""

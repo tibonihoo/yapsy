@@ -121,10 +121,45 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		# try re-adding it
 		spm.appendPluginCandidate(candidate)
 		self.assertEqual(len(spm.getPluginCandidates()),1)
-				
+
+	def testTwoStepsLoad(self):
+		"""
+		Test loading the plugins in two steps in order to collect more
+		deltailed informations.
+		"""
+		spm = PluginManager(directories_list=[
+				os.path.join(
+					os.path.dirname(os.path.abspath(__file__)),"plugins")])
+		# trigger the first step to look up for plugins
+		spm.locatePlugins()
+		# make full use of the "feedback" the loadPlugins can give
+		# - set-up the callback function that will be called *before*
+		# loading each plugin
+		callback_infos = []
+		def preload_cbk(plugin_info):
+            callback_infos.append(plugin_info)
+		# - gather infos about the processed plugins (loaded or not)
+		loadedPlugins = spm.loadPlugins(callback=preload_cbk)
+		self.assertEqual(len(loadedPlugins),1)
+		self.assertEqual(len(callback_infos),1)
+		self.assertEqual(loadedPlugins[0].error,None)
+		self.assertEqual(loadedPlugins[0],callback_infos[0])
+		# check that the getCategories works
+		self.assertEqual(len(spm.getCategories()),1)
+        sole_category = spm.getCategories()[0]
+		# check the getPluginsOfCategory
+        self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
+        plugin_info = spm.getPluginsOfCategory(sole_category)[0]
+		# try to remove it and check that is worked
+		spm.removePluginFromCategory(plugin_info,sole_category)
+        self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),0)
+		# now re-add this plugin the to same category
+		spm.appendPluginToCategory(plugin_info,sole_category)
+		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
+
 		
 
 suite = unittest.TestSuite([
 		unittest.TestLoader().loadTestsFromTestCase(SimpleTestsCase),
-		unittest.TestLoader().loadTestsFromTestCase(SimplePluginAdvancedManipulationTestsCase)
+		unittest.TestLoader().loadTestsFromTestCase(SimplePluginAdvancedManipulationTestsCase),
 		])

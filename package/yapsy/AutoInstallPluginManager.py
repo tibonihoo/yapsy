@@ -14,15 +14,13 @@ API
 """
 
 import os
-import logging
 import shutil
 import zipfile
 import StringIO
 
 from yapsy.IPlugin import IPlugin
-
-
 from yapsy.PluginManagerDecorator import PluginManagerDecorator
+from yapsy import log
 
 
 
@@ -94,7 +92,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 		# depending on wether the path indicated is a
 		# directory or a file
 		if not (os.path.exists(plugin_info.path) or os.path.exists(plugin_info.path+".py") ):
-			logging.warning("Could not find the plugin's implementation for %s." % plugin_info.name)
+			log.warning("Could not find the plugin's implementation for %s." % plugin_info.name)
 			return False
 		if os.path.isdir(plugin_info.path):
 			try:
@@ -103,7 +101,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 				shutil.copy(os.path.join(directory, plugin_info_filename),
 							self.install_dir)
 			except:
-				logging.error("Could not install plugin: %s." % plugin_info.name)
+				log.error("Could not install plugin: %s." % plugin_info.name)
 				return False
 			else:
 				return True
@@ -114,7 +112,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 				shutil.copy(os.path.join(directory, plugin_info_filename),
 						   self.install_dir)
 			except:
-				logging.error("Could not install plugin: %s." % plugin_info.name)
+				log.error("Could not install plugin: %s." % plugin_info.name)
 				return False
 			else:
 				return True
@@ -132,17 +130,15 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 		it is a failure.
 		"""
 		if not os.path.isfile(plugin_ZIP_filename):
-			logging.warning("Could not find the plugin's zip file at '%s'." % plugin_ZIP_filename)
-			print "Could not find the plugin's zip file at '%s'." % plugin_ZIP_filename
+			log.warning("Could not find the plugin's zip file at '%s'." % plugin_ZIP_filename)
 			return False
 		candidateZipFile = zipfile.ZipFile(plugin_ZIP_filename)
 		if candidateZipFile.testzip() is not None:
-			logging.warning("Corruption detected in Zip file '%s'." % plugin_ZIP_filename)
-			print "Corruption detected in Zip file '%s'." % plugin_ZIP_filename
+			log.warning("Corruption detected in Zip file '%s'." % plugin_ZIP_filename)
 			return False
 		zipContent = candidateZipFile.namelist()
-		logging.info("Investigating the content of a zip file containing: '%s'" % zipContent)
-		logging.info("Sanity checks on zip's contained files (looking for hazardous path symbols).")	
+		log.info("Investigating the content of a zip file containing: '%s'" % zipContent)
+		log.info("Sanity checks on zip's contained files (looking for hazardous path symbols).")	
 		# check absence of root path and ".." shortcut that would
 		# send the file oustide the desired directory
 		for containedFileName in zipContent:
@@ -151,42 +147,42 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 			# using os.path.expanduser, os.path.expandvars and
 			# os.path.normpath)
 			if containedFileName.startswith("/"):
-				logging.warning("Unsecure zip file, rejected because one of its file paths ('%s') starts with '/'" % containedFileName)
+				log.warning("Unsecure zip file, rejected because one of its file paths ('%s') starts with '/'" % containedFileName)
 				return False
-			if containedFileName.startswith("\\\\") or containedFileName.startswith("//"):
-				logging.warning("Unsecure zip file, rejected because one of its file paths ('%s') starts with '\\\\'" % containedFileName)
+			if containedFileName.startswith(r"\\") or containedFileName.startswith("//"):
+				log.warning(r"Unsecure zip file, rejected because one of its file paths ('%s') starts with '\\'" % containedFileName)
 				return False
 			if os.path.splitdrive(containedFileName)[0]:
-				logging.warning("Unsecure zip file, rejected because one of its file paths ('%s') starts with a drive letter" % containedFileName)
+				log.warning("Unsecure zip file, rejected because one of its file paths ('%s') starts with a drive letter" % containedFileName)
 				return False
 			if os.path.isabs(containedFileName):
-				logging.warning("Unsecure zip file, rejected because one of its file paths ('%s') is absolute" % containedFileName)
+				logg.warning("Unsecure zip file, rejected because one of its file paths ('%s') is absolute" % containedFileName)
 				return False
 			pathComponent = os.path.split(containedFileName)
 			if ".." in pathComponent:
-				logging.warning("Unsecure zip file, rejected because one of its file paths ('%s') contains '..'" % containedFileName)	
+				log.warning("Unsecure zip file, rejected because one of its file paths ('%s') contains '..'" % containedFileName)	
 				return False
 			if "~" in pathComponent:
-				logging.warning("Unsecure zip file, rejected because one of its file paths ('%s') contains '~'" % containedFileName)	
+				log.warning("Unsecure zip file, rejected because one of its file paths ('%s') contains '~'" % containedFileName)	
 				return False
 		infoFileCandidates = [filename for filename in zipContent if os.path.dirname(filename)==""]
 		if not infoFileCandidates:
-			logging.warning("Zip file structure seems wrong in '%s', no info file found." % plugin_ZIP_filename)
+			log.warning("Zip file structure seems wrong in '%s', no info file found." % plugin_ZIP_filename)
 			return False
 		isValid = False
-		logging.info("Looking for the zipped plugin's info file among '%s'" % infoFileCandidates)
+		log.info("Looking for the zipped plugin's info file among '%s'" % infoFileCandidates)
 		for infoFileName in infoFileCandidates:
 			infoFile = candidateZipFile.read(infoFileName)
-			logging.info("Assuming the zipped plugin info file to be '%s'" % infoFileName)
+			log.info("Assuming the zipped plugin info file to be '%s'" % infoFileName)
 			pluginName,moduleName,_ = self._getPluginNameAndModuleFromStream(StringIO.StringIO(infoFile))
 			if moduleName is None:
 					continue
-			logging.info("Checking existence of the expected module '%s' in the zip file" % moduleName)
+			log.info("Checking existence of the expected module '%s' in the zip file" % moduleName)
 			if moduleName in zipContent or os.path.join(moduleName,"__init__.py") in zipContent:
 				isValid = True
 				break
 		if not isValid:
-			logging.warning("Zip file structure seems wrong in '%s', "
+			log.warning("Zip file structure seems wrong in '%s', "
 							"could not match info file with the implementation of plugin '%s'." % (plugin_ZIP_filename,pluginName))
 			return False
 		else:
@@ -194,6 +190,6 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 				candidateZipFile.extractall(self.install_dir)
 				return True
 			except:
-				logging.error("Could not install plugin '%s' from zip file '%s'." % (pluginName,plugin_ZIP_filename))
+				log.error("Could not install plugin '%s' from zip file '%s'." % (pluginName,plugin_ZIP_filename))
 				return False
 		

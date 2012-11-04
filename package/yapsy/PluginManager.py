@@ -119,11 +119,12 @@ API
 
 import sys
 import os
-import logging
 import ConfigParser
 
 from yapsy.IPlugin import IPlugin
 from yapsy.PluginInfo import PluginInfo
+
+from yapsy import log
 
 
 PLUGIN_NAME_FORBIDEN_STRING=";;"
@@ -288,20 +289,20 @@ class PluginManager(object):
 		try:
 			config_parser.readfp(infoFileObject)
 		except Exception,e:
-			logging.debug("Could not parse the plugin file '%s' (exception raised was '%s')" % (candidate_infofile,e))
+			log.debug("Could not parse the plugin file '%s' (exception raised was '%s')" % (candidate_infofile,e))
 			return (None, None, None)
 		# check if the basic info is available
 		if not config_parser.has_section("Core"):
-			logging.debug("Plugin info file has no 'Core' section (in '%s')" % candidate_infofile)					
+			log.debug("Plugin info file has no 'Core' section (in '%s')" % candidate_infofile)					
 			return (None, None, None)
 		if not config_parser.has_option("Core","Name") or not config_parser.has_option("Core","Module"):
-			logging.debug("Plugin info file has no 'Name' or 'Module' section (in '%s')" % candidate_infofile)
+			log.debug("Plugin info file has no 'Name' or 'Module' section (in '%s')" % candidate_infofile)
 			return (None, None, None)
 		# check that the given name is valid
 		name = config_parser.get("Core", "Name")
 		name = name.strip()
 		if PLUGIN_NAME_FORBIDEN_STRING in name:
-			logging.debug("Plugin name contains forbiden character: %s (in '%s')" % (PLUGIN_NAME_FORBIDEN_STRING,
+			log.debug("Plugin name contains forbiden character: %s (in '%s')" % (PLUGIN_NAME_FORBIDEN_STRING,
 																				   candidate_infofile))
 			return (None, None, None)
 		return (name,config_parser.get("Core", "Module"), config_parser)
@@ -415,10 +416,10 @@ class PluginManager(object):
 		for directory in map(os.path.abspath,self.plugins_places):
 			# first of all, is it a directory :)
 			if not os.path.isdir(directory):
-				logging.debug("%s skips %s (not a directory)" % (self.__class__.__name__,directory))
+				log.debug("%s skips %s (not a directory)" % (self.__class__.__name__,directory))
 				continue
 			# iteratively walks through the directory
-			logging.debug("%s walks into directory: %s" % (self.__class__.__name__,directory))
+			log.debug("%s walks into directory: %s" % (self.__class__.__name__,directory))
 			for item in os.walk(directory):
 				dirpath = item[0]
 				for filename in item[2]:
@@ -426,12 +427,12 @@ class PluginManager(object):
 					if not filename.endswith(".%s" % self.plugin_info_ext):
 						continue
 					candidate_infofile = os.path.join(dirpath,filename)
-					logging.debug("""%s found a candidate: 
+					log.debug("""%s found a candidate: 
 	%s""" % (self.__class__.__name__, candidate_infofile))
 #					print candidate_infofile
 					plugin_info = self.gatherBasicPluginInfo(dirpath,filename)
 					if plugin_info is None:
-						logging.info("Plugin candidate rejected: '%s'" % candidate_infofile)
+						log.info("Plugin candidate rejected: '%s'" % candidate_infofile)
 						continue
 					# now determine the path of the file to execute,
 					# depending on wether the path indicated is a
@@ -442,7 +443,7 @@ class PluginManager(object):
 					elif os.path.isfile(plugin_info.path+".py"):
 						candidate_filepath = plugin_info.path
 					else:
-						logging.info("Plugin candidate rejected: '%s'" % candidate_infofile) 
+						log.info("Plugin candidate rejected: '%s'" % candidate_infofile) 
 						continue
 #					print candidate_filepath
 					self._candidates.append((candidate_infofile, candidate_filepath, plugin_info))
@@ -456,13 +457,19 @@ class PluginManager(object):
 		slot of the ``category_mapping``.
 
 		If a callback function is specified, call it before every load
-		attempt.  The ``plugin_info`` instance is passed as an argument to
-		the callback.
+		attempt.  The ``plugin_info`` instance is passed as an argument
+		to the callback.
+
+		Return a list of processed ``plugin_info`` instances. For
+		any plugins which were not loaded, the ``error`` attribute will
+		be populated with a (type, value, traceback) tuple, from
+		sys.exc_info().
 		"""
 # 		print "%s.loadPlugins" % self.__class__		
 		if not hasattr(self, '_candidates'):
 			raise ValueError("locatePlugins must be called before loadPlugins")
 
+		processed_plugins = []
 		for candidate_infofile, candidate_filepath, plugin_info in self._candidates:
 			# if a callback exists, call it before attempting to load
 			# the plugin so that a message can be displayed to the
@@ -477,11 +484,13 @@ class PluginManager(object):
 			try:
 				candidateMainFile = open(candidate_filepath+".py","r")	
 				exec(candidateMainFile,candidate_globals)
-			except Exception,e:
-				logging.debug("Unable to execute the code in plugin: %s" % candidate_filepath)
-				logging.debug("\t The following problem occured: %s %s " % (os.linesep, e))
+				processed_plugins.append(plugin_info)
+			except Exception:
+				log.error("Unable to execute the code in plugin: %s" % candidate_filepath, exc_info=True)
 				if "__init__" in  os.path.basename(candidate_filepath):
 					sys.path.remove(plugin_info.path)
+				plugin_info.error = sys.exc_info()
+				processed_plugins.append(plugin_info)
 				continue
 			
 			if "__init__" in  os.path.basename(candidate_filepath):
@@ -511,6 +520,7 @@ class PluginManager(object):
 		# Remove candidates list since we don't need them any more and
 		# don't need to take up the space
 		delattr(self, '_candidates')
+		return processed_plugins
 
 	def collectPlugins(self):
 		"""
@@ -541,7 +551,7 @@ class PluginManager(object):
 		if pta_item is not None:
 			plugin_to_activate = pta_item.plugin_object
 			if plugin_to_activate is not None:
-				logging.debug("Activating plugin: %s.%s"% (category,name))
+				log.debug("Activating plugin: %s.%s"% (category,name))
 				plugin_to_activate.activate()
 				return plugin_to_activate			
 		return None
@@ -558,7 +568,7 @@ class PluginManager(object):
 					plugin_to_deactivate = item.plugin_object
 					break
 			if plugin_to_deactivate is not None:
-				logging.debug("Deactivating plugin: %s.%s"% (category,name))
+				log.debug("Deactivating plugin: %s.%s"% (category,name))
 				plugin_to_deactivate.deactivate()
 				return plugin_to_deactivate			
 		return None
@@ -620,11 +630,11 @@ class PluginManagerSingleton(object):
 		value is returned.
 		"""
 		if self.__decoration_chain is None and self.__instance is None:
-			logging.debug("Setting up a specific behaviour for the PluginManagerSingleton")
+			log.debug("Setting up a specific behaviour for the PluginManagerSingleton")
 			self.__decoration_chain = list_of_pmd
 			return True
 		else:
-			logging.debug("Useless call to setBehaviour: the singleton is already instanciated of already has a behaviour.")
+			log.debug("Useless call to setBehaviour: the singleton is already instanciated of already has a behaviour.")
 			return False
 	setBehaviour = classmethod(setBehaviour)
 
@@ -646,7 +656,7 @@ class PluginManagerSingleton(object):
 			else:
 				# initialise the 'inner' PluginManagerDecorator
 				self.__instance = PluginManager()			
-			logging.debug("PluginManagerSingleton initialised")
+			log.debug("PluginManagerSingleton initialised")
 		return self.__instance
 	get = classmethod(get)
 

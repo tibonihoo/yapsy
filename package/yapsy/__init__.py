@@ -154,3 +154,7 @@ The nice thing is, if your new manager  inherits ``PluginManager``, then it will
 # tell epydoc that the documentation is in the reStructuredText format
 __docformat__ = "restructuredtext en"
 
+# provide a default named log for package-wide use
+import logging
+log = logging.getLogger('yapsy')
+
