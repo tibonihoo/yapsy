@@ -484,15 +484,16 @@ class PluginManager(object):
 			try:
 				candidateMainFile = open(candidate_filepath+".py","r")	
 				exec(candidateMainFile,candidate_globals)
-				processed_plugins.append(plugin_info)
 			except Exception:
-				log.error("Unable to execute the code in plugin: %s" % candidate_filepath, exc_info=True)
+                exc_info = sys.exc_info()
+				log.error("Unable to execute the code in plugin: %s" % candidate_filepath, exc_info=exc_info)
 				if "__init__" in  os.path.basename(candidate_filepath):
 					sys.path.remove(plugin_info.path)
-				plugin_info.error = sys.exc_info()
+				plugin_info.error = exc_info
 				processed_plugins.append(plugin_info)
 				continue
 			
+			processed_plugins.append(plugin_info)
 			if "__init__" in  os.path.basename(candidate_filepath):
 				sys.path.remove(plugin_info.path)
 			# now try to find and initialise the first subclass of the correct plugin interface
