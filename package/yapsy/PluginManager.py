@@ -476,7 +476,9 @@ class PluginManager(object):
 			if "__init__" in  os.path.basename(candidate_filepath):
 				sys.path.append(plugin_info.path)				
 			try:
-				candidateMainFile = open(candidate_filepath+".py","r")	
+				candidateMainFile = open(candidate_filepath+".py","r")
+				# TODO: make sure that we can get proper traceback
+				# info even when using exec(f.read())
 				exec(candidateMainFile.read(),candidate_globals)
 			except Exception as e:
 				logging.warning("Unable to execute the code in plugin: %s" % candidate_filepath)
