@@ -9,13 +9,13 @@ Next Release
 - doc: highlight the existence of tutorial and link to these ones:
   * http://www.micahcarrick.com/python-gtk-plugins-with-yapsy.html 
   * http://stackoverflow.com/questions/5333128/yapsy-minimal-example
-- code: [feature req.] Gather detailed information on plugin load error via a callback
+x code: [feature req.] Gather detailed information on plugin load error via a callback
 - code: [feature req.] Extra info to plug-in (eg add extra section or embed the ConfigParser output to the plugin_info)
 - code: [feature req.] "locatePlugins() toggle between os.walk() and absolute path"
 - code: [bug] Enforce a same tab convention everywhere
-- code: [contrib.  Mark Fickett] improve logging
+x code: [contrib.  Mark Fickett] improve logging
 - doc: [feature req.] Plugin installation/​management with python packages
-- code: [bug] No traceback hen plugin throws an exception
+x code: [bug] No traceback hen plugin throws an exception
 - doc: quote more projects using yapsy:
   * http://gbin.github.com/err/
   * http://nikola.ralsina.com.ar/
