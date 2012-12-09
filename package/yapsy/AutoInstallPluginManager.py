@@ -156,7 +156,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 				log.warning("Unsecure zip file, rejected because one of its file paths ('%s') starts with a drive letter" % containedFileName)
 				return False
 			if os.path.isabs(containedFileName):
-				logg.warning("Unsecure zip file, rejected because one of its file paths ('%s') is absolute" % containedFileName)
+				log.warning("Unsecure zip file, rejected because one of its file paths ('%s') is absolute" % containedFileName)
 				return False
 			pathComponent = os.path.split(containedFileName)
 			if ".." in pathComponent:

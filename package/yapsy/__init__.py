@@ -158,3 +158,10 @@ __docformat__ = "restructuredtext en"
 import logging
 log = logging.getLogger('yapsy')
 
+# Some constants concerning the plugins
+PLUGIN_NAME_FORBIDEN_STRING=";;"
+"""
+.. warning:: This string (';;' by default) is forbidden in plugin
+             names, and will be usable to describe lists of plugins
+             for instance (see :doc:`ConfigurablePluginManager`)
+"""

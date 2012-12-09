@@ -5,12 +5,13 @@
 Next Release
 
 - doc: sample code for filtering plugins
+x code: [feature req.] Allow to locate and describe plugins without a separated file (use strategies to change the way plugins are "descried" cf contrib. mhavel)
 - code: [contrib. mathieu Clabaut] multiple categories per plugin (cf https://bitbucket.org/matclab/yapsy-mcl)
 - doc: highlight the existence of tutorial and link to these ones:
   * http://www.micahcarrick.com/python-gtk-plugins-with-yapsy.html 
   * http://stackoverflow.com/questions/5333128/yapsy-minimal-example
 x code: [feature req.] Gather detailed information on plugin load error via a callback
-- code: [feature req.] Extra info to plug-in (eg add extra section or embed the ConfigParser output to the plugin_info)
+- code: [feature req.] Extra info to plug-in (eg add extra section or embed the ConfigParser output to the plugin_info), see also  https://github.com/tintinweb/yapsy 
 - code: [feature req.] "locatePlugins() toggle between os.walk() and absolute path"
 - code: [bug] Enforce a same tab convention everywhere
 x code: [contrib.  Mark Fickett] improve logging
@@ -19,8 +20,8 @@ x code: [bug] No traceback hen plugin throws an exception
 - doc: quote more projects using yapsy:
   * http://gbin.github.com/err/
   * http://nikola.ralsina.com.ar/
-
-
+- doc: show the logging snippet on front page + mention the indentation convention
+  
 Later
 
 
@@ -29,6 +30,5 @@ Next Refactoring
 
 - code: consider making the filter and versionned plugin into plugin manager child classes (instead of decorators), err or maybe strategies ?
 - code: find a correct design to make extending the plugin "loading" easier and chainable (policies/mixins, traits ?)
-- code: [feature req.] "meta descerption file needed?" use strategies to change the way plugins are "described" (eg. separated text file or all info emebedded in the same python file/module), cf mhavel.
 - code: [feature req.] Reloadable configuration for plugins
 - code: [feature req.] Allow Decorators to extend gatherPluginInfo

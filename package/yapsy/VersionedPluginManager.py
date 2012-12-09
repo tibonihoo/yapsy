@@ -93,13 +93,13 @@ class VersionedPluginManager(PluginManagerDecorator):
 
 	def getLatestPluginsOfCategory(self,category_name):
 		"""
+		DEPRECATED(>1.8): Please consider using getPluginsOfCategory
+		instead.
+		
 		Return the list of all plugins belonging to a category.
-
-		.. warning:: Deprecated ! Please consider using
-		             getPluginsOfCategory instead.
 		"""
 		return self.getPluginsOfCategory(category_name)
-
+	
 	def loadPlugins(self, callback=None):
 		"""
 		Load the candidate plugins that have been identified through a
