@@ -11,7 +11,7 @@ x code: [feature req.] Allow to locate and describe plugins without a separated 
   * http://www.micahcarrick.com/python-gtk-plugins-with-yapsy.html 
   * http://stackoverflow.com/questions/5333128/yapsy-minimal-example
 x code: [feature req.] Gather detailed information on plugin load error via a callback
-- code: [feature req.] Extra info to plug-in (eg add extra section or embed the ConfigParser output to the plugin_info), see also  https://github.com/tintinweb/yapsy 
+x code: [feature req.] Extra info to plug-in (eg add extra section or embed the ConfigParser output to the plugin_info), see also  https://github.com/tintinweb/yapsy 
 - code: [feature req.] "locatePlugins() toggle between os.walk() and absolute path"
 - code: [bug] Enforce a same tab convention everywhere
 x code: [contrib.  Mark Fickett] improve logging
