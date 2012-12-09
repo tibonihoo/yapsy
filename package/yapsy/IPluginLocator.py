@@ -31,12 +31,13 @@ class IPluginLocator(object):
 	
     def gatherCorePluginInfo(self, directory, filename):
         """
-        Returns a ``PluginInfo`` instance if ``filename`` is a valid
-        plugin discovered inside ``directory``. Returns None
-        otherwise.
+		Return a ``PluginInfo`` as well as the ``ConfigParser`` used to build it.
+		
+		If filename is a valid plugin discovered by any of the known
+        strategy in use. Returns None,None otherwise.
         """
 		raise NotImplementedError("gatherPluginInfo must be reimplemented by %s" % self)
-
+	
 	# --------------------------------------------------------------------
 	# Below are backward compatibility methods: if you inherit from
 	# IPluginLocator it's ok not to reimplement them, there will only
@@ -49,11 +50,13 @@ class IPluginLocator(object):
 		DEPRECATED(>1.9): kept for backward compatibility
 		with existing PluginManager child classes.
 		
-        Returns the plugin name and module name if filename is a valid plugin
-        discovered by any of the known strategy in use. Returns None otherwise.
+		Return a 3-uple with the name of the plugin, its
+		module and the config_parser used to gather the core
+		data *in a tuple*, if the required info could be
+		localised, else return ``(None,None,None)``.
 		"""
 		log.warn("setPluginInfoClass was called but '%s' doesn't implement it." % self)
-		return None,None
+		return None,None,None
 	
 
     def setPluginInfoClass(self, picls, names=None):

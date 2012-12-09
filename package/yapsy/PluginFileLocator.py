@@ -296,7 +296,11 @@ class PluginFileAnalyzerMathingRegex(IPluginFileAnalyzer):
 			plugin_filename = dirpath
 		infos["name"] = "%s" % module_name
 		infos["path"] = plugin_filename
-        return infos,ConfigParser.ConfigParser()
+		cf_parser = ConfigParser.ConfigParser()
+		cf_parser.add_section("Core")
+		cf_parser.set("Core","Name",infos["name"])
+		cf_parser.set("Core","Module",infos["path"])
+        return infos,cf_parser
 
 
 
@@ -365,17 +369,12 @@ class PluginFileLocator(IPluginLocator):
 		May return None if the analyzer fails to extract any info.
 		"""
 		plugin_info_dict,config_parser = analyzer.getInfosDictFromPlugin(dirpath, filename)
-		if not plugin_info_dict:
-			return None,None
+		if plugin_info_dict is None:
+			return None
 		plugin_info_cls = self._plugin_info_cls_map.get(analyzer.name,self._default_plugin_info_cls)
-		plugin_info = plugin_info_cls(plugin_info_dict.pop("name"), plugin_info_dict.pop("path"))
-		# additional extracted informations will be added here.
-		for pi_name, pi_value in plugin_info_dict.iteritems():
-			if pi_name == "version":
-				plugin_info.setVersion(pi_value)
-			else:
-				setattr(plugin_info, pi_name, pi_value)
-		return plugin_info,config_parser
+		plugin_info = plugin_info_cls(plugin_info_dict["name"],plugin_info_dict["path"])
+		plugin_info.setDetails(config_parser)
+		return plugin_info
 	
     def locatePlugins(self):
 		"""
@@ -409,7 +408,7 @@ class PluginFileLocator(IPluginLocator):
                             continue
 					    log.debug("%s found a candidate:\n    %s" % (self.__class__.__name__, candidate_infofile))
 #					    print candidate_infofile
-                        plugin_info,config_parser = self._getInfoForPluginFromAnalyzer(analyzer,dirpath, filename)
+                        plugin_info = self._getInfoForPluginFromAnalyzer(analyzer, dirpath, filename)
 					    if plugin_info is None:
 						    log.warning("Plugin candidate '%s'  rejected by strategy '%s'" % (candidate_infofile, analyzer.name))
 						    break # we consider this was the good strategy to use for: it failed -> not a plugin -> don't try another strategy
@@ -429,6 +428,8 @@ class PluginFileLocator(IPluginLocator):
 					                _discovered[os.path.join(plugin_info.path, _file)] = candidate_filepath
 						elif (plugin_info.path.endswith(".py") and os.path.isfile(plugin_info.path)) or os.path.isfile(plugin_info.path+".py"):
 						    candidate_filepath = plugin_info.path
+							if candidate_filepath.endswith(".py"):
+								candidate_filepath = candidate_filepath[:-3]
 						    # it is a file, adds it
 						    self._discovered_plugins[".".join((plugin_info.path, "py"))] = candidate_filepath
 						    _discovered[".".join((plugin_info.path, "py"))] = candidate_filepath
@@ -445,19 +446,18 @@ class PluginFileLocator(IPluginLocator):
 
     def gatherCorePluginInfo(self, directory, filename):
         """
-        Returns a ``PluginInfo`` instance if filename is a valid plugin discovered
-        by any of the known strategy in use. Returns None otherwise.
+        Return a ``PluginInfo`` as well as the ``ConfigParser`` used to build it.
+		
+		If filename is a valid plugin discovered by any of the known
+        strategy in use. Returns None,None otherwise.
         """
-        plugin_info = None
-		config_parser = None
         for analyzer in self._analyzers:
             # eliminate the obvious non plugin files
             if not analyzer.isValidPlugin(filename):
                 continue
-            plugin_info,config_parser = self._getInfoForPluginFromAnalyzer(analyzer,directory, filename)
-            break
-        return plugin_info,config_parser
-	
+            plugin_info = self._getInfoForPluginFromAnalyzer(analyzer,directory, filename)
+            return plugin_info,plugin_info.details
+		return None,None
 	
 	# -----------------------------------------------
 	# Backward compatible methods
