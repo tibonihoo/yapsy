@@ -474,15 +474,13 @@ class PluginManager(object):
 				sys.path.remove(plugin_info.path)
 			# now try to find and initialise the first subclass of the correct plugin interface
 			for element in candidate_globals.itervalues():
-				current_category = None
 				plugin_info_reference = None
 				for category_name in self.categories_interfaces:
 					try:
 						is_correct_subclass = issubclass(element, self.categories_interfaces[category_name])
 					except TypeError:
 						continue
-					if is_correct_subclass and \
-							element is not self.categories_interfaces[category_name]:
+					if is_correct_subclass and element is not self.categories_interfaces[category_name]:
 							current_category = category_name
 							if candidate_infofile not in self._category_file_mapping[current_category]:
 								# we found a new plugin: initialise it and search for the next one
@@ -492,8 +490,6 @@ class PluginManager(object):
 								plugin_info.categories.append(current_category)
 								self.category_mapping[current_category].append(plugin_info_reference)
 								self._category_file_mapping[current_category].append(candidate_infofile)
-								current_category = None
-								break
 		# Remove candidates list since we don't need them any more and
 		# don't need to take up the space
 		delattr(self, '_candidates')

@@ -6,7 +6,7 @@ import unittest
 import os 
 
 from yapsy.PluginManager import PluginManager
-
+from yapsy.IPlugin import IPlugin
 
 class SimpleTestsCase(unittest.TestCase):
 	"""
@@ -158,6 +158,54 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		spm.appendPluginToCategory(plugin_info,sole_category)
 		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
 
+	def testMultipleCategoriesForASamePlugin(self):
+		"""
+		Test that associating a plugin to multiple categories works as expected.
+		"""
+		class AnotherPluginIfce(object):
+			def __init__(self):
+				pass
+			def activate(self):
+				pass
+			def deactivate(self):
+				pass
+
+		spm = PluginManager(
+			categories_filter = {
+				"Default": IPlugin,
+				"IP": IPlugin,
+				"Other": AnotherPluginIfce,
+				},
+			directories_list=[
+				os.path.join(
+					os.path.dirname(os.path.abspath(__file__)),"plugins")])
+		# load the plugins that may be found
+		spm.collectPlugins()
+		# check that the getCategories works
+		self.assertEqual(len(spm.getCategories()),3)
+		first_category = spm.getCategories()[0]
+		self.assertEqual(first_category,"Default")
+		# check the getPluginsOfCategory
+		self.assertEqual(len(spm.getPluginsOfCategory(first_category)),1)
+		plugin_info = spm.getPluginsOfCategory(first_category)[0]
+		self.assertEqual(plugin_info.categories,["Default","IP"])
+		second_category = spm.getCategories()[1]
+		self.assertEqual(second_category,"IP")
+		# check the getPluginsOfCategory
+		self.assertEqual(len(spm.getPluginsOfCategory(second_category)),1)
+		third_category = spm.getCategories()[2]
+		self.assertEqual(third_category,"Other")
+		# check the getPluginsOfCategory
+		self.assertEqual(len(spm.getPluginsOfCategory(third_category)),0)
+		# try to remove the plugin from one category and check the
+		# other category
+		spm.removePluginFromCategory(plugin_info,first_category)
+		self.assertEqual(len(spm.getPluginsOfCategory(first_category)),0)
+		self.assertEqual(len(spm.getPluginsOfCategory(second_category)),1)
+		# now re-add this plugin the to same category
+		spm.appendPluginToCategory(plugin_info,first_category)
+		self.assertEqual(len(spm.getPluginsOfCategory(first_category)),1)
+		self.assertEqual(len(spm.getPluginsOfCategory(second_category)),1)
 		
 
 suite = unittest.TestSuite([
