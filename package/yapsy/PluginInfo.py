@@ -50,17 +50,17 @@ class PluginInfo(object):
 		    defined by a simple file. In the later case, the actual
 		    plugin is reached via ``plugin_info.path+'.py'``.
 		"""
-		self.details = ConfigParser()
+		self.__details = ConfigParser()
 		self.name = plugin_name
 		self.path = plugin_path
 		self._ensureDetailsDefaultsAreBackwardCompatible()
 		# Storage for stuff created during the plugin lifetime
 		self.plugin_object = None
-		self.category     = None
+		self.categories    = []
 		self.error = None
 
 
-	def setDetails(self,cfDetails):
+	def __setDetails(self,cfDetails):
 		"""
 		Fill in all details by storing a ``ConfigParser`` instance.
 
@@ -72,30 +72,33 @@ class PluginInfo(object):
 		"""	
 		bkp_name = self.name
 		bkp_path = self.path
-		self.details = cfDetails
+		self.__details = cfDetails
 		self.name = bkp_name
 		self.path = bkp_path
 		self._ensureDetailsDefaultsAreBackwardCompatible()
+	
+	def __getDetails(self):
+		return self.__details
 		
-	def getName(self):
+	def __getName(self):
 		return self.details.get("Core","Name")
 	
-	def setName(self, name):
+	def __setName(self, name):
 		if not self.details.has_section("Core"):
 			self.details.add_section("Core")
 		self.details.set("Core","Name",name)
 
 	
-	def getPath(self):
+	def __getPath(self):
 		return self.details.get("Core","Module")
 	
-	def setPath(self,path):
+	def __setPath(self,path):
 		if not self.details.has_section("Core"):
 			self.details.add_section("Core")
 		self.details.set("Core","Module",path)
 
 	
-	def getVersion(self):
+	def __getVersion(self):
 		return StrictVersion(self.details.get("Documentation","Version"))
 	
 	def setVersion(self, vstring):
@@ -111,48 +114,73 @@ class PluginInfo(object):
 			self.details.add_section("Documentation")
 		self.details.set("Documentation","Version",vstring)
 
-	def getAuthor(self):
+	def __getAuthor(self):
 		self.details.get("Documentation","Author")
 		
-	def setAuthor(self,author):
+	def __setAuthor(self,author):
 		if not self.details.has_section("Documentation"):
 			self.details.add_section("Documentation")
 		self.details.set("Documentation","Author",author)
 
 
-	def getCopyright(self):
+	def __getCopyright(self):
 		self.details.get("Documentation","Copyright")
 		
-	def setCopyright(self,copyrightTxt):
+	def __setCopyright(self,copyrightTxt):
 		if not self.details.has_section("Documentation"):
 			self.details.add_section("Documentation")
 		self.details.set("Documentation","Copyright",copyrightTxt)
 
 	
-	def getWebsite(self):
+	def __getWebsite(self):
 		self.details.get("Documentation","Website")
 		
-	def setWebsite(self,website):
+	def __setWebsite(self,website):
 		if not self.details.has_section("Documentation"):
 			self.details.add_section("Documentation")
 		self.details.set("Documentation","Website",website)
 
 	
-	def getDescription(self):
+	def __getDescription(self):
 		return self.details.get("Documentation","Description")
 	
-	def setDescription(self,description):
+	def __setDescription(self,description):
 		if not self.details.has_section("Documentation"):
 			self.details.add_section("Documentation")
 		return self.details.set("Documentation","Description",description)
 
-	name = property(fget=getName,fset=setName)
-	path = property(fget=getPath,fset=setPath)
-	version = property(fget=getVersion,fset=setVersion)
-	author = property(fget=getAuthor,fset=setAuthor)
-	copyright = property(fget=getCopyright,fset=setCopyright)
-	website = property(fget=getWebsite,fset=setWebsite)
-	description = property(fget=getDescription,fset=setDescription)
+
+	def __getCategory(self):
+		"""
+		DEPRECATED (yapsy>=1.10): Mimic former behaviour when what is
+		noz the first category was considered as the only one the
+		plugin belonged to.
+		"""		
+		if self.categories:
+			return self.categories[0]
+		else:
+			return "UnknownCategory"
+	
+	def __setCategory(self,c):
+		"""
+		DEPRECATED (yapsy>=1.10): Mimic former behaviour by making so
+		that if a category is set as it it was the only category to
+		which the plugin belongs, then a __getCategory will return
+		this newly set category.
+		"""
+		self.categories = [c] + self.categories
+	
+	name = property(fget=__getName,fset=__setName)
+	path = property(fget=__getPath,fset=__setPath)
+	version = property(fget=__getVersion,fset=setVersion)
+	author = property(fget=__getAuthor,fset=__setAuthor)
+	copyright = property(fget=__getCopyright,fset=__setCopyright)
+	website = property(fget=__getWebsite,fset=__setWebsite)
+	description = property(fget=__getDescription,fset=__setDescription)
+	details = property(fget=__getDetails,fset=__setDetails)
+	# deprecated (yapsy>1.10): plugins are not longer assocaited to a
+	# single category !
+	category = property(fget=__getCategory,fset=__setCategory)
 	
 	def _getIsActivated(self):
 		"""
@@ -162,7 +190,7 @@ class PluginInfo(object):
 		return self.plugin_object.is_activated
 	
 	is_activated = property(fget=_getIsActivated)
-
+	
 	def _ensureDetailsDefaultsAreBackwardCompatible(self):
 		"""
 		Internal helper function.

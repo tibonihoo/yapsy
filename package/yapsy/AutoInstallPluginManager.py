@@ -23,7 +23,6 @@ from yapsy.PluginManagerDecorator import PluginManagerDecorator
 from yapsy import log
 
 
-
 class AutoInstallPluginManager(PluginManagerDecorator):
 	"""
 	A plugin manager that also manages the installation of the plugin

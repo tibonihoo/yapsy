@@ -373,7 +373,7 @@ class PluginFileLocator(IPluginLocator):
 			return None
 		plugin_info_cls = self._plugin_info_cls_map.get(analyzer.name,self._default_plugin_info_cls)
 		plugin_info = plugin_info_cls(plugin_info_dict["name"],plugin_info_dict["path"])
-		plugin_info.setDetails(config_parser)
+		plugin_info.details = config_parser
 		return plugin_info
 	
     def locatePlugins(self):
