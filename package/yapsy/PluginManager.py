@@ -280,7 +280,7 @@ class PluginManager(object):
 
 	def setPluginLocator(self, plugin_locator, dir_list, picls=None):
 		"""
-		Sets the strqtegy used to locate the basic information.
+		Sets the strategy used to locate the basic information.
 
 		See ``IPluginLocator`` for the policy that plugin_locator must enforce.
 		"""

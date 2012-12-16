@@ -152,7 +152,7 @@ class PluginInfo(object):
 
 	def __getCategory(self):
 		"""
-		DEPRECATED (yapsy>=1.10): Mimic former behaviour when what is
+		DEPRECATED (>1.9): Mimic former behaviour when what is
 		noz the first category was considered as the only one the
 		plugin belonged to.
 		"""		
@@ -163,7 +163,7 @@ class PluginInfo(object):
 	
 	def __setCategory(self,c):
 		"""
-		DEPRECATED (yapsy>=1.10): Mimic former behaviour by making so
+		DEPRECATED (>1.9): Mimic former behaviour by making so
 		that if a category is set as it it was the only category to
 		which the plugin belongs, then a __getCategory will return
 		this newly set category.
@@ -178,7 +178,7 @@ class PluginInfo(object):
 	website = property(fget=__getWebsite,fset=__setWebsite)
 	description = property(fget=__getDescription,fset=__setDescription)
 	details = property(fget=__getDetails,fset=__setDetails)
-	# deprecated (yapsy>1.10): plugins are not longer assocaited to a
+	# deprecated (>1.9): plugins are not longer assocaited to a
 	# single category !
 	category = property(fget=__getCategory,fset=__setCategory)
 	
