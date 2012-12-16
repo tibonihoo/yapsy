@@ -277,7 +277,7 @@ class PluginManager(object):
 		"""
 		return self.getPluginLocator().getPluginInfoClass()
 
-	def setPluginLocator(self, plugin_locator, dir_list, picls=None):
+	def setPluginLocator(self, plugin_locator, dir_list=None, picls=None):
 		"""
 		Sets the strategy used to locate the basic information.
 

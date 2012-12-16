@@ -7,6 +7,7 @@ import os
 
 from yapsy.PluginManager import PluginManager
 from yapsy.IPlugin import IPlugin
+from yapsy.PluginFileLocator import PluginFileLocator
 
 class SimpleTestsCase(unittest.TestCase):
 	"""
@@ -207,8 +208,72 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		self.assertEqual(len(spm.getPluginsOfCategory(first_category)),1)
 		self.assertEqual(len(spm.getPluginsOfCategory(second_category)),1)
 		
+class SimplePluginDetectionTestsCase(unittest.TestCase):
+	"""
+	Test particular aspects of plugin detection
+	"""
+	
+	def testRecursivePluginlocation(self):
+		"""
+		Test detection of plugins which by default must be
+		recusrive. Here we give the test directory as a plugin place
+		whereas we expect the plugins to be in test/plugins.
+		"""
+		spm = PluginManager(directories_list=[
+					os.path.dirname(os.path.abspath(__file__))])
+		# load the plugins that may be found
+		spm.collectPlugins()
+		# check that the getCategories works
+		self.assertEqual(len(spm.getCategories()),1)
+		sole_category = spm.getCategories()[0]
+		# check the getPluginsOfCategory
+		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
 
+	def testNonRecursivePluginlocationNotFound(self):
+		"""
+		Test detection of plugins when the detection is non recursive.
+		Here we test that it cannot look into subdirectories of the
+		test directory.
+		"""
+		pluginLocator = PluginFileLocator()
+		pluginLocator.setPluginPlaces([
+					os.path.dirname(os.path.abspath(__file__))])
+		pluginLocator.disableRecursiveScan()
+		spm = PluginManager()
+		spm.setPluginLocator(pluginLocator)
+		# load the plugins that may be found
+		spm.collectPlugins()
+		# check that the getCategories works
+		self.assertEqual(len(spm.getCategories()),1)
+		sole_category = spm.getCategories()[0]
+		# check the getPluginsOfCategory
+		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),0)
+
+
+	def testNonRecursivePluginlocationNotFound(self):
+		"""
+		Test detection of plugins when the detection is non
+		recursive. Here we test that if we give test/plugin as the
+		directory to scan it can find the plugin.
+		"""
+		pluginLocator = PluginFileLocator()
+		pluginLocator.setPluginPlaces([
+				os.path.join(
+					os.path.dirname(os.path.abspath(__file__)),"plugins")])
+		pluginLocator.disableRecursiveScan()
+		spm = PluginManager()
+		spm.setPluginLocator(pluginLocator)
+		# load the plugins that may be found
+		spm.collectPlugins()
+		# check that the getCategories works
+		self.assertEqual(len(spm.getCategories()),1)
+		sole_category = spm.getCategories()[0]
+		# check the getPluginsOfCategory
+		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
+
+		
 suite = unittest.TestSuite([
 		unittest.TestLoader().loadTestsFromTestCase(SimpleTestsCase),
 		unittest.TestLoader().loadTestsFromTestCase(SimplePluginAdvancedManipulationTestsCase),
+		unittest.TestLoader().loadTestsFromTestCase(SimplePluginDetectionTestsCase),
 		])

@@ -97,13 +97,13 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 
 	A plugin is expected to be described by a text file ('ini' format) with a specific extension (.yapsy-plugin by default).
 
-	This file must contain at least the following information:
+	This file must contain at least the following information::
 	
 	    [Core]
 	    Name = name of the module
 	    Module = relative_path/to/python_file_or_directory
 
-	Optionnally the description file may also contain the following section (in addition to the above one):
+	Optionnally the description file may also contain the following section (in addition to the above one)::
 
 	    [Documentation]
 	    Author = Author Name
@@ -123,6 +123,7 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
         IPluginFileAnalyzer.__init__(self,name)
 		self.setPluginInfoExtension(extensions)
 
+	
 	def setPluginInfoExtension(self,extensions):
 		"""
 		Set the extension that will identify a plugin info file.
@@ -133,7 +134,8 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 		if not isinstance(extensions, tuple):
             extensions = (extensions, )
 		self.expectedExtensions = extensions
-		
+
+	
     def isValidPlugin(self, filename):
 		"""
 		Check if it is a valid plugin based on the given plugin info file extension(s).
@@ -310,6 +312,10 @@ class PluginFileLocator(IPluginLocator):
 	
     If more than one analyzer is being used, the first that will discover a
     new plugin will avoid other strategies to find it too.
+
+	By default each directory set as a "plugin place" is scanned
+	recursively. You can change that by a call to
+	``disableRecursiveScan``.
     """
     def __init__(self, analyzers=None, plugin_info_cls=PluginInfo):
         """
@@ -324,7 +330,14 @@ class PluginFileLocator(IPluginLocator):
         self._default_plugin_info_cls = PluginInfo
 		self._plugin_info_cls_map = {}
         self._max_size = 1e3*1024 # in octets (by default 1 Mo)
+		self.recursive = True
 
+	def disableRecursiveScan(self):
+		"""
+		Disable recursive scan of the directories given as plugin places.
+		"""
+		self.recursive = False
+		
     def setAnalyzers(self, analyzers):
         """
         Sets a new set of analyzers.
@@ -389,9 +402,15 @@ class PluginFileLocator(IPluginLocator):
 			if not os.path.isdir(directory):
 				log.debug("%s skips %s (not a directory)" % (self.__class__.__name__, directory))
 				continue
+			if self.recursive:
+				debug_txt_mode = "recursively"
+				walk_iter = os.walk(directory)
+			else:
+				debug_txt_mode = "non-recursively"
+				walk_iter = [(directory,[],os.listdir(directory))]				
 			# iteratively walks through the directory
-			log.debug("%s walks into directory: %s" % (self.__class__.__name__, directory))
-			for item in os.walk(directory):
+			log.debug("%s walks (%s) into directory: %s" % (self.__class__.__name__, debug_txt_mode, directory))
+			for item in walk_iter:
 				dirpath = item[0]
 				for filename in item[2]:
                     # print "testing candidate file %s" % filename
