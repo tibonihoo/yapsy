@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8; tab-width: 4; python-indent: 4; indent-tabs-mode: t -*-
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 
 
@@ -14,12 +14,12 @@ Role
 from yapsy import log
 
 class IPluginLocator(object):
-    """
-    Plugin Locator interface with some methods already implemented to
-    manage the awkward backward compatible stuff.
-    """
+	"""
+	Plugin Locator interface with some methods already implemented to
+	manage the awkward backward compatible stuff.
+	"""
 	
-    def locatePlugins(self):
+	def locatePlugins(self):
 		"""
 		Walk through the plugins' places and look for plugins.
 
@@ -29,13 +29,13 @@ class IPluginLocator(object):
 		"""
 		raise NotImplementedError("locatePlugins must be reimplemented by %s" % self)
 	
-    def gatherCorePluginInfo(self, directory, filename):
-        """
+	def gatherCorePluginInfo(self, directory, filename):
+		"""
 		Return a ``PluginInfo`` as well as the ``ConfigParser`` used to build it.
 		
 		If filename is a valid plugin discovered by any of the known
-        strategy in use. Returns None,None otherwise.
-        """
+		strategy in use. Returns None,None otherwise.
+		"""
 		raise NotImplementedError("gatherPluginInfo must be reimplemented by %s" % self)
 	
 	# --------------------------------------------------------------------
@@ -59,8 +59,8 @@ class IPluginLocator(object):
 		return None,None,None
 	
 
-    def setPluginInfoClass(self, picls, names=None):
-        """
+	def setPluginInfoClass(self, picls, names=None):
+		"""
 		DEPRECATED(>1.9): kept for backward compatibility
 		with existing PluginManager child classes.
 		
@@ -69,8 +69,8 @@ class IPluginLocator(object):
 		"""
 		log.warn("setPluginInfoClass was called but '%s' doesn't implement it." % self)
 
-    def getPluginInfoClass(self):
-        """
+	def getPluginInfoClass(self):
+		"""
 		DEPRECATED(>1.9): kept for backward compatibility
 		with existing PluginManager child classes.
 		
@@ -79,7 +79,7 @@ class IPluginLocator(object):
 		log.warn("getPluginInfoClass was called but '%s' doesn't implement it." % self)
 		return None
 
-    def setPluginPlaces(self, directories_list):
+	def setPluginPlaces(self, directories_list):
 		"""
 		DEPRECATED(>1.9): kept for backward compatibility
 		with existing PluginManager child classes.
@@ -88,12 +88,12 @@ class IPluginLocator(object):
 		"""
 		log.warn("setPluginPlaces was called but '%s' doesn't implement it." % self)
 
-    def updatePluginPlaces(self, directories_list):
-        """
+	def updatePluginPlaces(self, directories_list):
+		"""
 		DEPRECATED(>1.9): kept for backward compatibility
 		with existing PluginManager child classes.
 		
-        Updates the list of directories where to look for plugin places.
-        """
+		Updates the list of directories where to look for plugin places.
+		"""
 		log.warn("updatePluginPlaces was called but '%s' doesn't implement it." % self)
 

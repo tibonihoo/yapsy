@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8; tab-width: 4; python-indent: 4; indent-tabs-mode: t -*-
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 """
 Role
@@ -44,21 +44,20 @@ For a *Single file* plugin:
 
   ``myplugin.yapsy-plugin`` 
        
-    A *plugin info file* which is identified thanks to its extension,
-    see the `Plugin Info File Format`_ to see what should be in this
-    file.
-    
-  
-    The extension is customisable at the ``PluginManager``'s
-    instanciation, since one may usually prefer the extension to bear
-    the application name.
+      A *plugin info file* which is identified thanks to its extension,
+      see the `Plugin Info File Format`_ to see what should be in this
+      file.
+   
+      The extension is customisable at the ``PluginManager``'s
+      instanciation, since one may usually prefer the extension to bear
+      the application name.
   
   ``myplugin.py``
   
-     The source of the plugin. This file should at least define a class
-     inheriting the ``IPlugin`` interface. This class will be
-     instanciated at plugin loading and it will be notified the
-     activation/deactivation events.
+      The source of the plugin. This file should at least define a class
+      inheriting the ``IPlugin`` interface. This class will be
+      instanciated at plugin loading and it will be notified the
+      activation/deactivation events.
 
 
 Plugin Info File Format
@@ -74,18 +73,18 @@ information about the plugin.
 
 Here is an example of what such a file should contain::
 
-	  [Core]
-	  Name = My plugin Name
-	  Module = the_name_of_the_pluginto_load_with_no_py_ending
+      [Core]
+      Name = My plugin Name
+      Module = the_name_of_the_pluginto_load_with_no_py_ending
          
-	  [Documentation]
-	  Description = What my plugin broadly does
-	  Author = My very own name
-	  Version = 0.1
-	  Website = My very own website
-	  Version = the_version_number_of_the_plugin
-	  
-	 
+      [Documentation]
+      Description = What my plugin broadly does
+      Author = My very own name
+      Version = 0.1
+      Website = My very own website
+      Version = the_version_number_of_the_plugin
+      
+ 
 .. note:: From such plugin descriptions, the ``PluginManager`` will
           built its own representations of the plugins as instances of
           the :doc:`PluginInfo` class.
@@ -114,7 +113,7 @@ be added as a subclass of ``PluginManager``.
 
 API
 ===
-
+ 
 """
 
 import sys
@@ -318,9 +317,9 @@ class PluginManager(object):
 		"""
 		return self.getPluginLocator().gatherCorePluginInfo(directory,plugin_info_filename)
 
-	def _getPluginNameAndModuleFromStream(self,fileobj):
+	def _getPluginNameAndModuleFromStream(self,infoFileObject,candidate_infofile="<buffered info>"):
 		"""
-		DEPRECATED since yapsy-1.10: please use a specific plugin
+		DEPRECATED(>1.9): please use a specific plugin
 		locator if you need such information.
 		
 		Extract the name and module of a plugin from the
@@ -330,13 +329,13 @@ class PluginManager(object):
 		.. note:: Prefer using ``_gatherCorePluginInfo``
 		instead, whenever possible...
 		
-            .. warning:: ``infoFileObject`` must be a file-like
-            object: either an opened file for instance or a string
-            buffer wrapped in a StringIO instance as another
-            example.
+        .. warning:: ``infoFileObject`` must be a file-like
+		object: either an opened file for instance or a string
+		buffer wrapped in a StringIO instance as another
+		example.
 
-            .. note:: ``candidate_infofile`` must be provided
-            whenever possible to get better error messages.
+		.. note:: ``candidate_infofile`` must be provided
+		whenever possible to get better error messages.
 			
 		Return a 3-uple with the name of the plugin, its
 		module and the config_parser used to gather the core
@@ -346,8 +345,8 @@ class PluginManager(object):
 		.. note:: This is supposed to be used internally by subclasses
         and decorators.
 		"""
-		return self.getPluginLocator().getPluginNameAndModuleFromStream(fileobj)
-
+		return self.getPluginLocator().getPluginNameAndModuleFromStream(infoFileObject, candidate_infofile)
+	
 	
 	def getCategories(self):
 		"""

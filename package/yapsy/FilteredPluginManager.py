@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 """
 Role
@@ -50,7 +50,7 @@ class FilteredPluginManager(PluginManagerDecorator):
 		This method can be overridden if the isPluginOk() sentinel is not
 		powerful enough.
 		"""
-		self.rejectedPlugins        = [ ]
+		self.rejectedPlugins = [ ]
 		for candidate_infofile, candidate_filepath, plugin_info in self._component.getPluginCandidates():
 			if not self.isPluginOk( plugin_info):
 				self.rejectPluginCandidate((candidate_infofile, candidate_filepath, plugin_info) )

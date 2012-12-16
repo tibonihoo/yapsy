@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 """
 Role
@@ -44,13 +44,13 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 
 		Arguments
 		
-		  ``plugin_install_dir``
+	        ``plugin_install_dir``
 		    The directory where new plugins to be installed will be copied.
 
 		.. warning:: If ``plugin_install_dir`` does not correspond to
-		    an element of the ``directories_list``, it is appended to
-		    the later.
-		    
+		             an element of the ``directories_list``, it is
+		             appended to the later.
+			
 		"""
 		# Create the base decorator class
 		PluginManagerDecorator.__init__(self,

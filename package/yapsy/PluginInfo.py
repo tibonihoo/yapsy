@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8; tab-width: 4; python-indent: 4; indent-tabs-mode: t -*-
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 
 """
@@ -45,10 +45,11 @@ class PluginInfo(object):
          found.
 		
 		.. warning:: The ``path`` attribute is the full path to the
-		    plugin if it is organised as a directory or the full path
-		    to a file without the ``.py`` extension if the plugin is
-		    defined by a simple file. In the later case, the actual
-		    plugin is reached via ``plugin_info.path+'.py'``.
+		             plugin if it is organised as a directory or the
+		             full path to a file without the ``.py`` extension
+		             if the plugin is defined by a simple file. In the
+		             later case, the actual plugin is reached via
+		             ``plugin_info.path+'.py'``.
 		"""
 		self.__details = ConfigParser()
 		self.name = plugin_name

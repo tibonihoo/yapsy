@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
+
 import test_settings
 import unittest
 import os 
@@ -38,26 +41,22 @@ class AutoInstallTestsCase(unittest.TestCase):
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "autoinstallplugin.yapsy-autoinstall-plugin"))
-		except OSError,e:
-#			print e
+		except OSError:
 			pass
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "AutoInstallPlugin.py"))
-		except OSError,e:
-#			print e
+		except OSError:
 			pass
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "autoinstalldirplugin.yapsy-autoinstall-plugin"))
-		except OSError,e:
-#			print e
+		except OSError:
 			pass
 		try:
 			shutil.rmtree(os.path.join(self.pluginManager.plugins_places[0],
 									   "autoinstalldirplugin"))
-		except OSError,e:
-#			print e
+		except OSError:
 			pass
 			
 
@@ -165,14 +164,12 @@ class AutoInstallZIPTestsCase(unittest.TestCase):
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "autoinstallzipplugin.yapsy-autoinstall-plugin"))
-		except OSError,e:
-#			print e
+		except OSError:
 			pass
 		try:
 			shutil.rmtree(os.path.join(self.pluginManager.plugins_places[0],
 									   "autoinstallzipplugin"))
-		except OSError,e:
-#			print e
+		except OSError:
 			pass
 			
 
@@ -213,8 +210,7 @@ class AutoInstallZIPTestsCase(unittest.TestCase):
 		"""
 		Test if the correct plugin (define by a zip file) can be installed and loaded.
 		"""
-		install_success = self.pluginManager.installFromZIP(os.path.join(self.new_plugins_waiting_dir,
-                                                                                 "autoinstallZIPplugin.zip"))
+		install_success = self.pluginManager.installFromZIP(os.path.join(self.new_plugins_waiting_dir,"autoinstallZIPplugin.zip"))
 		self.assert_(install_success)
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check("Auto Install ZIP Plugin")
@@ -223,32 +219,30 @@ class AutoInstallZIPTestsCase(unittest.TestCase):
 		"""
 		Test if, when the zip file does not contain what is required the installation fails.
 		"""
-		install_success = self.pluginManager.installFromZIP(os.path.join(self.new_plugins_waiting_dir,
-                                                                                 "autoinstallWRONGzipplugin.zip"))
+		install_success = self.pluginManager.installFromZIP(os.path.join(self.new_plugins_waiting_dir,"autoinstallWRONGzipplugin.zip"))
 		self.assertFalse(install_success)
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check_none()
-                
+				
 	def testActivationAndDeactivation(self):
 		"""
 		Test if the activation procedure works.
 		"""
-		install_success = self.pluginManager.installFromZIP(os.path.join(self.new_plugins_waiting_dir,
-                                                                                 "autoinstallZIPplugin.zip"))
+		install_success = self.pluginManager.installFromZIP(os.path.join(self.new_plugins_waiting_dir,"autoinstallZIPplugin.zip"))
 		self.assert_(install_success)
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check("Auto Install ZIP Plugin")
 		self.assert_(not self.plugin_info.plugin_object.is_activated)
 		self.pluginManager.activatePluginByName(self.plugin_info.name,
-                                                        self.plugin_info.category)
+												self.plugin_info.category)
 		self.assert_(self.plugin_info.plugin_object.is_activated)
 		self.pluginManager.deactivatePluginByName(self.plugin_info.name,
-                                                          self.plugin_info.category)
+												  self.plugin_info.category)
 		self.assert_(not self.plugin_info.plugin_object.is_activated)
 
 
 
 suite = unittest.TestSuite([
 		unittest.TestLoader().loadTestsFromTestCase(AutoInstallTestsCase),
-                unittest.TestLoader().loadTestsFromTestCase(AutoInstallZIPTestsCase),
+		unittest.TestLoader().loadTestsFromTestCase(AutoInstallZIPTestsCase),
 		])

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 """
 Role
@@ -32,9 +32,9 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 	(only the plugins that explicitly requires to save configuration
 	options will have this kind of section).
 
-	.. warning:: when giving/building the list of plugins to activate by
-	    default, there must not be any space in the list (neither in the
-	    names nor in between)
+	.. warning:: when giving/building the list of plugins to activate
+	             by default, there must not be any space in the list
+	             (neither in the names nor in between)
 	"""
 	
 	CONFIG_SECTION_NAME = "Plugin Management"

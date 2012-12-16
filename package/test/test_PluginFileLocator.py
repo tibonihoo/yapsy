@@ -1,4 +1,5 @@
-# -*- coding: utf-8; tab-width: 4; python-indent: 4; indent-tabs-mode: t -*-
+#!/usr/bin/python
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 import test_settings
 import unittest

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8; tab-width: 4; python-indent: 4; indent-tabs-mode: t -*-
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 
 """
@@ -22,14 +22,14 @@ Two analyzers are already implemented and provided here:
 
     ``PluginFileAnalyzerWithInfoFile``
 
-	    the default 'analyzer' that looks for plugin 'info files' as
-	    text file with a predefined extension. This implements the way
-	    yapsy looks for plugin since version 1.
+        the default 'analyzer' that looks for plugin 'info files' as
+        text file with a predefined extension. This implements the way
+        yapsy looks for plugin since version 1.
 
-	``PluginFileAnalyzerMathingRegex``
+    ``PluginFileAnalyzerMathingRegex``
 
-	    look for files matching a regex and considers them as being
-	    the plugin itself.
+        look for files matching a regex and considers them as being
+        the plugin itself.
 
 All analyzers must enforce the 
 
@@ -100,16 +100,16 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 	This file must contain at least the following information:
 	
 	    [Core]
-		Name = name of the module
-		Module = relative_path/to/python_file_or_directory
+	    Name = name of the module
+	    Module = relative_path/to/python_file_or_directory
 
 	Optionnally the description file may also contain the following section (in addition to the above one):
 
 	    [Documentation]
-		Author = Author Name
-		Version = Major.minor
-		Website = url_for_plugin
-		Description = A simple one-sentence description
+	    Author = Author Name
+	    Version = Major.minor
+	    Website = url_for_plugin
+	    Description = A simple one-sentence description
 
     """
     def __init__(self, name, extensions="yapsy-plugin"):
@@ -147,7 +147,7 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 				break
 		return res
 	
-	def getPluginNameAndModuleFromStream(self, infoFileObject, candidate_infofile="<buffered info>"):
+	def getPluginNameAndModuleFromStream(self, infoFileObject, candidate_infofile=None):
 		"""
 		Extract the name and module of a plugin from the
 		content of the info file that describes it and which
@@ -156,13 +156,13 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 		.. note:: Prefer using ``_extractCorePluginInfo``
 		instead, whenever possible...
 		
-				.. warning:: ``infoFileObject`` must be a file-like
-				object: either an opened file for instance or a string
-				buffer wrapped in a StringIO instance as another
-				example.
-		
-				.. note:: ``candidate_infofile`` must be provided
-				whenever possible to get better error messages.
+		.. warning:: ``infoFileObject`` must be a file-like object:
+		             either an opened file for instance or a string
+		             buffer wrapped in a StringIO instance as another
+		             example.
+		      
+		.. note:: ``candidate_infofile`` must be provided
+		          whenever possible to get better error messages.
 		
 		Return a 3-uple with the name of the plugin, its
 		module and the config_parser used to gather the core
@@ -170,7 +170,7 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 		localised, else return ``(None,None,None)``.
 		
 		.. note:: This is supposed to be used internally by subclasses
-			and decorators.
+			      and decorators.
 		"""
 		# parse the information buffer to get info about the plugin
 		config_parser = ConfigParser.SafeConfigParser()
@@ -214,8 +214,7 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 		else:
 			candidate_infofile = os.path.join(directory, filename)
 			# parse the information file to get info about the plugin
-			name, moduleName, config_parser = self.getPluginNameAndModuleFromStream(open(candidate_infofile),
-																					 candidate_infofile)
+			name, moduleName, config_parser = self.getPluginNameAndModuleFromStream(open(candidate_infofile),candidate_infofile)
 		if (name, moduleName, config_parser) == (None, None, None):
 			return (None,None)
 		infos = {"name":name, "path":os.path.join(directory, moduleName)}
@@ -465,7 +464,7 @@ class PluginFileLocator(IPluginLocator):
 	# counterpart in yapsy<1.10
 	# -----------------------------------------------
 
-	def getPluginNameAndModuleFromStream(self, infoFileObject):
+	def getPluginNameAndModuleFromStream(self, infoFileObject, candidate_infofile=None):
 		for analyzer in self._analyzers:
 			if analyzer.name == "info_ext":
 				return analyzer.getPluginNameAndModuleFromStream(infoFileObject)

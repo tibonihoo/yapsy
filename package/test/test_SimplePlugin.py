@@ -1,4 +1,5 @@
-# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
+#!/usr/bin/python
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 import test_settings
 import unittest
@@ -77,7 +78,7 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 	Test some advanced manipulation on the core data of a PluginManager.
 	"""
 	
-        
+		
 	def testCategoryManipulation(self):
 		"""
 		Test querying, removing and adding plugins from/to a category.
@@ -89,13 +90,13 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		spm.collectPlugins()
 		# check that the getCategories works
 		self.assertEqual(len(spm.getCategories()),1)
-        sole_category = spm.getCategories()[0]
+		sole_category = spm.getCategories()[0]
 		# check the getPluginsOfCategory
-        self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
-        plugin_info = spm.getPluginsOfCategory(sole_category)[0]
+		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
+		plugin_info = spm.getPluginsOfCategory(sole_category)[0]
 		# try to remove it and check that is worked
 		spm.removePluginFromCategory(plugin_info,sole_category)
-        self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),0)
+		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),0)
 		# now re-add this plugin the to same category
 		spm.appendPluginToCategory(plugin_info,sole_category)
 		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
@@ -137,7 +138,7 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		# loading each plugin
 		callback_infos = []
 		def preload_cbk(plugin_info):
-            callback_infos.append(plugin_info)
+			callback_infos.append(plugin_info)
 		# - gather infos about the processed plugins (loaded or not)
 		loadedPlugins = spm.loadPlugins(callback=preload_cbk)
 		self.assertEqual(len(loadedPlugins),1)
@@ -146,13 +147,13 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		self.assertEqual(loadedPlugins[0],callback_infos[0])
 		# check that the getCategories works
 		self.assertEqual(len(spm.getCategories()),1)
-        sole_category = spm.getCategories()[0]
+		sole_category = spm.getCategories()[0]
 		# check the getPluginsOfCategory
-        self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
-        plugin_info = spm.getPluginsOfCategory(sole_category)[0]
+		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
+		plugin_info = spm.getPluginsOfCategory(sole_category)[0]
 		# try to remove it and check that is worked
 		spm.removePluginFromCategory(plugin_info,sole_category)
-        self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),0)
+		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),0)
 		# now re-add this plugin the to same category
 		spm.appendPluginToCategory(plugin_info,sole_category)
 		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
