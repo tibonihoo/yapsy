@@ -2,8 +2,10 @@ import test_settings
 
 import os 
 import unittest
+import logging
 
 from yapsy.PluginManager import PluginManager
+from yapsy import log
 
 class ErrorTestCase(unittest.TestCase):
     """
@@ -28,7 +30,20 @@ class ErrorTestCase(unittest.TestCase):
         def preload_cbk(i_plugin_info):
             callback_infos.append(i_plugin_info)
         # - gather infos about the processed plugins (loaded or not)
-        loadedPlugins = spm.loadPlugins(callback=preload_cbk)
+        # and for the test, monkey patch the logger
+        originalLogLevel = log.getEffectiveLevel()
+        log.setLevel(logging.CRITICAL)
+        errorLogCallFlag = [False]
+        def errorMock(*args,**kwargs):
+            errorLogCallFlag[0]=True
+        originalErrorMethod = log.error
+        log.error = errorMock 
+        try:
+            loadedPlugins = spm.loadPlugins(callback=preload_cbk)
+        finally:
+            log.setLevel(originalLogLevel)
+            log.error = originalErrorMethod
+        self.assertTrue(errorLogCallFlag[0])
         self.assertEqual(len(loadedPlugins),1)
         self.assertEqual(len(callback_infos),1)
         self.assertTrue(isinstance(callback_infos[0].error,tuple))
