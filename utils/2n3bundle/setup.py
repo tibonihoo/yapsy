@@ -40,7 +40,7 @@ if sys.version < '3':
 else:
   package_par_dir = 'src3/package'
 
-sys.path.append(package_par_dir)
+sys.path.insert(0,package_par_dir)
 import yapsy
 
 setup(
