@@ -22,8 +22,8 @@ from . import test_ConfigPlugin
 from . import test_VersionedPlugin
 from . import test_AutoInstallPlugin
 from . import test_FilterPlugin
-import test_ErrorInPlugin
-import test_PluginFileLocator
+from . import test_ErrorInPlugin
+from . import test_PluginFileLocator
 
 
 # add them to a common test suite

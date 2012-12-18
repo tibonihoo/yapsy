@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
+from . import test_settings
 import unittest
 import os 
 import shutil
@@ -40,22 +41,22 @@ class AutoInstallTestsCase(unittest.TestCase):
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "autoinstallplugin.yapsy-autoinstall-plugin"))
-		except OSError as e:
+		except OSError:
 			pass
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "AutoInstallPlugin.py"))
-		except OSError as e:
+		except OSError:
 			pass
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "autoinstalldirplugin.yapsy-autoinstall-plugin"))
-		except OSError as e:
+		except OSError:
 			pass
 		try:
 			shutil.rmtree(os.path.join(self.pluginManager.plugins_places[0],
 									   "autoinstalldirplugin"))
-		except OSError as e:
+		except OSError:
 			pass
 			
 
@@ -163,7 +164,7 @@ class AutoInstallZIPTestsCase(unittest.TestCase):
 		try:
 			os.remove(os.path.join(self.pluginManager.plugins_places[0],
 								   "autoinstallzipplugin.yapsy-autoinstall-plugin"))
-		except OSError 
+		except OSError:
 			pass
 		try:
 			shutil.rmtree(os.path.join(self.pluginManager.plugins_places[0],

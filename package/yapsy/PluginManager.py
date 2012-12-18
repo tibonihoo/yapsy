@@ -363,7 +363,7 @@ class PluginManager(object):
 		"""
 		Return the list of all categories.
 		"""
-		return self.category_mapping.keys()
+		return list(self.category_mapping.keys())
 
 	def removePluginFromCategory(self, plugin,category_name):
 		"""
@@ -389,7 +389,7 @@ class PluginManager(object):
 		Return the list of all plugins (belonging to all categories).
 		"""
 		allPlugins = set()
-		for pluginsOfOneCategory in self.category_mapping.itervalues():
+		for pluginsOfOneCategory in self.category_mapping.values():
 				allPlugins.update(pluginsOfOneCategory)
 		return list(allPlugins)
 
@@ -469,8 +469,8 @@ class PluginManager(object):
 			if "__init__" in  os.path.basename(candidate_filepath):
 				sys.path.append(plugin_info.path)				
 			try:
-				candidateMainFile = open(candidate_filepath+".py","r")
-				# TODO: make sure that we can get proper traceback
+				candidateMainFile = open(candidate_filepath+".py","r")	
+				exec(candidateMainFile.read(),candidate_globals)
 			except Exception:
 				exc_info = sys.exc_info()
 				log.error("Unable to execute the code in plugin: %s" % candidate_filepath, exc_info=exc_info)

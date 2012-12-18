@@ -27,3 +27,6 @@ List of Contributors:
   - Rob McMullen
   - Roger Gammans
   - Mathieu Havel
+  - Mathieu Clabaut
+  - Mark Fickett
+

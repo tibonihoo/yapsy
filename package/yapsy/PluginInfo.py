@@ -12,7 +12,7 @@ API
 ===
 """
 
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from distutils.version import StrictVersion
 
 

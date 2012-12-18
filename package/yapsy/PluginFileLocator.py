@@ -52,7 +52,7 @@ All analyzers must enforce the policy represented by the ``IPluginFileAnalyzer``
 import os
 import re
 from yapsy import log
-import ConfigParser
+import configparser
 
 from yapsy.PluginInfo import PluginInfo
 from yapsy import PLUGIN_NAME_FORBIDEN_STRING
@@ -175,10 +175,10 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 			      and decorators.
 		"""
 		# parse the information buffer to get info about the plugin
-		config_parser = ConfigParser.SafeConfigParser()
+		config_parser = configparser.SafeConfigParser()
 		try:
 			config_parser.readfp(infoFileObject)
-		except Exception,e:
+		except Exception as e:
 			log.debug("Could not parse the plugin file '%s' (exception raised was '%s')" % (candidate_infofile,e))
 			return (None, None, None)
 		# check if the basic info is available
@@ -258,7 +258,7 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 		If *callback* function has not been provided for this strategy,
 		we use the filename alone to extract minimal informations.
 		"""
- 		infos, config_parser = self._extractBasicPluginInfo(dirpath, filename)
+		infos, config_parser = self._extractBasicPluginInfo(dirpath, filename)
 		if infos.get("name", None) is None:
 			raise ValueError("Missing *name* of the plugin in extracted infos.")
 		if infos.get("path", None) is None:
@@ -297,7 +297,7 @@ class PluginFileAnalyzerMathingRegex(IPluginFileAnalyzer):
 			plugin_filename = dirpath
 		infos["name"] = "%s" % module_name
 		infos["path"] = plugin_filename
-		cf_parser = ConfigParser.ConfigParser()
+		cf_parser = configparser.ConfigParser()
 		cf_parser.add_section("Core")
 		cf_parser.set("Core","Name",infos["name"])
 		cf_parser.set("Core","Module",infos["path"])
