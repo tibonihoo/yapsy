@@ -40,7 +40,7 @@ class PluginFileAnalyzerWithInfoFileTest(unittest.TestCase):
 		analyzer = PluginFileAnalyzerWithInfoFile("mouf")
 		info_dict,cf_parser =  analyzer.getInfosDictFromPlugin(self.plugin_directory,
 															   os.path.basename(self.yapsy_plugin_path))
-		self.assertEqual(info_dict,{'website': 'http://mathbench.sourceforge.net', 'description': 'A simple plugin usefull for basic testing', 'author': 'Thibauld Nion', 'version': '0.1', 'path': '/home/thibauld/Development/yapsy/default/package/test/plugins/SimplePlugin', 'name': 'Simple Plugin'})
+		self.assertEqual(info_dict,{'website': 'http://mathbench.sourceforge.net', 'description': 'A simple plugin usefull for basic testing', 'author': 'Thibauld Nion', 'version': '0.1', 'path': '%s/SimplePlugin' % self.plugin_directory, 'name': 'Simple Plugin'})
 		self.assertTrue(isinstance(cf_parser,ConfigParser))
 		
 	def test_isValid_WithMultiExtensions(self):
