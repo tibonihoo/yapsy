@@ -1,3 +1,17 @@
+version-1.10 [2012-12-18]
+
+  - code: [contrib. Mathieu Havel] "plugin locators" allow to change the strategy to describe and locate plugins
+  - code: [contrib. Mathieu Clabaut] multiple categories per plugin (cf https://bitbucket.org/matclab/yapsy-mcl)
+  - code: [contrib.  Mark Fickett] improve logging
+  - code: Gather detailed information on plugin load error via a callback
+  - code: Extra info to plug-in (eg add extra section or embed the ConfigParser output to the plugin_info), see also https://github.com/tintinweb/yapsy
+  - code: proper config of the default "plugin locator" can stop plugin detection from scanning a directory recursively
+  - code: Enforce a same tab convention everywhere
+  - doc: update list of project using yapsy
+  - doc: highlight the existence of tutorial and link to these ones:
+  - doc: be more helpful to users with an advice/troubleshooting page
+  - doc: add a CHANGELOG.txt file
+
 version-1.9.2 [2012-07-15]
 
   - packaging fixes and strange version bumps to workaround pypi.python.org's version handling

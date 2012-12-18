@@ -4,26 +4,6 @@
 
 Next Release
 
-x doc: sample code for filtering plugins
-x code: [feature req.] Allow to locate and describe plugins without a separated file (use strategies to change the way plugins are "descried" cf contrib. mhavel)
-x code: [contrib. mathieu Clabaut] multiple categories per plugin (cf https://bitbucket.org/matclab/yapsy-mcl)
-x doc: highlight the existence of tutorial and link to these ones:
-  * http://www.micahcarrick.com/python-gtk-plugins-with-yapsy.html 
-  * http://stackoverflow.com/questions/5333128/yapsy-minimal-example
-x code: [feature req.] Gather detailed information on plugin load error via a callback
-x code: [feature req.] Extra info to plug-in (eg add extra section or embed the ConfigParser output to the plugin_info), see also  https://github.com/tintinweb/yapsy 
-x code: [feature req.] "locatePlugins() toggle between os.walk() and absolute path"
-x code: [bug] Enforce a same tab convention everywhere
-x code: [contrib.  Mark Fickett] improve logging
-x doc: [feature req.] Plugin installation/​management with python packages
-x code: [bug] No traceback hen plugin throws an exception
-x doc: quote more projects using yapsy:
-  * http://gbin.github.com/err/
-  * http://nikola.ralsina.com.ar/
-x doc: show the logging snippet on front page
-x doc: explain tricks about categorization with inheritance (if several categories: make sublcasses of IPlugin instead of using it directly)
-x doc: documentation tab convention in a developer's section
-- doc: add a CHANGELOG.txt file
 
 Later
 
