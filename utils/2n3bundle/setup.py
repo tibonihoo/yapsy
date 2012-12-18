@@ -45,7 +45,7 @@ import yapsy
 
 setup(
     name = "Yapsy",
-	version = yapsy.__version__+"-py2py3",
+	version = yapsy.__version__+"-pythons2n3",
 	packages = ['yapsy'],
 	package_dir = {'yapsy':package_par_dir+"/yapsy"},
 	
