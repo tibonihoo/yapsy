@@ -1,0 +1,45 @@
+version-1.9.2 [2012-07-15]
+
+  - packaging fixes and strange version bumps to workaround pypi.python.org's version handling
+
+version-1.9 [2011-12-23]
+
+  - ability to load zipped plugins
+  - a separate development branch has been created where the focus is on the compatibility with python3
+  - no more SVN repository (as advertised last year it wasn't kept in sync with the Mercurial repository, and it is now officially dead)
+  - better logging of errors and debug infos
+  - small doc improvement, especially to show how simple it is to interactwith the plugins once they are loaded
+
+version-1.8 [2010-09-26]
+
+  - the documentation has been refactored and should now go "straight to the point"
+  - the source control is now performed by Mercurial
+  - Filtering manager to filter out plugins that must not be loaded, contributed by Roger Gammans
+  - a getAllPlugins method has been added to the PluginManager to make it easier to access plugins when only the default category is defined
+  - code has been slightly cleaned up and should now be easy to adapt to Python3 via the 2to3 tool.
+
+version-1.7 [2008-04-09]
+
+  - WARNING: API BREAK ! the arguments for [de]activatePluginByName and getPluginByName are now the other way round: category,name -> name,category="Default"
+  - new AutoInstall manager for automatically installing plugins by copying them in proper place
+  - small improvements to generic code for plugin loading
+
+version-1.6 [2007-11-10]
+
+  - fix major bug in ConfigurablePluginManager
+
+version-1.5 [2007-11-03]
+
+  - separation of plugin loading into locate and load contributed by Rob McMullen
+  - package with "Easy install" framework
+  - new forge (https://sourceforge.net/p/yapsy) and independent repo from mathbench
+
+version-1.1 [2007-09-21]
+
+  - VersionedPlugin manager contributed by Rob McMullen
+
+version-1.0 [2007-08-26]
+
+  - basic implementation of a PluginManager
+  - ConfigurablePlugin manager that can store information in a ConfigParser compatible file
+  - singleton versions of these plugin managers.
