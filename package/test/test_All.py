@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
+
 """
 The test suite that binds them all...
 """
@@ -19,6 +22,8 @@ from . import test_ConfigPlugin
 from . import test_VersionedPlugin
 from . import test_AutoInstallPlugin
 from . import test_FilterPlugin
+import test_ErrorInPlugin
+import test_PluginFileLocator
 
 
 # add them to a common test suite
@@ -30,5 +35,7 @@ MainTestSuite = unittest.TestSuite(
 		test_VersionedPlugin.suite,
 		test_AutoInstallPlugin.suite,
 		test_FilterPlugin.suite,
+		test_ErrorInPlugin.suite,
+		test_PluginFileLocator.suite,
 		])
 

@@ -1,0 +1,9 @@
+[Core]
+Name = Erroreous Plugin
+Module = ErroneousPlugin
+
+[Documentation]
+Author = Thibauld Nion
+Version = 0.1
+Website = http://yapsy.sourceforge.net
+Description = A simple plugin trigger a syntax error for basic testing

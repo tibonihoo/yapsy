@@ -1,7 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
-
-__version__="1.9.2"
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 """
 
@@ -53,104 +51,21 @@ should get you a fully working plugin management system::
              for pluginInfo in simplePluginManager.getAllPlugins():
                 pluginInfo.plugin_object.doSomething(...)
 
-
-
-.. _extend:
-
-Extensibility
-=============
-
-For applications that require the plugins and their managers to be
-more sophisticated, several techniques make such enhancement easy. The
-following sections detail the three most frequent needs for extensions
-and what you can do about it.
-
-
-More sophisticated plugin classes
----------------------------------
-
-You can define a plugin class with a richer interface that
-``IPlugin``, so long as it inherits from IPlugin, it should work the
-same. The only thing you need to know is that the plugin instance is
-accessible via the ``PluginInfo`` instance from its
-``PluginInfo.plugin_object``.
-
-
-It is also possible to define a wider variety of plugins, by defining
-as much subclasses of IPlugin. But in such a case you have to inform
-the manager about that before collecting plugins::
-
-   # Build the manager
-   simplePluginManager = PluginManager()
-   # Tell it the default place(s) where to find plugins
-   simplePluginManager.setPluginPlaces(["path/to/myplugins"])
-   # Define the various categories corresponding to the different
-   # kinds of plugins you have defined
-   simplePluginManager.setCategoriesFilter({
-      "Playback" : IPlaybackPlugin,
-      "SongInfo" : ISongInfoPlugin,
-      "Visualization" : IVisualisation,
-      })
-
-
-.. note:: Communicating with the plugins belonging to a given category
-          might then be achieved with some code looking like the
-          following::
-
-             # Trigger 'some action' from the "Visualization" plugins 
-             for pluginInfo in simplePluginManager.getPluginsOfCategory("Visualization"):
-                pluginInfo.plugin_object.doSomething(...)
-
-      
-Enhance the manager's interface
--------------------------------
-
-To make the plugin manager more helpful to the other components of an
-application, you should consider decorating it.
-
-Actually a "template" for such decoration is provided as
-:doc:`PluginManagerDecorator`, which must be inherited in order to
-implement the right decorator for your application.
-
-Such decorators can be chained, so that you can take advantage of the ready-made decorators such as:
-
-:doc:`ConfigurablePluginManager`
-
-  Implements a ``PluginManager`` that uses a configuration file to
-  save the plugins to be activated by default and also grants access
-  to this file to the plugins.
-
-
-:doc:`AutoInstallPluginManager`
-
-  Automatically copy the plugin files to the right plugin directory. 
-
-
-Modify the way plugins are loaded
----------------------------------
-
-
-To tweak the plugin loading phase it is highly advised to re-implement
-your own manager class.
-
-The nice thing is, if your new manager  inherits ``PluginManager``, then it will naturally fit as the start point of any decoration chain. You just have to provide an instance of this new manager to the first decorators, like in the following::
-
-   # build and configure a specific manager
-   baseManager = MyNewManager()
-   # start decorating this manager to add some more responsibilities
-   myFirstDecorator = AFirstPluginManagerDecorator(baseManager)
-   # add even more stuff
-   mySecondDecorator = ASecondPluginManagerDecorator(myFirstDecorator)
-
-.. note:: Some decorators have been implemented that modify the way
-          plugins are loaded, this is however not the easiest way to
-          do it and it makes it harder to build a chain of decoration
-          that would include these decorators.  Among those are
-          :doc:`VersionedPluginManager` and
-          :doc:`FilteredPluginManager`
-
 """
+
+__version__="1.9.2"
 
 # tell epydoc that the documentation is in the reStructuredText format
 __docformat__ = "restructuredtext en"
 
+# provide a default named log for package-wide use
+import logging
+log = logging.getLogger('yapsy')
+
+# Some constants concerning the plugins
+PLUGIN_NAME_FORBIDEN_STRING=";;"
+"""
+.. warning:: This string (';;' by default) is forbidden in plugin
+             names, and will be usable to describe lists of plugins
+             for instance (see :doc:`ConfigurablePluginManager`)
+"""

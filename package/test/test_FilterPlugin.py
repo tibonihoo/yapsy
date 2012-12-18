@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 from . import test_settings
 from .test_settings import TEST_MESSAGE
@@ -12,8 +12,8 @@ from yapsy.FilteredPluginManager import FilteredPluginManager
 
 class testFilter(FilteredPluginManager):
 	"""
-		Test filter class.
-		Refused to load plugins whose Name starts with 'C'.
+	Test filter class.
+	Refused to load plugins whose Name starts with 'C'.
 	"""
 	_bannednames = re.compile("^C")
 
@@ -36,8 +36,8 @@ class FilteredTestsCase(unittest.TestCase):
 		self.filteredPluginManager = testFilter(
 			directories_list=[os.path.join(
 					os.path.dirname(os.path.abspath(__file__)),"plugins")],
-				  plugin_info_ext="yapsy-filter-plugin",
-	  	)
+			plugin_info_ext="yapsy-filter-plugin",
+			)
 		# load the plugins that may be found
 		self.filteredPluginManager.collectPlugins()
 		# Will be used later
@@ -172,7 +172,74 @@ class FilteredTestsCase(unittest.TestCase):
 						 len(self.filteredPluginManager.getPluginCandidates()))
 
 
+class FilteredWithMonkeyPathTestsCase(unittest.TestCase):
+	"""
+	Test the correct loading oand filtering of plugins when the FilteredPluginManager is just monkey-patched
+	"""
+	
+	def setUp(self):
+		"""
+		init
+		"""
+		# create the plugin manager
+#		print os.path.join(os.path.dirname(os.path.abspath(__file__)),"plugins")
+		self.filteredPluginManager = FilteredPluginManager(
+			directories_list=[os.path.join(
+					os.path.dirname(os.path.abspath(__file__)),"plugins")],
+			plugin_info_ext="yapsy-filter-plugin",
+			)
+		self.filteredPluginManager.isPluginOk = lambda info:not re.match("^C",info.name)
+		# load the plugins that may be found
+		self.filteredPluginManager.collectPlugins()
+		# Will be used later
+		self.plugin_info = None
+
+	def plugin_loading_check(self):
+		"""
+		Test if the correct plugins have been loaded.
+		"""
+		# check nb of categories
+		self.assertEqual(len(self.filteredPluginManager.getCategories()),1)
+		sole_category = self.filteredPluginManager.getCategories()[0]
+		# check the number of plugins
+		self.assertEqual(len(self.filteredPluginManager.getPluginsOfCategory(sole_category)),1)
+		plugins = self.filteredPluginManager.getPluginsOfCategory(sole_category)
+		for plugin_info in plugins:
+			TEST_MESSAGE("plugin info: %s" % plugin_info)
+			self.plugin_info = plugin_info	
+			self.assert_(self.plugin_info)
+			self.assertEqual(self.plugin_info.name,"Simple Plugin")
+			self.assertEqual(sole_category,self.plugin_info.category)
+
+	def testLoaded(self):
+		"""
+		Test if the correct plugin has been loaded.
+		"""
+		self.plugin_loading_check()
+		
+
+	def testActivationAndDeactivation(self):
+		"""
+		Test if the activation procedure works.
+		"""
+		self.plugin_loading_check()
+		self.assert_(not self.plugin_info.plugin_object.is_activated)
+		TEST_MESSAGE("plugin object = %s" % self.plugin_info.plugin_object)
+		self.plugin_info.plugin_object.activate()
+		self.assert_(self.plugin_info.plugin_object.is_activated)
+		self.plugin_info.plugin_object.deactivate()
+		self.assert_(not self.plugin_info.plugin_object.is_activated)	
+
+
+	def testRejectedList(self):
+		"""
+		Test if the list of rejected plugins is correct.
+		"""
+		for plugin in self.filteredPluginManager.getRejectedPlugins():
+			TEST_MESSAGE("plugin info: %s" % plugin[2])
+			self.assertEqual(plugin[2].name,"Config Plugin")
 
 suite = unittest.TestSuite([
 		unittest.TestLoader().loadTestsFromTestCase(FilteredTestsCase),
+		unittest.TestLoader().loadTestsFromTestCase(FilteredWithMonkeyPathTestsCase),
 		])

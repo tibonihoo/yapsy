@@ -26,3 +26,4 @@ List of Contributors:
   - Thibauld Nion
   - Rob McMullen
   - Roger Gammans
+  - Mathieu Havel

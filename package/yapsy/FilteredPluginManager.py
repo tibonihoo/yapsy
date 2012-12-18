@@ -1,14 +1,26 @@
 #!/usr/bin/python
-# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 """
 Role
 ====
 
-Defines a basic interface for plugin managers which filter the
-available list of plugins before loading.
+Defines the basic mechanisms to have a plugin manager filter the
+available list of plugins after locating them and before loading them.
 
-One use fo this would be to prevent untrusted plugins from entering the system
+One use fo this would be to prevent untrusted plugins from entering
+the system.
+
+To use it properly you must reimplement or monkey patch the
+``IsPluginOk`` method, as in the following example::
+
+  # define a plugin manager (with you prefered options)
+  pm = PluginManager(...)
+  # decorate it with the Filtering mechanics
+  pm = FilteredPluginManager(pm)
+  # define a custom predicate that filters out plugins without descriptions
+  pm.isPluginOk = lambda x: x.description!=""
+
 
 API
 ===
@@ -44,21 +56,20 @@ class FilteredPluginManager(PluginManagerDecorator):
 
 	def filterPlugins(self):
 		"""
-		This method goes through the currently available candidates, and
-		and either leaves them, or moves them into the list of rejected Plugins.
+		Go through the currently available candidates, and and either
+		leaves them, or moves them into the list of rejected Plugins.
 		
-		This method can be overridden if the isPluginOk() sentinel is not
+		Can be overridden if overriding ``isPluginOk`` sentinel is not
 		powerful enough.
 		"""
-		self.rejectedPlugins        = [ ]
+		self.rejectedPlugins = [ ]
 		for candidate_infofile, candidate_filepath, plugin_info in self._component.getPluginCandidates():
 			if not self.isPluginOk( plugin_info):
 				self.rejectPluginCandidate((candidate_infofile, candidate_filepath, plugin_info) )
 
 	def rejectPluginCandidate(self,pluginTuple):
 		"""
-		This is method can be called to mark move a plugin from Candidates list
-		to the rejected List.
+		Move a plugin from the candidates list to the rejected List.
 		"""
 		if pluginTuple in self.getPluginCandidates():
 			self._component.removePluginCandidate(pluginTuple)
@@ -67,8 +78,8 @@ class FilteredPluginManager(PluginManagerDecorator):
 
 	def unrejectPluginCandidate(self,pluginTuple):
 		"""
-		This is method can be called to mark move a plugin from the rejected list
-		to into the Candidates List.
+		Move a plugin from the rejected list to into the candidates
+		list.
 		"""
 		if not pluginTuple in self.getPluginCandidates():
 			self._component.appendPluginCandidate(pluginTuple)
@@ -76,6 +87,9 @@ class FilteredPluginManager(PluginManagerDecorator):
 			self.rejectedPlugins.remove(pluginTuple)
 
 	def removePluginCandidate(self,pluginTuple):
+		"""
+		Remove a plugin from the list of candidates.
+		"""
 		if pluginTuple in self.getPluginCandidates():
 			self._component.removePluginCandidate(pluginTuple)
 		if  pluginTuple in self.rejectedPlugins:
@@ -83,6 +97,9 @@ class FilteredPluginManager(PluginManagerDecorator):
 
 
 	def appendPluginCandidate(self,pluginTuple):
+		"""
+		Add a new candidate.
+		"""
 		if self.isPluginOk(pluginTuple[2]):
 			if pluginTuple not in self.getPluginCandidates():
 				self._component.appendPluginCandidate(pluginTuple)
@@ -94,6 +111,10 @@ class FilteredPluginManager(PluginManagerDecorator):
 		"""
 		Sentinel function to detect if a plugin should be filtered.
 
+		``info`` is an instance of a ``PluginInfo`` and this method is
+		expected to return True if the corresponding plugin can be
+		accepted, and False if it must be filtered out.
+		
 		Subclasses should override this function and return false for
 		any plugin which they do not want to be loadable.
 		"""
@@ -111,4 +132,7 @@ class FilteredPluginManager(PluginManagerDecorator):
 		return len(self._component.getPluginCandidates()) 
 
 	def getRejectedPlugins(self):
+		"""
+		Return the list of rejected plugins.
+		"""
 		return self.rejectedPlugins[:]

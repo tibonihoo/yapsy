@@ -25,37 +25,166 @@ Quick links:
    IPlugin
    PluginManager
    PluginInfo
-   PluginManagerDecorator
    Extensions
-
+   Advices
+   
 
 .. contents:: On this page
    :local:  
-   
 
+   
 .. automodule:: yapsy
    :members:
    :undoc-members:   
 
+.. _extend:
 
-Development
-===========
+Make it your own
+================
 
-Brief history
--------------
+For applications that require the plugins and their managers to be
+more sophisticated, several techniques make such enhancement easy. The
+following sections detail the most frequent needs for extensions
+and what you can do about it.
+
+
+More sophisticated plugin classes
+---------------------------------
+
+You can define a plugin class with a richer interface than
+``IPlugin``, so long as it inherits from IPlugin, it should work the
+same. The only thing you need to know is that the plugin instance is
+accessible via the ``PluginInfo`` instance from its
+``PluginInfo.plugin_object``.
+
+
+It is also possible to define a wider variety of plugins, by defining
+as much subclasses of IPlugin. But in such a case you have to inform
+the manager about that before collecting plugins::
+
+   # Build the manager
+   simplePluginManager = PluginManager()
+   # Tell it the default place(s) where to find plugins
+   simplePluginManager.setPluginPlaces(["path/to/myplugins"])
+   # Define the various categories corresponding to the different
+   # kinds of plugins you have defined
+   simplePluginManager.setCategoriesFilter({
+      "Playback" : IPlaybackPlugin,
+      "SongInfo" : ISongInfoPlugin,
+      "Visualization" : IVisualisation,
+      })
+
+
+.. note:: Communicating with the plugins belonging to a given category
+          might then be achieved with some code looking like the
+          following::
+
+             # Trigger 'some action' from the "Visualization" plugins 
+             for pluginInfo in simplePluginManager.getPluginsOfCategory("Visualization"):
+                pluginInfo.plugin_object.doSomething(...)
+
+      
+Enhance the plugin manager's interface
+--------------------------------------
+
+To make the plugin manager more helpful to the other components of an
+application, you should consider decorating it.
+
+Actually a "template" for such decoration is provided as
+:doc:`PluginManagerDecorator`, which must be inherited in order to
+implement the right decorator for your application.
+
+Such decorators can be chained, so that you can take advantage of the ready-made decorators such as:
+
+:doc:`ConfigurablePluginManager`
+
+  Implements a ``PluginManager`` that uses a configuration file to
+  save the plugins to be activated by default and also grants access
+  to this file to the plugins.
+
+
+:doc:`AutoInstallPluginManager`
+
+  Automatically copy the plugin files to the right plugin directory. 
+
+A full list of pre-implemented decorators is available at :doc:`Extensions`.
+
+
+Modify plugin descriptions and detections
+-----------------------------------------
+
+By default, plugins are described by a text file called the plugin
+"info file" expected to have a ".yapsy-plugin" extension.
+
+You may want to use another way to describe and detect your
+application's plugin and happily yapsy (since version 1.10) makes it
+possible to provide the ``PluginManager`` with a custom strategy for
+plugin detection.
+
+See :doc:`IPluginLocator` for the required interface of such
+strategies and :doc:`PluginFileLocator` for a working example of such
+a detection strategy.
+
+  
+Modify the way plugins are loaded
+---------------------------------
+
+To tweak the plugin loading phase it is highly advised to re-implement
+your own manager class.
+
+The nice thing is, if your new manager  inherits ``PluginManager``, then it will naturally fit as the start point of any decoration chain. You just have to provide an instance of this new manager to the first decorators, like in the following::
+
+   # build and configure a specific manager
+   baseManager = MyNewManager()
+   # start decorating this manager to add some more responsibilities
+   myFirstDecorator = AFirstPluginManagerDecorator(baseManager)
+   # add even more stuff
+   mySecondDecorator = ASecondPluginManagerDecorator(myFirstDecorator)
+
+.. note:: Some decorators have been implemented that modify the way
+          plugins are loaded, this is however not the easiest way to
+          do it and it makes it harder to build a chain of decoration
+          that would include these decorators.  Among those are
+          :doc:`VersionedPluginManager` and
+          :doc:`FilteredPluginManager`
+
+
+Showcase and tutorials
+======================
 
 |yapsy| 's development has been originally motivated by the MathBench_
-project but it is now used in other (more advanced) projects like
-peppy_, MysteryMachine_ and Aranduka_ for instance.
+project but it is now used in other (more advanced) projects like:
+
+- peppy_ : "an XEmacs-like editor in Python. Eventually. "
+- MysteryMachine_ : "an application for writing freeform games."
+- Aranduka_ : "A simple e-book manager and reader"
+- err_ : "a plugin based chatbot"
+- nikola_ : "a Static Site and Blog Generator"
 
 .. _MathBench: http://mathbench.sourceforge.net
 .. _peppy: http://www.flipturn.org/peppy/
 .. _MysteryMachine: http://trac.backslashat.org/MysteryMachine
 .. _Aranduka: http://code.google.com/p/aranduka/
+.. _err: http://gbin.github.com/err/
+.. _nikola: http://nikola.ralsina.com.ar/
 
-Nowadays, the development is clearly motivated by such external projects and the enthusiast developpers who use the library. Some of them going as far as writing *very nice tutorials* such as `Making your app modular: Yapsy`_ which is obviously useful and motivating :)
+Nowadays, the development is clearly motivated by such external projects and the enthusiast developpers who use the library. 
+
+If you're interested in using yapsy, feel free to look into the following links:
+
+- :doc:`Advices`
+- `A minimal example on stackoverflow`_
+- `Making your app modular: Yapsy`_ (applied to Qt apps)
+- `Python plugins with yapsy`_ (applied to GTK apps)
 
 .. _`Making your app modular: Yapsy`: http://lateral.netmanagers.com.ar/weblog/posts/BB923.html
+.. _`A minimal example on stackoverflow`: http://stackoverflow.com/questions/5333128/yapsy-minimal-example
+.. _`Python plugins with yapsy`: http://www.micahcarrick.com/python-gtk-plugins-with-yapsy.html
+
+
+Development
+===========
+
 
 Contributing or forking ?
 -------------------------
@@ -75,23 +204,28 @@ you're using |yapsy| (original or forked) and how it is useful to you,
 is in itself a appreciable contribution :)
 
 
-Trivia
-------
+License
+-------
 
+The work is placed under the simplified BSD_ license in order to make
+it as easy as possible to be reused in other projects. 
 
 .. _BSD: http://www.opensource.org/licenses/bsd-license.php
 
-The work is placed under the simplified BSD_ license in order to make
-it as easy as possible to be reused in other projects. Please note
-that the icon is not under the same license but under the Creative
-Common Attribution-ShareAlike license.
+Please note that the icon is not under the same license but under the
+`Creative Common Attribution-ShareAlike`_ license.
 
-The project is hosted by `Sourceforge`_.
+.. _`Creative Common Attribution-ShareAlike`: http://creativecommons.org/licenses/by-sa/3.0/
+
+
+Forge
+-----
+
+The project is hosted by `Sourceforge`_ where you can access the code, documentation and a tracker to share your feedback and ask for support.
 
 .. _`Sourceforge`: http://sourceforge.net/projects/yapsy/
 
-|SourceForge.net| 
-
+|SourceForge.net|
 
 Any suggestion and help are much welcome !
 
@@ -99,12 +233,12 @@ Any suggestion and help are much welcome !
 References
 ----------
 
-
-Other Python plugin systems already existed before |yapsy|. |yapsy|'s
-creation is by no mean a sign that these others plugin systems sucks
-:) It is just the results of me being slighlty lazy and as I had
-already a good idea of how a simple plugin system should look like, I
-wanted to implement my own [#older_systems]_.
+Other Python plugin systems already existed before |yapsy| and some
+have appeared after that. |yapsy|'s creation is by no mean a sign that
+these others plugin systems sucks :) It is just the results of me
+being slighlty lazy and as I had already a good idea of how a simple
+plugin system should look like, I wanted to implement my own
+[#older_systems]_.
 
 
 - setuptools_ seems to be designed to allow applications to have a
@@ -124,6 +258,26 @@ wanted to implement my own [#older_systems]_.
   much.
 
 .. _PlugBoard: http://developer.berlios.de/projects/plugboard/ 
+
+- `Marty Alchin's simple plugin framework`_ is a quite interesting
+  description of a plugin architecture with code snippets as
+  illustrations.
+
+.. _`Marty Alchin's simple plugin framework`: http://martyalchin.com/2008/jan/10/simple-plugin-framework/
+
+- stevedor_ looks quite promising and actually seems to make
+  setuptools relevant to build plugin systems.
+
+.. _stevedor: http://stevedore.readthedocs.org
+
+- `Evan Fosmark's A simple event-driven plugin system in Python`_ where "plugins are just functions that get registered through the use of a decorator". 
+
+.. _`Evan Fosmark's A simple event-driven plugin system in Python`: http://www.evanfosmark.com/2009/07/simple-event-driven-plugin-system-in-python/
+
+- You can look up more example on a `stackoverflow's discution about minimal plugin systems in Python`_
+
+.. _`stackoverflow's discution about minimal plugin systems in Python`: http://stackoverflow.com/questions/932069/building-a-minimal-plugin-architecture-in-python
+
 
 .. [#older_systems] All the more because it seems that my modest
    design ideas slightly differ from what has been done in other

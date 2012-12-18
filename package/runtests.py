@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 
 """
@@ -34,7 +34,7 @@ def main(argv):
 	"""
 	Launch all the test.
 	"""
-	try:                                
+	try:
 		opts, args = getopt.getopt(argv[1:], "vdh", ["help"])
 	except getopt.GetoptError:
 		print(usage())
