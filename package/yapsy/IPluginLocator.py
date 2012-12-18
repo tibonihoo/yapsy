@@ -7,7 +7,13 @@
 Role
 ====
 
-``IPluginLocator`` defines the basic interface that must be provided in order for the ``PluginManager`` to be able to locate plugins.
+``IPluginLocator`` defines the basic interface expected by a
+``PluginManager`` to be able to locate plugins and get basic info
+about each discovered plugin (name, version etc).
+
+API
+===
+
 """
 
 
