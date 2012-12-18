@@ -34,7 +34,7 @@ from setuptools import setup
 
 setup(
     name = "Yapsy",
-	version = __import__("yapsy").__version__,
+	version = __import__("yapsy").__version__+"-pythons2n3",
 	packages = ['yapsy'],
 	package_dir = {'yapsy':'yapsy'},
 	
@@ -43,7 +43,7 @@ setup(
 	
 	# metadata for upload to PyPI
 	author = "Thibauld Nion",
-	author_email = "tibonihoo@users.sourceforge.net",
+	author_email = "thibauld@tibonihoo.net",
 	description = "Yet another plugin system",
 	license = "BSD",
 	keywords = "plugin manager",

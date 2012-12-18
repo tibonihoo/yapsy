@@ -1,6 +1,6 @@
 include README.txt
 include LICENSE.txt
-include TODO.txt
+include CHANGELOG.txt
 
 recursive-include test *.py *-plugin *.zip
 
