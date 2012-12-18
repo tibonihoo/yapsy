@@ -89,6 +89,16 @@ Here is an example of what such a file should contain::
           built its own representations of the plugins as instances of
           the :doc:`PluginInfo` class.
 
+Changing the default behaviour
+==============================
+
+The default behaviour for locating and loading plugins can be changed
+using the various options exposed on the interface via getters.
+
+The plugin detection, in particular, can be fully customized by
+settting a custom plugin locator. See ``IPluginLocator`` for more
+details on this.
+
 
 Extensibility
 =============
@@ -166,40 +176,40 @@ class PluginManager(object):
 		# many Python experienced users told me not to use mutable objects
 		# as default values for function/method arguments, but rather use None.
 		if categories_filter is None:
-            categories_filter = {"Default":IPlugin}
+			categories_filter = {"Default":IPlugin}
 		self.setCategoriesFilter(categories_filter)
-        plugin_locator = self._locatorDecide(plugin_info_ext, plugin_locator)
-        # plugin_locator could be either a dict defining strategies, or directly
+		plugin_locator = self._locatorDecide(plugin_info_ext, plugin_locator)
+		# plugin_locator could be either a dict defining strategies, or directly
 		# a IPluginLocator object
 		self.setPluginLocator(plugin_locator, directories_list)
 
-    def _locatorDecide(self, plugin_info_ext, plugin_locator):
-        """
-        For backward compatibility, we kept the *plugin_info_ext* argument.
-        Thus we may use it if provided. Returns the (possibly modified)
-        *plugin_locator*.
-        """
-        specific_info_ext = plugin_info_ext is not None
-        specific_locator = plugin_locator is not None
-        if not specific_info_ext and not specific_locator:
-            # use the default behavior
-            res = PluginFileLocator()
-        elif not specific_info_ext and specific_locator:
-            # plugin_info_ext not used
-            res = plugin_locator
-        elif not specific_locator and specific_info_ext:
-            # plugin_locator not used, and plugin_info_ext provided
-            # -> compatibility mode
-            res = PluginFileLocator()
+	def _locatorDecide(self, plugin_info_ext, plugin_locator):
+		"""
+		For backward compatibility, we kept the *plugin_info_ext* argument.
+		Thus we may use it if provided. Returns the (possibly modified)
+		*plugin_locator*.
+		"""
+		specific_info_ext = plugin_info_ext is not None
+		specific_locator = plugin_locator is not None
+		if not specific_info_ext and not specific_locator:
+			# use the default behavior
+			res = PluginFileLocator()
+		elif not specific_info_ext and specific_locator:
+			# plugin_info_ext not used
+			res = plugin_locator
+		elif not specific_locator and specific_info_ext:
+			# plugin_locator not used, and plugin_info_ext provided
+			# -> compatibility mode
+			res = PluginFileLocator()
 			res.setAnalyzers([PluginFileAnalyzerWithInfoFile("info_ext",plugin_info_ext)])
-        elif specific_info_ext and specific_locator:
-            # both provided... issue a warning that tells "plugin_info_ext"
-            # will be ignored
-            msg = ("Two incompatible arguments (%s) provided:",
-                   "'plugin_info_ext' and 'plugin_locator'). Ignoring",
-                   "'plugin_info_ext'.")
-            raise ValueError(" ".join(msg) % self.__class__.__name__)
-        return res
+		elif specific_info_ext and specific_locator:
+			# both provided... issue a warning that tells "plugin_info_ext"
+			# will be ignored
+			msg = ("Two incompatible arguments (%s) provided:",
+				   "'plugin_info_ext' and 'plugin_locator'). Ignoring",
+				   "'plugin_info_ext'.")
+			raise ValueError(" ".join(msg) % self.__class__.__name__)
+		return res
 	
 	def setCategoriesFilter(self, categories_filter):
 		"""
@@ -222,34 +232,34 @@ class PluginManager(object):
 			self._category_file_mapping[categ] = []
 			
 
-    def setPluginPlaces(self, directories_list):
-        """
+	def setPluginPlaces(self, directories_list):
+		"""
 		DEPRECATED(>1.9): directly configure the IPluginLocator instance instead !
 		
-        Convenience method (actually call the IPluginLocator method)
-        """
-        self.getPluginLocator().setPluginPlaces(directories_list)
+		Convenience method (actually call the IPluginLocator method)
+		"""
+		self.getPluginLocator().setPluginPlaces(directories_list)
 
-    def updatePluginPlaces(self, directories_list):
-        """
+	def updatePluginPlaces(self, directories_list):
+		"""
 		DEPRECATED(>1.9): directly configure the IPluginLocator instance instead !
 
 		Convenience method (actually call the IPluginLocator method)
-        """
-        self.getPluginLocator().updatePluginPlaces(directories_list)
+		"""
+		self.getPluginLocator().updatePluginPlaces(directories_list)
 
-    def setPluginInfoExtension(self, ext):
-        """
-        DEPRECATED(>1.9): for backward compatibility. Directly configure the
-        IPluginLocator instance instead !
+	def setPluginInfoExtension(self, ext):
+		"""
+		DEPRECATED(>1.9): for backward compatibility. Directly configure the
+		IPluginLocator instance instead !
 		
-        .. warning: This will only work if the strategy "info_ext" is
-        active for locating plugins.
-        """
-        try:
-            self.getPluginLocator().setPluginInfoExtension(ext)
-        except KeyError:
-            log.error("Current plugin locator doesn't support setting the plugin info extension.")
+		.. warning:: This will only work if the strategy "info_ext" is
+		             active for locating plugins.
+		"""
+		try:
+			self.getPluginLocator().setPluginInfoExtension(ext)
+		except KeyError:
+			log.error("Current plugin locator doesn't support setting the plugin info extension.")
 
 	def setPluginInfoClass(self, picls, strategies=None):
 		"""
@@ -257,10 +267,10 @@ class PluginManager(object):
 		
 		Convenience method (actually call self.getPluginLocator().setPluginInfoClass)
 		
-        When using a ``PluginFileLocator`` you may restrict the
-        strategies to which the change of PluginInfo class will occur
-        by just giving the list of strategy names in the argument
-        "strategies"
+		When using a ``PluginFileLocator`` you may restrict the
+		strategies to which the change of PluginInfo class will occur
+		by just giving the list of strategy names in the argument
+		"strategies"
 		"""
 		if strategies:
 			for name in strategies:
@@ -284,13 +294,13 @@ class PluginManager(object):
 		See ``IPluginLocator`` for the policy that plugin_locator must enforce.
 		"""
 		if isinstance(plugin_locator, IPluginLocator):
-            self._plugin_locator = plugin_locator
-            if dir_list is not None:
-                self._plugin_locator.updatePluginPlaces(dir_list)
-            if picls is not None:
-                self.setPluginInfoClass(picls)
+			self._plugin_locator = plugin_locator
+			if dir_list is not None:
+				self._plugin_locator.updatePluginPlaces(dir_list)
+			if picls is not None:
+				self.setPluginInfoClass(picls)
 		else:
-            raise TypeError("Unexpected format for plugin_locator ('%s' is not an instance of IPluginLocator)" % plugin_locator)
+			raise TypeError("Unexpected format for plugin_locator ('%s' is not an instance of IPluginLocator)" % plugin_locator)
 		
 	def getPluginLocator(self):
 		"""
@@ -312,7 +322,7 @@ class PluginManager(object):
 		required info could be localised, else return ``(None,None)``.
 
 		.. note:: This is supposed to be used internally by subclasses
-        and decorators.
+		and decorators.
 
 		"""
 		return self.getPluginLocator().gatherCorePluginInfo(directory,plugin_info_filename)
@@ -329,7 +339,7 @@ class PluginManager(object):
 		.. note:: Prefer using ``_gatherCorePluginInfo``
 		instead, whenever possible...
 		
-        .. warning:: ``infoFileObject`` must be a file-like
+		.. warning:: ``infoFileObject`` must be a file-like
 		object: either an opened file for instance or a string
 		buffer wrapped in a StringIO instance as another
 		example.
@@ -343,7 +353,7 @@ class PluginManager(object):
 		localised, else return ``(None,None,None)``.
 
 		.. note:: This is supposed to be used internally by subclasses
-        and decorators.
+		and decorators.
 		"""
 		return self.getPluginLocator().getPluginNameAndModuleFromStream(infoFileObject, candidate_infofile)
 	
@@ -422,10 +432,10 @@ class PluginManager(object):
 		self._candidates.append(candidateTuple)
 
 	def locatePlugins(self):
-        """
-        Convenience method (actually call the IPluginLocator method)
-        """
-        self._candidates, npc = self.getPluginLocator().locatePlugins()
+		"""
+		Convenience method (actually call the IPluginLocator method)
+		"""
+		self._candidates, npc = self.getPluginLocator().locatePlugins()
 	
 	def loadPlugins(self, callback=None):
 		"""
@@ -461,7 +471,7 @@ class PluginManager(object):
 				candidateMainFile = open(candidate_filepath+".py","r")	
 				exec(candidateMainFile,candidate_globals)
 			except Exception:
-                exc_info = sys.exc_info()
+				exc_info = sys.exc_info()
 				log.error("Unable to execute the code in plugin: %s" % candidate_filepath, exc_info=exc_info)
 				if "__init__" in  os.path.basename(candidate_filepath):
 					sys.path.remove(plugin_info.path)

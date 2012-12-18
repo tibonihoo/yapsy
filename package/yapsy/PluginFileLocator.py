@@ -62,38 +62,38 @@ from yapsy.IPluginLocator import IPluginLocator
 
 
 class IPluginFileAnalyzer(object):
-    """
-    Define the methods expected by PluginFileLocator for its 'analyzer'.
-    """
+	"""
+	Define the methods expected by PluginFileLocator for its 'analyzer'.
+	"""
 
 	def __init__(self,name):
 		self.name = name
 	
-    def isValidPlugin(self, filename):
+	def isValidPlugin(self, filename):
 		"""
 		Check if the resource found at filename is a valid plugin.
 		"""
 		raise NotImplementedError("'isValidPlugin' must be reimplemented by %s" % self)	
 
 
-    def getInfosDictFromPlugin(self, dirpath, filename):
-        """
-        Returns the extracted plugin informations as a dictionary.
-        This function ensures that "name" and "path" are provided.
+	def getInfosDictFromPlugin(self, dirpath, filename):
+		"""
+		Returns the extracted plugin informations as a dictionary.
+		This function ensures that "name" and "path" are provided.
 
 		*dirpath* is the full path to the directory where the plugin file is
 
 		*filename* is the name (ie the basename) of the plugin file.
 		
-        If *callback* function has not been provided for this strategy,
-        we use the filename alone to extract minimal informations.
-        """
+		If *callback* function has not been provided for this strategy,
+		we use the filename alone to extract minimal informations.
+		"""
 		raise NotImplementedError("'getInfosDictFromPlugin' must be reimplemented by %s" % self)
 
 
 class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
-    """
-    Consider plugins described by a textual description file.
+	"""
+	Consider plugins described by a textual description file.
 
 	A plugin is expected to be described by a text file ('ini' format) with a specific extension (.yapsy-plugin by default).
 
@@ -111,16 +111,16 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 	    Website = url_for_plugin
 	    Description = A simple one-sentence description
 
-    """
-    def __init__(self, name, extensions="yapsy-plugin"):
-        """
-        Creates a new analyzer named *name* and dedicated to check and analyze plugins described by a textual "info file".
+	"""
+	def __init__(self, name, extensions="yapsy-plugin"):
+		"""
+		Creates a new analyzer named *name* and dedicated to check and analyze plugins described by a textual "info file".
 		
 		*name* name of the plugin.
 
 		*extensions* the expected extensions for the plugin info file. May be a string or a tuple of strings if several extensions are expected.
-        """
-        IPluginFileAnalyzer.__init__(self,name)
+		"""
+		IPluginFileAnalyzer.__init__(self,name)
 		self.setPluginInfoExtension(extensions)
 
 	
@@ -132,11 +132,11 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 		"""
 		# Make sure extension is a tuple
 		if not isinstance(extensions, tuple):
-            extensions = (extensions, )
+			extensions = (extensions, )
 		self.expectedExtensions = extensions
-
+		
 	
-    def isValidPlugin(self, filename):
+	def isValidPlugin(self, filename):
 		"""
 		Check if it is a valid plugin based on the given plugin info file extension(s).
 		If several extensions are provided, the first matching will cause the function
@@ -153,10 +153,10 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 		"""
 		Extract the name and module of a plugin from the
 		content of the info file that describes it and which
-		is stored in infoFileObject.
+		is stored in ``infoFileObject``.
 		
 		.. note:: Prefer using ``_extractCorePluginInfo``
-		instead, whenever possible...
+		          instead, whenever possible...
 		
 		.. warning:: ``infoFileObject`` must be a file-like object:
 		             either an opened file for instance or a string
@@ -250,46 +250,46 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 				infos["description"] = config_parser.get("Documentation", "Description")
 		return infos, config_parser
 		
-    def getInfosDictFromPlugin(self, dirpath, filename):
-        """
-        Returns the extracted plugin informations as a dictionary.
-        This function ensures that "name" and "path" are provided.
+	def getInfosDictFromPlugin(self, dirpath, filename):
+		"""
+		Returns the extracted plugin informations as a dictionary.
+		This function ensures that "name" and "path" are provided.
 
-        If *callback* function has not been provided for this strategy,
-        we use the filename alone to extract minimal informations.
-        """
+		If *callback* function has not been provided for this strategy,
+		we use the filename alone to extract minimal informations.
+		"""
  		infos, config_parser = self._extractBasicPluginInfo(dirpath, filename)
 		if infos.get("name", None) is None:
 			raise ValueError("Missing *name* of the plugin in extracted infos.")
 		if infos.get("path", None) is None:
 			raise ValueError("Missing *path* of the plugin in extracted infos.")
-        return infos, config_parser
+		return infos, config_parser
 
 	
 class PluginFileAnalyzerMathingRegex(IPluginFileAnalyzer):
-    """
+	"""
 	An analyzer that targets plugins decribed by files whose name match a given regex.
-    """
-    def __init__(self, name, regexp):
-        IPluginFileAnalyzer.__init__(self,name)
+	"""
+	def __init__(self, name, regexp):
+		IPluginFileAnalyzer.__init__(self,name)
 		self.regexp = regexp
 	
-    def isValidPlugin(self, filename):
-        """
-        Checks if the given filename is a valid plugin for this Strategy
-        """
+	def isValidPlugin(self, filename):
+		"""
+		Checks if the given filename is a valid plugin for this Strategy
+		"""
 		reg = re.compile(self.regexp)
 		if reg.match(filename) is not None:
 			return True
 		return False
 	
-    def getInfosDictFromPlugin(self, dirpath, filename):
-        """
-        Returns the extracted plugin informations as a dictionary.
-        This function ensures that "name" and "path" are provided.
-        """
-        # use the filename alone to extract minimal informations.
-        infos = {}
+	def getInfosDictFromPlugin(self, dirpath, filename):
+		"""
+		Returns the extracted plugin informations as a dictionary.
+		This function ensures that "name" and "path" are provided.
+		"""
+		# use the filename alone to extract minimal informations.
+		infos = {}
 		module_name = os.path.splitext(filename)[0]
 		plugin_filename = os.path.join(dirpath,filename)
 		if module_name == "__init__":
@@ -301,35 +301,35 @@ class PluginFileAnalyzerMathingRegex(IPluginFileAnalyzer):
 		cf_parser.add_section("Core")
 		cf_parser.set("Core","Name",infos["name"])
 		cf_parser.set("Core","Module",infos["path"])
-        return infos,cf_parser
+		return infos,cf_parser
 
 
 
 class PluginFileLocator(IPluginLocator):
-    """
-    Locates plugins on the file system using a set of analyzers to
-    determine what files actually corresponds to plugins.
+	"""
+	Locates plugins on the file system using a set of analyzers to
+	determine what files actually corresponds to plugins.
 	
-    If more than one analyzer is being used, the first that will discover a
-    new plugin will avoid other strategies to find it too.
+	If more than one analyzer is being used, the first that will discover a
+	new plugin will avoid other strategies to find it too.
 
 	By default each directory set as a "plugin place" is scanned
 	recursively. You can change that by a call to
 	``disableRecursiveScan``.
-    """
-    def __init__(self, analyzers=None, plugin_info_cls=PluginInfo):
-        """
-        Defines the strategies, and the places for plugins to look into.
-        """
+	"""
+	def __init__(self, analyzers=None, plugin_info_cls=PluginInfo):
+		"""
+		Defines the strategies, and the places for plugins to look into.
+		"""
 		IPluginLocator.__init__(self)
 		self._discovered_plugins = {}
-        self.setPluginPlaces(None)
-        self._analyzers = analyzers      # analyzers used to locate plugins
-        if self._analyzers is None:
+		self.setPluginPlaces(None)
+		self._analyzers = analyzers      # analyzers used to locate plugins
+		if self._analyzers is None:
 			self._analyzers = [PluginFileAnalyzerWithInfoFile("info_ext")]
-        self._default_plugin_info_cls = PluginInfo
+		self._default_plugin_info_cls = PluginInfo
 		self._plugin_info_cls_map = {}
-        self._max_size = 1e3*1024 # in octets (by default 1 Mo)
+		self._max_size = 1e3*1024 # in octets (by default 1 Mo)
 		self.recursive = True
 
 	def disableRecursiveScan(self):
@@ -338,20 +338,20 @@ class PluginFileLocator(IPluginLocator):
 		"""
 		self.recursive = False
 		
-    def setAnalyzers(self, analyzers):
-        """
-        Sets a new set of analyzers.
+	def setAnalyzers(self, analyzers):
+		"""
+		Sets a new set of analyzers.
 
-		.. warning: the new analyzers won't be aware of the plugin
-		info class that may have been set via a previous call to
-		setPluginInfoClass.
-        """
+		.. warning:: the new analyzers won't be aware of the plugin
+		             info class that may have been set via a previous
+		             call to ``setPluginInfoClass``.
+		"""
 		self._analyzers = analyzers
 
-    def removeAnalyzers(self, name):
-        """
-        Removes analyzers of a given name.
-        """
+	def removeAnalyzers(self, name):
+		"""
+		Removes analyzers of a given name.
+		"""
 		analyzersListCopy = self._analyzers[:]
 		foundAndRemoved = False
 		for obj in analyzersListCopy:
@@ -359,18 +359,18 @@ class PluginFileLocator(IPluginLocator):
 				self._analyzers.remove(obj)
 				foundAndRemoved = True
 		if not foundAndRemoved:
-            log.debug("'%s' is not a known strategy name: can't remove it." % name)
+			log.debug("'%s' is not a known strategy name: can't remove it." % name)
 
-    def removeAllAnalyzer(self):
-        """
-        Remove all analyzers.
-        """
+	def removeAllAnalyzer(self):
+		"""
+		Remove all analyzers.
+		"""
 		self._analyzers = []
 	
-    def appendAnalyzer(self, analyzer):
-        """
-        Append an analyzer to the existing list.
-        """
+	def appendAnalyzer(self, analyzer):
+		"""
+		Append an analyzer to the existing list.
+		"""
 		self._analyzers.append(analyzer)
 
 
@@ -388,7 +388,7 @@ class PluginFileLocator(IPluginLocator):
 		plugin_info.details = config_parser
 		return plugin_info
 	
-    def locatePlugins(self):
+	def locatePlugins(self):
 		"""
 		Walk through the plugins' places and look for plugins.
 
@@ -413,68 +413,68 @@ class PluginFileLocator(IPluginLocator):
 			for item in walk_iter:
 				dirpath = item[0]
 				for filename in item[2]:
-                    # print "testing candidate file %s" % filename
-                    for analyzer in self._analyzers:
+					# print "testing candidate file %s" % filename
+					for analyzer in self._analyzers:
 						# print "... with analyzer %s" % analyzer.name
-                        # eliminate the obvious non plugin files
-                        if not analyzer.isValidPlugin(filename):
-                            log.debug("%s is not a valid plugin for strategy %s" % (filename, analyzer.name))
-                            continue
-                        candidate_infofile = os.path.join(dirpath, filename)
-                        if candidate_infofile in _discovered:
-                            log.debug("%s (with strategy %s) rejected because already discovered" % (candidate_infofile, analyzer.name))
-                            continue
-					    log.debug("%s found a candidate:\n    %s" % (self.__class__.__name__, candidate_infofile))
-#					    print candidate_infofile
-                        plugin_info = self._getInfoForPluginFromAnalyzer(analyzer, dirpath, filename)
-					    if plugin_info is None:
-						    log.warning("Plugin candidate '%s'  rejected by strategy '%s'" % (candidate_infofile, analyzer.name))
-						    break # we consider this was the good strategy to use for: it failed -> not a plugin -> don't try another strategy
-					    # now determine the path of the file to execute,
-					    # depending on wether the path indicated is a
-					    # directory or a file
+						# eliminate the obvious non plugin files
+						if not analyzer.isValidPlugin(filename):
+							log.debug("%s is not a valid plugin for strategy %s" % (filename, analyzer.name))
+							continue
+						candidate_infofile = os.path.join(dirpath, filename)
+						if candidate_infofile in _discovered:
+							log.debug("%s (with strategy %s) rejected because already discovered" % (candidate_infofile, analyzer.name))
+							continue
+						log.debug("%s found a candidate:\n    %s" % (self.__class__.__name__, candidate_infofile))
+#						print candidate_infofile
+						plugin_info = self._getInfoForPluginFromAnalyzer(analyzer, dirpath, filename)
+						if plugin_info is None:
+							log.warning("Plugin candidate '%s'  rejected by strategy '%s'" % (candidate_infofile, analyzer.name))
+							break # we consider this was the good strategy to use for: it failed -> not a plugin -> don't try another strategy
+						# now determine the path of the file to execute,
+						# depending on wether the path indicated is a
+						# directory or a file
 #					print plugin_info.path
-                        # Remember all the files belonging to a discovered
-                        # plugin, so that strategies (if several in use) won't
-                        # collide
-					    if os.path.isdir(plugin_info.path):
-						    candidate_filepath = os.path.join(plugin_info.path, "__init__")
-						    # it is a package, adds all the files concerned
-					        for _file in os.listdir(plugin_info.path):
-                                if _file.endswith(".py"):
-                                    self._discovered_plugins[os.path.join(plugin_info.path, _file)] = candidate_filepath
-					                _discovered[os.path.join(plugin_info.path, _file)] = candidate_filepath
+						# Remember all the files belonging to a discovered
+						# plugin, so that strategies (if several in use) won't
+						# collide
+						if os.path.isdir(plugin_info.path):
+							candidate_filepath = os.path.join(plugin_info.path, "__init__")
+							# it is a package, adds all the files concerned
+							for _file in os.listdir(plugin_info.path):
+								if _file.endswith(".py"):
+									self._discovered_plugins[os.path.join(plugin_info.path, _file)] = candidate_filepath
+									_discovered[os.path.join(plugin_info.path, _file)] = candidate_filepath
 						elif (plugin_info.path.endswith(".py") and os.path.isfile(plugin_info.path)) or os.path.isfile(plugin_info.path+".py"):
-						    candidate_filepath = plugin_info.path
+							candidate_filepath = plugin_info.path
 							if candidate_filepath.endswith(".py"):
 								candidate_filepath = candidate_filepath[:-3]
-						    # it is a file, adds it
-						    self._discovered_plugins[".".join((plugin_info.path, "py"))] = candidate_filepath
-						    _discovered[".".join((plugin_info.path, "py"))] = candidate_filepath
-					    else:
-						    log.error("Plugin candidate rejected: cannot find the file or directory module for '%s'" % (candidate_infofile))
-						    break
+							# it is a file, adds it
+							self._discovered_plugins[".".join((plugin_info.path, "py"))] = candidate_filepath
+							_discovered[".".join((plugin_info.path, "py"))] = candidate_filepath
+						else:
+							log.error("Plugin candidate rejected: cannot find the file or directory module for '%s'" % (candidate_infofile))
+							break
 #					print candidate_filepath
-					    _candidates.append((candidate_infofile, candidate_filepath, plugin_info))
-					    # finally the candidate_infofile must not be discovered again
-					    _discovered[candidate_infofile] = candidate_filepath
-					    self._discovered_plugins[candidate_infofile] = candidate_filepath
-#					    print "%s found by strategy %s" % (candidate_filepath, analyzer.name)
+						_candidates.append((candidate_infofile, candidate_filepath, plugin_info))
+						# finally the candidate_infofile must not be discovered again
+						_discovered[candidate_infofile] = candidate_filepath
+						self._discovered_plugins[candidate_infofile] = candidate_filepath
+#						print "%s found by strategy %s" % (candidate_filepath, analyzer.name)
 		return _candidates, len(_candidates)
 
-    def gatherCorePluginInfo(self, directory, filename):
-        """
-        Return a ``PluginInfo`` as well as the ``ConfigParser`` used to build it.
+	def gatherCorePluginInfo(self, directory, filename):
+		"""
+		Return a ``PluginInfo`` as well as the ``ConfigParser`` used to build it.
 		
 		If filename is a valid plugin discovered by any of the known
-        strategy in use. Returns None,None otherwise.
-        """
-        for analyzer in self._analyzers:
-            # eliminate the obvious non plugin files
-            if not analyzer.isValidPlugin(filename):
-                continue
-            plugin_info = self._getInfoForPluginFromAnalyzer(analyzer,directory, filename)
-            return plugin_info,plugin_info.details
+		strategy in use. Returns None,None otherwise.
+		"""
+		for analyzer in self._analyzers:
+			# eliminate the obvious non plugin files
+			if not analyzer.isValidPlugin(filename):
+				continue
+			plugin_info = self._getInfoForPluginFromAnalyzer(analyzer,directory, filename)
+			return plugin_info,plugin_info.details
 		return None,None
 	
 	# -----------------------------------------------
@@ -490,8 +490,8 @@ class PluginFileLocator(IPluginLocator):
 		else:
 			raise RuntimeError("No current file analyzer is able to provide plugin information from stream")
 	
-    def setPluginInfoClass(self, picls, name=None):
-        """
+	def setPluginInfoClass(self, picls, name=None):
+		"""
 		Set the class that holds PluginInfo. The class should inherit
 		from ``PluginInfo``.
 
@@ -505,7 +505,7 @@ class PluginFileLocator(IPluginLocator):
 		else:
 			self._plugin_info_cls_map[name] = picls
 			
-    def setPluginPlaces(self, directories_list):
+	def setPluginPlaces(self, directories_list):
 		"""
 		Set the list of directories where to look for plugin places.
 		"""
@@ -513,20 +513,20 @@ class PluginFileLocator(IPluginLocator):
 			directories_list = [os.path.dirname(__file__)]
 		self.plugins_places = directories_list
 
-    def updatePluginPlaces(self, directories_list):
-        """
-        Updates the list of directories where to look for plugin places.
-        """
+	def updatePluginPlaces(self, directories_list):
+		"""
+		Updates the list of directories where to look for plugin places.
+		"""
 		self.plugins_places = list(set.union(set(directories_list), set(self.plugins_places)))
 
-    def setPluginInfoExtension(self, ext):
-        """
-        DEPRECATED(>1.9): for backward compatibility. Directly configure the
-        IPluginLocator instance instead !
+	def setPluginInfoExtension(self, ext):
+		"""
+		DEPRECATED(>1.9): for backward compatibility. Directly configure the
+		IPluginLocator instance instead !
 
-        This will only work if the strategy "info_ext" is active
-        for locating plugins.
-        """
+		This will only work if the strategy "info_ext" is active
+		for locating plugins.
+		"""
 		for analyzer in self._analyzers:
 			if analyzer.name == "info_ext":
 				analyzer.setPluginInfoExtension(ext)
