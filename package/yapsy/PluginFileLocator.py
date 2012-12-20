@@ -210,7 +210,7 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 		          and decorators.
 		"""
 		# now we can consider the file as a serious candidate
-		if not isinstance(filename, str):
+		if not (isinstance(filename, str) or isinstance(filename,unicode)):
 			# filename is a file object: use it
 			name, moduleName, config_parser = self.getPluginNameAndModuleFromStream(filename)
 		else:
