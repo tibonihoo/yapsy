@@ -1,3 +1,9 @@
+version-1.10.1 [2013-01-13]
+
+  - code: switch from exec to imp.load_module for plugin loading which also solves https://sourceforge.net/p/yapsy/bugs/9/
+  - doc: add explanation about plugin class detection caveat https://sourceforge.net/p/yapsy/bugs/8/
+  - code: fix unicode bug on python2 version, see https://sourceforge.net/p/yapsy/bugs/10/
+
 version-1.10 [2012-12-18]
 
   - code: [contrib. Mathieu Havel] "plugin locators" allow to change the strategy to describe and locate plugins
