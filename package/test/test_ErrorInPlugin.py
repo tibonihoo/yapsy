@@ -35,7 +35,7 @@ class ErrorTestCase(unittest.TestCase):
 		# - gather infos about the processed plugins (loaded or not)
 		# and for the test, monkey patch the logger
 		originalLogLevel = log.getEffectiveLevel()
-		log.setLevel(logging.CRITICAL)
+		log.setLevel(logging.ERROR)
 		errorLogCallFlag = [False]
 		def errorMock(*args,**kwargs):
 			errorLogCallFlag[0]=True
