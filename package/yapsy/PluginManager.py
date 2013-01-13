@@ -129,8 +129,11 @@ API
 
 import sys
 import os
+import imp
 
 from yapsy import log
+from yapsy import NormalizePluginNameForModuleName
+
 from yapsy.IPlugin import IPlugin
 from yapsy.IPluginLocator import IPluginLocator
 # The follozing two imports are used to implement the default behaviour
@@ -455,6 +458,14 @@ class PluginManager(object):
 
 		processed_plugins = []
 		for candidate_infofile, candidate_filepath, plugin_info in self._candidates:
+			# make sure to attribute a unique module name to the one
+			# that is about to be loaded
+			plugin_module_name_template = NormalizePluginNameForModuleName("yapsy_loaded_plugin_" + plugin_info.name) + "_%d"
+			for plugin_name_suffix in range(len(sys.modules)):
+				plugin_module_name =  plugin_module_name_template % plugin_name_suffix
+				if plugin_module_name not in sys.modules:
+					break
+			
 			# tolerance on the presence (or not) of the py extensions
 			if candidate_filepath.endswith(".py"):
 				candidate_filepath = candidate_filepath[:-3]
@@ -463,28 +474,28 @@ class PluginManager(object):
 			# user
 			if callback is not None:
 				callback(plugin_info)
-			# now execute the file and get its content into a
-			# specific dictionnary
-			candidate_globals = {"__file__":candidate_filepath+".py"}
+			# cover the case when the __init__ of a package has been
+			# explicitely indicated
 			if "__init__" in  os.path.basename(candidate_filepath):
-				sys.path.append(plugin_info.path)				
+				candidate_filepath = os.path.dirname(candidate_filepath)
 			try:
-				candidateMainFile = open(candidate_filepath+".py","r")	
-				exec(candidateMainFile.read(),candidate_globals)
+				# use imp to correctly load the plugin as a module
+				if os.path.isdir(candidate_filepath):
+					candidate_module = imp.load_module(plugin_module_name,None,candidate_filepath,("py","r",imp.PKG_DIRECTORY))
+				else:
+					with open(candidate_filepath+".py","r") as plugin_file:
+						candidate_module = imp.load_module(plugin_module_name,plugin_file,candidate_filepath+".py",("py","r",imp.PY_SOURCE))
 			except Exception:
 				exc_info = sys.exc_info()
-				log.error("Unable to execute the code in plugin: %s" % candidate_filepath, exc_info=exc_info)
-				if "__init__" in  os.path.basename(candidate_filepath):
-					sys.path.remove(plugin_info.path)
+				log.error("Unable to import plugin: %s" % candidate_filepath, exc_info=exc_info)
 				plugin_info.error = exc_info
 				processed_plugins.append(plugin_info)
 				continue
-			
 			processed_plugins.append(plugin_info)
 			if "__init__" in  os.path.basename(candidate_filepath):
 				sys.path.remove(plugin_info.path)
 			# now try to find and initialise the first subclass of the correct plugin interface
-			for element in candidate_globals.values():
+			for element in (getattr(candidate_module,name) for name in dir(candidate_module)):
 				plugin_info_reference = None
 				for category_name in self.categories_interfaces:
 					try:
