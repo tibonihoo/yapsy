@@ -14,7 +14,7 @@ Please let me know if you find this useful.
 
 For more info see:
   - online at: http://packages.python.org/Yapsy/
-  - in the sources at: ./doc/index.rst
+  - in the sources at: ``package/doc/index.rst``
 
 Thibauld Nion
 
