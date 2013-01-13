@@ -19,7 +19,8 @@ else
 fi
 
 if [ -d $PY3_YAPSY_DIR ]; then
-    cp -r $PY3_YAPSY_DIR $BUNDLE_DIR/src3
+    mkdir "./2n3bundle/src3"
+    cp -r $PY3_YAPSY_DIR/package $BUNDLE_DIR/src3/package
     echo "Copied Python3-compatible sources of yapsy."
 else
     echo "Unable to find Python3-compatible sources of yapsy, aborting !"
