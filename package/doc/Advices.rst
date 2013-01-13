@@ -38,8 +38,8 @@ following snippet::
   logging.getLogger('yapsy').setLevel(logging.DEBUG)
 
 
-Categorization and inheritance caveat
--------------------------------------
+Categorization by inheritance caveat
+------------------------------------
 
 If your application defines various categories of plugins with the yapsy's built-in mechanism for that, please keep in mind the following facts:
 
@@ -61,6 +61,31 @@ should consider the following tips:
     class inheritance hierarchy reflects the hierarchy between
     categories** (and if you want something more complex that a
     hierarchy, you can consider using mixins).
+
+
+Plugin class detection caveat
+-----------------------------
+
+Because of the "categorization by inheritance" system, you **musn't
+directly import the subclass** of ``IPlugin`` in the main plugin file,
+instead import its containing module and make your plugin class
+inherit from ``ContainingModule.SpecificPluginClass`` as in the
+following example.
+
+The following code won't work (the class ``MyBasePluginClass`` will be
+detected as the plugin's implementation instead of ``MyPlugin``)::
+
+  from myapp.plugintypes import MyBasePluginClass
+   
+  class MyPlugin(MyBasePluginClass):
+      pass
+
+Instead you should do the following::
+
+  import myapp.plugintypes as plugintypes
+   
+  class MyPlugin(plugintypes.MyBasePluginClass):
+      pass
 
 
 Plugin packaging
