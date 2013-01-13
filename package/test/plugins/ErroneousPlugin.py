@@ -7,8 +7,6 @@
 This is certainly the second simplest plugin ever.
 """
 
-import test_settings
-import main
 from yapsy.IPlugin import IPlugin
 
 from import_error import the_error_is_here
