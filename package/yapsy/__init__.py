@@ -69,3 +69,17 @@ PLUGIN_NAME_FORBIDEN_STRING=";;"
              names, and will be usable to describe lists of plugins
              for instance (see :doc:`ConfigurablePluginManager`)
 """
+
+import re
+def NormalizePluginNameForModuleName(pluginName):
+	"""
+	Normalize a plugin name into a safer name for a module name.
+	
+	.. note:: may do a little more modifications than strictly
+	          necessary and is not optimized for speed.
+	"""
+	if len(pluginName)==0:
+		return "_"
+	if pluginName[0].isdigit():
+		pluginName = "_" + pluginName
+	return re.sub("\W","_",pluginName)
