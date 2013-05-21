@@ -29,33 +29,39 @@ Automagical stuff:
       python setup.py build_sphinx
 """
 
+import os
 from setuptools import setup
 
-
-setup(
-    name = "Yapsy",
-	version = __import__("yapsy").__version__+"-pythons2n3",
-	packages = ['yapsy'],
-	package_dir = {'yapsy':'yapsy'},
+# just in case setup.py is launched from elsewhere that the containing directory
+originalDir = os.getcwd()
+os.chdir(os.path.dirname(__file__))
+try:
+	setup(
+		name = "Yapsy",
+		version = __import__("yapsy").__version__+"-pythons2n3",
+		packages = ['yapsy'],
+		package_dir = {'yapsy':'yapsy'},
+		
+		# the unit tests
+		test_suite = "test.test_All.MainTestSuite",
+		
+		# metadata for upload to PyPI
+		author = "Thibauld Nion",
+		author_email = "thibauld@tibonihoo.net",
+		description = "Yet another plugin system",
+		license = "BSD",
+		keywords = "plugin manager",
+		url = "http://yapsy.sourceforge.net",
+		# more details
+		long_description = open("README.txt").read(),
+		classifiers=['Development Status :: 5 - Production/Stable',
+					 'Intended Audience :: Developers',
+					 'License :: OSI Approved :: BSD License',
+					 'Operating System :: OS Independent',
+					 'Programming Language :: Python',
+					 'Topic :: Software Development :: Libraries :: Python Modules'],
+		platforms='All',
+		)
 	
-	# the unit tests
-	test_suite = "test.test_All.MainTestSuite",
-	
-	# metadata for upload to PyPI
-	author = "Thibauld Nion",
-	author_email = "thibauld@tibonihoo.net",
-	description = "Yet another plugin system",
-	license = "BSD",
-	keywords = "plugin manager",
-	url = "http://yapsy.sourceforge.net",
-	# more details
-	long_description = open("README.txt").read(),
-	classifiers=['Development Status :: 5 - Production/Stable',
-				 'Intended Audience :: Developers',
-				 'License :: OSI Approved :: BSD License',
-				 'Operating System :: OS Independent',
-				 'Programming Language :: Python',
-				 'Topic :: Software Development :: Libraries :: Python Modules'],
-	platforms='All',
-	)
-
+finally:
+  os.chdir(originalDir)
