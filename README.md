@@ -16,5 +16,3 @@ Yapsy is also continuously tested on [travis-ci](https://travis-ci.org):
 
 [![Build Status](https://travis-ci.org/tibonihoo/yapsy.png?branch=master)](https://travis-ci.org/tibonihoo/yapsy)
 
-[![Build Status](https://travis-ci.org/tibonihoo/yapsy.png?branch=python3)](https://travis-ci.org/tibonihoo/yapsy)
-
