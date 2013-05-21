@@ -482,8 +482,11 @@ class PluginManager(object):
 				if os.path.isdir(candidate_filepath):
 					candidate_module = imp.load_module(plugin_module_name,None,candidate_filepath,("py","r",imp.PKG_DIRECTORY))
 				else:
-					with open(candidate_filepath+".py","r") as plugin_file:
+					plugin_file = open(candidate_filepath+".py","r")
+					try:
 						candidate_module = imp.load_module(plugin_module_name,plugin_file,candidate_filepath+".py",("py","r",imp.PY_SOURCE))
+					finally:
+						plugin_file.close()
 			except Exception:
 				exc_info = sys.exc_info()
 				log.error("Unable to import plugin: %s" % candidate_filepath, exc_info=exc_info)
