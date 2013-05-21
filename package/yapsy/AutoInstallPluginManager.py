@@ -13,6 +13,7 @@ API
 ===
 """
 
+import sys
 import os
 import shutil
 import zipfile
@@ -125,9 +126,13 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 		that their is a valid info file in it and correct all the
 		plugin files into the correct directory.
 		
+		.. warning:: Only available for python 2.6 and later.
+		
 		Return ``True`` if the installation is a success, ``False`` if
 		it is a failure.
 		"""
+		if sys.version_info < (2, 6):
+			raise NotImplementedError("Installing fom a ZIP file is only supported for Python2.6 and later.")
 		if not os.path.isfile(plugin_ZIP_filename):
 			log.warning("Could not find the plugin's zip file at '%s'." % plugin_ZIP_filename)
 			return False
@@ -188,7 +193,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 			try:
 				candidateZipFile.extractall(self.install_dir)
 				return True
-			except:
-				log.error("Could not install plugin '%s' from zip file '%s'." % (pluginName,plugin_ZIP_filename))
+			except Exception,e:
+				log.error("Could not install plugin '%s' from zip file '%s' (exception: '%s')." % (pluginName,plugin_ZIP_filename,e))
 				return False
 		
