@@ -34,7 +34,7 @@ from setuptools import setup
 
 # just in case setup.py is launched from elsewhere that the containing directory
 originalDir = os.getcwd()
-os.chdir(os.path.dirname(__file__))
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 try:
 	setup(
 		name = "Yapsy",
