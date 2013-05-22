@@ -3,7 +3,7 @@
 
 # Uses the content of 2n3bundle to build a source package that holds
 # both sources and also requires that the default and
-# python3_transition branches are checkdout at paths corresponding to
+# python3_transition branches are checkout'd at paths corresponding to
 # the variables below.
 
 PY2_YAPSY_DIR="../../default"
