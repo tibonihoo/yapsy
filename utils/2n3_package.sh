@@ -1,10 +1,15 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
 
+
 # Uses the content of 2n3bundle to build a source package that holds
 # both sources and also requires that the default and
 # python3_transition branches are checkout'd at paths corresponding to
 # the variables below.
+#
+# Usage example:
+# ./2n3_package.sh sdist upload
+
 
 PY2_YAPSY_DIR="../../default"
 PY3_YAPSY_DIR="../../python3-transition"
