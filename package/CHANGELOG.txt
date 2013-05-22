@@ -1,3 +1,8 @@
+version-1.10.2 [2013-05-22]
+
+  - code: fix compatibility with python2.5
+  - doc: add links to travis-ci and readthedocs.org
+
 version-1.10.1 [2013-01-13]
 
   - code: switch from exec to imp.load_module for plugin loading which also solves https://sourceforge.net/p/yapsy/bugs/9/
