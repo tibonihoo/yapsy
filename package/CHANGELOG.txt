@@ -2,6 +2,8 @@ version-1.10.2 [2013-05-22]
 
   - code: fix compatibility with python2.5
   - doc: add links to travis-ci and readthedocs.org
+  - code: fix AutoInstall test failures [contrib. Agustin Henze]
+  - code: replace deprecated methods usage (for Python3)
 
 version-1.10.1 [2013-01-13]
 
