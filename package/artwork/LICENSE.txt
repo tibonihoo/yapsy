@@ -1,4 +1,4 @@
-The "yapsy" icon is copyright (c) 2007, Thibauld Nion
+The "yapsy" icon is copyright (c) 2007-2013, Thibauld Nion
 
 It is licensed under the Creative Commons Attribution-Share Alike 3.0
 License. More info about this license can be found there:
