@@ -24,7 +24,7 @@ class ConfigTestCase(unittest.TestCase):
 		"""
 		# create a config file
 		self.config_file = self.CONFIG_FILE
-		self.config_parser = configparser.SafeConfigParser()
+		self.config_parser = configparser.ConfigParser()
 		self.plugin_info = None
 		# create the plugin manager
 		self.pluginManager = ConfigurablePluginManager(
@@ -52,10 +52,10 @@ class ConfigTestCase(unittest.TestCase):
 		# get rid of the plugin manager and create a new one
 		del self.pluginManager
 		del self.config_parser
-		self.config_parser = configparser.SafeConfigParser()
+		self.config_parser = configparser.ConfigParser()
 		self.config_parser.read(self.config_file)
-		self.assert_(self.config_parser.has_section("Plugin Management"))
-		self.assert_(self.config_parser.has_option("Plugin Management", 
+		self.assertTrue(self.config_parser.has_section("Plugin Management"))
+		self.assertTrue(self.config_parser.has_option("Plugin Management", 
 												   "default_plugins_to_load"))
 		self.pluginManager = ConfigurablePluginManager(
 			directories_list=[os.path.join(
@@ -80,7 +80,7 @@ class ConfigTestCase(unittest.TestCase):
 		self.plugin_activate()
 		self.pluginManager.deactivatePluginByName(self.plugin_info.name,
 												  self.plugin_info.category)
-		self.assert_(not self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 
 	def testPluginOptions(self):
 		"""
@@ -90,7 +90,7 @@ class ConfigTestCase(unittest.TestCase):
 		self.plugin_activate()
 		plugin = self.plugin_info.plugin_object
 		plugin.choseTestOption("voila")
-		self.assert_(plugin.checkTestOption())
+		self.assertTrue(plugin.checkTestOption())
 		self.assertEqual(plugin.getTestOption(),"voila")
 
 
@@ -111,17 +111,17 @@ class ConfigTestCase(unittest.TestCase):
 			self.assertEqual(self.plugin_info.name,"Config Plugin")
 			self.assertEqual(sole_category,self.plugin_info.category)
 		else:
-			self.assert_(True)
+			self.assertTrue(True)
 		
 	def plugin_activate(self):
 		"""
 		Activate the plugin with basic checking
 		"""
 		self.plugin_loading_check()
-		self.assert_(not self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 		self.pluginManager.activatePluginByName(self.plugin_info.name,
 												self.plugin_info.category)
-		self.assert_(self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(self.plugin_info.plugin_object.is_activated)
 		
 
 	def update_config(self):

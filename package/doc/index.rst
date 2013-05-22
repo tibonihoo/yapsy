@@ -11,8 +11,6 @@ Yapsy: Yet Another Plugin SYstem
 
 
 .. |Yapsy| replace:: **Yapsy**
-.. |SourceForge.net| image:: http://sflogo.sourceforge.net/sflogo.php?group_id=208383&type=5
-                     :alt: SourceForge.net
 .. |CC-BYSA| image:: http://i.creativecommons.org/l/by-sa/3.0/88x31.png
              :alt: Creative Commons License
 
@@ -223,11 +221,34 @@ Forge
 
 The project is hosted by `Sourceforge`_ where you can access the code, documentation and a tracker to share your feedback and ask for support.
 
-.. _`Sourceforge`: http://sourceforge.net/projects/yapsy/
-
 |SourceForge.net|
 
-Any suggestion and help are much welcome !
+.. _`Sourceforge`: http://sourceforge.net/projects/yapsy/
+.. |SourceForge.net| image:: http://sflogo.sourceforge.net/sflogo.php?group_id=208383&type=5
+                     :alt: SourceForge.net
+
+
+**Any suggestion and help are much welcome !**
+
+Yapsy is also tested on the continous integration service `TravisCI`_:
+  * with Python-2.x: |TravisPy2|
+  * with Python-3.x: |TravisPy3|
+
+.. _`TravisCI`: https://travis-ci.org/tibonihoo/yapsy
+.. |TravisPy2| image:: https://travis-ci.org/tibonihoo/yapsy.png?branch=master
+                     :alt: Tests with Python2
+.. |TravisPy3| image:: https://travis-ci.org/tibonihoo/yapsy.png?branch=python3
+                     :alt: Tests with Python3
+
+And if you're looking for the development version of the
+documentation, it is continuously updated on `ReadTheDoc`_.
+
+.. _`ReadTheDoc`: https://yapsy.readthedocs.org
+
+Last but not least, Yapsy's sources are mirrored on `GitHub`_.
+
+.. _`GitHub`: https://github.com/tibonihoo/yapsy/
+
 
 
 References

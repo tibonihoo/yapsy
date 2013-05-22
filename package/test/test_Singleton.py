@@ -30,7 +30,7 @@ class ConfigSingletonTestsCase(unittest.TestCase):
 		"""
 		# create a config file
 		self.config_file = self.CONFIG_FILE
-		self.config_parser = configparser.SafeConfigParser()
+		self.config_parser = configparser.ConfigParser()
 		self.plugin_info = None
 
 		# create the plugin manager
@@ -58,8 +58,8 @@ class ConfigSingletonTestsCase(unittest.TestCase):
 		self.plugin_activate()
 		# get rid of the plugin manager and create a new one
 		self.config_parser.read(self.config_file)
-		self.assert_(self.config_parser.has_section("Plugin Management"))
-		self.assert_(self.config_parser.has_option("Plugin Management", 
+		self.assertTrue(self.config_parser.has_section("Plugin Management"))
+		self.assertTrue(self.config_parser.has_option("Plugin Management", 
 												   "default_plugins_to_load"))
 
 
@@ -76,7 +76,7 @@ class ConfigSingletonTestsCase(unittest.TestCase):
 		self.plugin_activate()
 		PluginManagerSingleton.get().deactivatePluginByName(self.plugin_info.name,
 															self.plugin_info.category)
-		self.assert_(not self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 
 	def testPluginOptions(self):
 		"""
@@ -86,7 +86,7 @@ class ConfigSingletonTestsCase(unittest.TestCase):
 		self.plugin_activate()
 		plugin = self.plugin_info.plugin_object
 		plugin.choseTestOption("voila")
-		self.assert_(plugin.checkTestOption())
+		self.assertTrue(plugin.checkTestOption())
 		self.assertEqual(plugin.getTestOption(),"voila")
 
 
@@ -108,7 +108,7 @@ class ConfigSingletonTestsCase(unittest.TestCase):
 			self.assertEqual(self.plugin_info.name,"Config Plugin")
 			self.assertEqual(sole_category,self.plugin_info.category)
 		else:
-			self.assert_(True)
+			self.assertTrue(True)
 		
 	def plugin_activate(self):
 		"""
@@ -118,7 +118,7 @@ class ConfigSingletonTestsCase(unittest.TestCase):
 		if not self.plugin_info.plugin_object.is_activated:
 			PluginManagerSingleton.get().activatePluginByName(self.plugin_info.name,
 															  self.plugin_info.category)
-		self.assert_(self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(self.plugin_info.plugin_object.is_activated)
 		
 
 	def update_config(self):

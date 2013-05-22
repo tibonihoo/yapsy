@@ -12,7 +12,6 @@ To get more details about the sources please look:
 
 Yapsy's development is [hosted at Sourceforge](http://sourceforge.net/projects/yapsy/)
 
-Yapsy is also continuously tested on [travis-ci](https://travis-ci.org):
+Yapsy is also continuously tested on [travis-ci](https://travis-ci.org): 
 
 [![Build Status](https://travis-ci.org/tibonihoo/yapsy.png?branch=python3)](https://travis-ci.org/tibonihoo/yapsy)
-

@@ -50,12 +50,12 @@ class VersionedTestsCase(unittest.TestCase):
 				if plugin_info.name == "Versioned Plugin":
 					self.plugin_info = plugin_info
 					break
-			self.assert_(self.plugin_info)
+			self.assertTrue(self.plugin_info)
 			# test that the name of the plugin has been correctly defined
 			self.assertEqual(self.plugin_info.name,"Versioned Plugin")
 			self.assertEqual(sole_category,self.plugin_info.category)
 		else:
-			self.assert_(True)
+			self.assertTrue(True)
 
 	def testLoaded(self):
 		"""
@@ -80,13 +80,13 @@ class VersionedTestsCase(unittest.TestCase):
 		Test if the activation procedure works.
 		"""
 		self.plugin_loading_check()
-		self.assert_(not self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 		self.versionedPluginManager.activatePluginByName(self.plugin_info.name,
 														 self.plugin_info.category)
-		self.assert_(self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(self.plugin_info.plugin_object.is_activated)
 		self.versionedPluginManager.deactivatePluginByName(self.plugin_info.name,
 														   self.plugin_info.category)
-		self.assert_(not self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 		# also check that this is the plugin of the latest version
 		# that has been activated (ok the following test is already
 		# ensured by the plugin_loading_check method, but this is to
@@ -100,12 +100,12 @@ class VersionedTestsCase(unittest.TestCase):
 	#	 Test if the activation procedure works when directly activating a plugin.
 	#	 """
 	#	 self.plugin_loading_check()
-	#	 self.assert_(not self.plugin_info.plugin_object.is_activated)
+	#	 self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 	#	 TEST_MESSAGE("plugin object = %s" % self.plugin_info.plugin_object)
 	#	 self.plugin_info.plugin_object.activate()
-	#	 self.assert_(self.plugin_info.plugin_object.is_activated)
+	#	 self.assertTrue(self.plugin_info.plugin_object.is_activated)
 	#	 self.plugin_info.plugin_object.deactivate()
-	#	 self.assert_(not self.plugin_info.plugin_object.is_activated)
+	#	 self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 
 
 

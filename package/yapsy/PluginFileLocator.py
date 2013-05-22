@@ -175,9 +175,9 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 			      and decorators.
 		"""
 		# parse the information buffer to get info about the plugin
-		config_parser = configparser.SafeConfigParser()
+		config_parser = configparser.ConfigParser()
 		try:
-			config_parser.readfp(infoFileObject)
+			config_parser.read_file(infoFileObject)
 		except Exception as e:
 			log.debug("Could not parse the plugin file '%s' (exception raised was '%s')" % (candidate_infofile,e))
 			return (None, None, None)
@@ -214,9 +214,10 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 			# filename is a file object: use it
 			name, moduleName, config_parser = self.getPluginNameAndModuleFromStream(filename)
 		else:
-			candidate_infofile = os.path.join(directory, filename)
+			candidate_infofile_path = os.path.join(directory, filename)
 			# parse the information file to get info about the plugin
-			name, moduleName, config_parser = self.getPluginNameAndModuleFromStream(open(candidate_infofile),candidate_infofile)
+			with open(candidate_infofile_path) as candidate_infofile:
+				name, moduleName, config_parser = self.getPluginNameAndModuleFromStream(candidate_infofile,candidate_infofile_path)
 		if (name, moduleName, config_parser) == (None, None, None):
 			return (None,None)
 		infos = {"name":name, "path":os.path.join(directory, moduleName)}

@@ -3,6 +3,7 @@
 
 from . import test_settings
 import unittest
+import sys
 import os 
 import shutil
 
@@ -85,7 +86,7 @@ class AutoInstallTestsCase(unittest.TestCase):
 			self.assertEqual(self.plugin_info.name,new_plugin_name)
 			self.assertEqual(sole_category,self.plugin_info.category)
 		else:
-			self.assert_(True)
+			self.assertTrue(True)
 
 	def testNoneLoaded(self):
 		"""
@@ -99,7 +100,7 @@ class AutoInstallTestsCase(unittest.TestCase):
 		"""
 		install_success = self.pluginManager.install(self.new_plugins_waiting_dir,
 													 "autoinstallplugin.yapsy-autoinstall-plugin")
-		self.assert_(install_success)
+		self.assertTrue(install_success)
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check("Auto Install Plugin")
 
@@ -110,7 +111,7 @@ class AutoInstallTestsCase(unittest.TestCase):
 		"""
 		install_success = self.pluginManager.install(self.new_plugins_waiting_dir,
 													 "autoinstalldirplugin.yapsy-autoinstall-plugin")
-		self.assert_(install_success)
+		self.assertTrue(install_success)
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check("Auto Install Dir Plugin")
 				
@@ -121,16 +122,16 @@ class AutoInstallTestsCase(unittest.TestCase):
 		"""
 		install_success = self.pluginManager.install(self.new_plugins_waiting_dir,
 													 "autoinstallplugin.yapsy-autoinstall-plugin")
-		self.assert_(install_success)
+		self.assertTrue(install_success)
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check("Auto Install Plugin")
-		self.assert_(not self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 		self.pluginManager.activatePluginByName(self.plugin_info.name,
 												self.plugin_info.category)
-		self.assert_(self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(self.plugin_info.plugin_object.is_activated)
 		self.pluginManager.deactivatePluginByName(self.plugin_info.name,
 												  self.plugin_info.category)
-		self.assert_(not self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 
 class AutoInstallZIPTestsCase(unittest.TestCase):
 	"""
@@ -198,7 +199,7 @@ class AutoInstallZIPTestsCase(unittest.TestCase):
 			self.assertEqual(self.plugin_info.name,new_plugin_name)
 			self.assertEqual(sole_category,self.plugin_info.category)
 		else:
-			self.assert_(True)
+			self.assertTrue(True)
 
 	def testNoneLoaded(self):
 		"""
@@ -211,7 +212,7 @@ class AutoInstallZIPTestsCase(unittest.TestCase):
 		Test if the correct plugin (define by a zip file) can be installed and loaded.
 		"""
 		install_success = self.pluginManager.installFromZIP(os.path.join(self.new_plugins_waiting_dir,"autoinstallZIPplugin.zip"))
-		self.assert_(install_success)
+		self.assertTrue(install_success)
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check("Auto Install ZIP Plugin")
 				
@@ -223,22 +224,22 @@ class AutoInstallZIPTestsCase(unittest.TestCase):
 		self.assertFalse(install_success)
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check_none()
-				
+	
 	def testActivationAndDeactivation(self):
 		"""
 		Test if the activation procedure works.
 		"""
 		install_success = self.pluginManager.installFromZIP(os.path.join(self.new_plugins_waiting_dir,"autoinstallZIPplugin.zip"))
-		self.assert_(install_success)
+		self.assertTrue(install_success)
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check("Auto Install ZIP Plugin")
-		self.assert_(not self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 		self.pluginManager.activatePluginByName(self.plugin_info.name,
 												self.plugin_info.category)
-		self.assert_(self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(self.plugin_info.plugin_object.is_activated)
 		self.pluginManager.deactivatePluginByName(self.plugin_info.name,
 												  self.plugin_info.category)
-		self.assert_(not self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 
 
 

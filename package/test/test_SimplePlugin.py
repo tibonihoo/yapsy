@@ -43,7 +43,7 @@ class SimpleTestsCase(unittest.TestCase):
 			self.assertEqual(self.plugin_info.name,"Simple Plugin")
 			self.assertEqual(sole_category,self.plugin_info.category)
 		else:
-			self.assert_(True)
+			self.assertTrue(True)
 
 	def testLoaded(self):
 		"""
@@ -65,13 +65,13 @@ class SimpleTestsCase(unittest.TestCase):
 		Test if the activation procedure works.
 		"""
 		self.plugin_loading_check()
-		self.assert_(not self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 		self.simplePluginManager.activatePluginByName(self.plugin_info.name,
 													  self.plugin_info.category)
-		self.assert_(self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(self.plugin_info.plugin_object.is_activated)
 		self.simplePluginManager.deactivatePluginByName(self.plugin_info.name,
 														self.plugin_info.category)
-		self.assert_(not self.plugin_info.plugin_object.is_activated)
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 
 
 class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
