@@ -24,6 +24,7 @@ import test_AutoInstallPlugin
 import test_FilterPlugin
 import test_ErrorInPlugin
 import test_PluginFileLocator
+import test_PluginInfo
 
 
 # add them to a common test suite
@@ -37,5 +38,6 @@ MainTestSuite = unittest.TestSuite(
 		test_FilterPlugin.suite,
 		test_ErrorInPlugin.suite,
 		test_PluginFileLocator.suite,
+		test_PluginInfo.suite,
 		])
 
