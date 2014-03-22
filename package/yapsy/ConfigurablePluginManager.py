@@ -17,8 +17,7 @@ from yapsy.IPlugin import IPlugin
 
 from yapsy.PluginManagerDecorator import PluginManagerDecorator
 from yapsy.PluginManager import PLUGIN_NAME_FORBIDEN_STRING
-
-
+	
 
 class ConfigurablePluginManager(PluginManagerDecorator):
 	"""
@@ -255,7 +254,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 		for each plugin candidate look for its category, load it and
 		stores it in the appropriate slot of the ``category_mapping``.
 		"""
- 		self._component.loadPlugins(callback)
+		self._component.loadPlugins(callback)
 		# now load the plugins according to the recorded configuration
 		if self.config_parser.has_section(self.CONFIG_SECTION_NAME):
 			# browse all the categories
