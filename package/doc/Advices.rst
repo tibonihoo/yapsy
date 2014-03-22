@@ -66,6 +66,10 @@ should consider the following tips:
 Plugin class detection caveat
 -----------------------------
 
+There must be only one plugin defined per module. This means that you
+can't have two plugin description files pointing at the same module
+for instance.
+
 Because of the "categorization by inheritance" system, you **musn't
 directly import the subclass** of ``IPlugin`` in the main plugin file,
 instead import its containing module and make your plugin class
