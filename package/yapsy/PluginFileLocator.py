@@ -238,7 +238,7 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 		"""
 		infos, config_parser = self._extractCorePluginInfo(directory, filename)
 		# collect additional (but usually quite usefull) information
-		if config_parser.has_section("Documentation"):
+		if infos and config_parser and config_parser.has_section("Documentation"):
 			if config_parser.has_option("Documentation","Author"):
 				infos["author"]	= config_parser.get("Documentation", "Author")
 			if config_parser.has_option("Documentation","Version"):
@@ -260,9 +260,9 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 		we use the filename alone to extract minimal informations.
 		"""
 		infos, config_parser = self._extractBasicPluginInfo(dirpath, filename)
-		if infos.get("name", None) is None:
+		if not infos or infos.get("name", None) is None:
 			raise ValueError("Missing *name* of the plugin in extracted infos.")
-		if infos.get("path", None) is None:
+		if not infos or infos.get("path", None) is None:
 			raise ValueError("Missing *path* of the plugin in extracted infos.")
 		return infos, config_parser
 
