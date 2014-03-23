@@ -12,13 +12,7 @@ may want to have a look at the unit tests inside the "test" directory.
 
 Please let me know if you find this useful.
 
-For more info see:
-  - online at: http://packages.python.org/Yapsy/
-  - in the sources at: ``package/doc/index.rst``
-
-Thibauld Nion
-
----
+For more info see online at: http://packages.python.org/Yapsy/ (in the sources at: ``package/doc/index.rst``).
 
 Site of the project: http://yapsy.sourceforge.net/
 
@@ -29,4 +23,6 @@ List of Contributors:
   - Mathieu Havel
   - Mathieu Clabaut
   - Mark Fickett
+  - agustinhenze
+  - qitta
 
