@@ -81,9 +81,9 @@ Here is an example of what such a file should contain::
       [Documentation]
       Description = What my plugin broadly does
       Author = My very own name
-      Version = 0.1
-      Website = My very own website
       Version = the_version_number_of_the_plugin
+      Website = My very own website
+      
       
  
 .. note:: From such plugin descriptions, the ``PluginManager`` will
