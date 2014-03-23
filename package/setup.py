@@ -38,7 +38,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 try:
 	setup(
 		name = "Yapsy",
-		version = __import__("yapsy").__version__+"23",
+		version = __import__("yapsy").__version__,
 		packages = ['yapsy'],
 		package_dir = {'yapsy':'yapsy'},
 		
