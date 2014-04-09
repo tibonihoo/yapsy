@@ -71,6 +71,7 @@ PLUGIN_NAME_FORBIDEN_STRING=";;"
 """
 
 import re
+re_word = re.compile("\W")
 def NormalizePluginNameForModuleName(pluginName):
 	"""
 	Normalize a plugin name into a safer name for a module name.
@@ -82,4 +83,4 @@ def NormalizePluginNameForModuleName(pluginName):
 		return "_"
 	if pluginName[0].isdigit():
 		pluginName = "_" + pluginName
-	return re.sub("\W","_",pluginName)
+	return re_word.sub("_",pluginName)
