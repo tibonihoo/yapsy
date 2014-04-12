@@ -233,12 +233,15 @@ The project is hosted by `Sourceforge`_ where you can access the code, documenta
 Yapsy is also tested on the continous integration service `TravisCI`_:
   * with Python-2.x: |TravisPy2|
   * with Python-3.x: |TravisPy3|
+  * Coverage: |Coveralls|
 
 .. _`TravisCI`: https://travis-ci.org/tibonihoo/yapsy
 .. |TravisPy2| image:: https://travis-ci.org/tibonihoo/yapsy.png?branch=master
                      :alt: Tests with Python2
 .. |TravisPy3| image:: https://travis-ci.org/tibonihoo/yapsy.png?branch=python3
                      :alt: Tests with Python3
+.. |Coveralls| image:: https://coveralls.io/repos/tibonihoo/yapsy/badge.png?branch=master
+                     :target: https://coveralls.io/r/tibonihoo/yapsy?branch=master
 
 And if you're looking for the development version of the
 documentation, it is continuously updated on `ReadTheDoc`_.
