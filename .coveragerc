@@ -1,5 +1,5 @@
 [run]
-omit = /tmp/*, _*,*/site-packages/*,*/test/*
+omit = /tmp/*, _*,*/site-packages/*,*/test/*,*/distutils/*
 
 [report]
 exclude_lines =
