@@ -1,0 +1,6 @@
+[run]
+omit = /tmp/*, _*,*/site-packages/*,*/test/*
+
+[report]
+exclude_lines =
+    raise NotImplementedError
