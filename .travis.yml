@@ -9,7 +9,7 @@ install:
 
 # command to run tests
 script: 
-  - coverage package/setup.py test
+  - coverage run package/setup.py test
 
 after_success:
   - coveralls
