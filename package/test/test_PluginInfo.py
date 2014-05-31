@@ -4,7 +4,6 @@
 import test_settings
 from ConfigParser import ConfigParser
 import unittest
-import os
 
 from yapsy.PluginInfo import PluginInfo
 

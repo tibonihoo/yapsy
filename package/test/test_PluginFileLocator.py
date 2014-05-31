@@ -8,7 +8,9 @@ import os
 import tempfile
 import shutil
 from ConfigParser import ConfigParser
+from StringIO import StringIO
 
+from yapsy import PLUGIN_NAME_FORBIDEN_STRING
 from yapsy.PluginInfo import PluginInfo
 from yapsy.PluginFileLocator import PluginFileLocator
 from yapsy.PluginFileLocator import PluginFileAnalyzerWithInfoFile
@@ -44,7 +46,7 @@ class PluginFileAnalyzerWithInfoFileTest(unittest.TestCase):
 		analyzer = PluginFileAnalyzerWithInfoFile("mouf")
 		info_dict,cf_parser =  analyzer.getInfosDictFromPlugin(self.plugin_directory,
 															   os.path.basename(self.yapsy_plugin_path))
-		self.assertEqual(info_dict,{'website': 'http://mathbench.sourceforge.net', 'description': 'A simple plugin usefull for basic testing', 'author': 'Thibauld Nion', 'version': '0.1', 'path': '%s/SimplePlugin' % self.plugin_directory, 'name': 'Simple Plugin'})
+		self.assertEqual(info_dict,{'website': 'http://mathbench.sourceforge.net', 'description': 'A simple plugin usefull for basic testing', 'author': 'Thibauld Nion', 'version': '0.1', 'path': '%s/SimplePlugin' % self.plugin_directory, 'name': 'Simple Plugin', 'copyright': '2014'})
 		self.assertTrue(isinstance(cf_parser,ConfigParser))
 		
 	def test_isValid_WithMultiExtensions(self):
@@ -52,7 +54,52 @@ class PluginFileAnalyzerWithInfoFileTest(unittest.TestCase):
 		self.assertTrue(analyzer.isValidPlugin(self.yapsy_plugin_path))
 		self.assertFalse(analyzer.isValidPlugin(self.version_plugin_path))
 		self.assertTrue(analyzer.isValidPlugin(self.yapsy_filter_plugin_path))
+
+	def test__extractCorePluginInfo_with_minimal_description(self):
+		plugin_desc_content = StringIO("""\
+[Core]
+Name = Simple Plugin
+Module = SimplePlugin
+""")
+		analyzer = PluginFileAnalyzerWithInfoFile("mouf",
+												  ("yapsy-plugin"))
+		infos, parser = analyzer._extractCorePluginInfo("bla",plugin_desc_content)
+		self.assertEqual("Simple Plugin", infos["name"])
+		self.assertEqual(os.path.join("bla","SimplePlugin"), infos["path"])
+		self.assertTrue(isinstance(parser,ConfigParser))
 		
+	def test_getPluginNameAndModuleFromStream_with_invalid_descriptions(self):
+		plugin_desc_content = StringIO("""\
+[Core]
+Name = Bla{0}Bli
+Module = SimplePlugin
+""".format(PLUGIN_NAME_FORBIDEN_STRING))
+		analyzer = PluginFileAnalyzerWithInfoFile("mouf",
+												  ("yapsy-plugin"))
+		res = analyzer._extractCorePluginInfo("bla",plugin_desc_content)
+		self.assertEqual((None, None), res)
+		plugin_desc_content = StringIO("""\
+[Core]
+Name = Simple Plugin
+""")
+		analyzer = PluginFileAnalyzerWithInfoFile("mouf",
+												  ("yapsy-plugin"))
+		res = analyzer._extractCorePluginInfo("bla",plugin_desc_content)
+		self.assertEqual((None, None), res)
+		plugin_desc_content = StringIO("""\
+[Core]
+Module = Simple Plugin
+""")
+		res = analyzer._extractCorePluginInfo("bla",plugin_desc_content)
+		self.assertEqual((None, None), res)
+		plugin_desc_content = StringIO("""\
+[Mouf]
+Bla = Simple Plugin
+""")
+		res = analyzer._extractCorePluginInfo("bla",plugin_desc_content)
+		self.assertEqual((None, None), res)
+
+
 class PluginFileAnalyzerMathingRegexTest(unittest.TestCase):
 	"""
 	Test that the "regex" analyzer enforces the correct policy.
@@ -288,6 +335,11 @@ class PluginFileLocatorTest(unittest.TestCase):
 		self.assertEqual(num,5)
 		self.assertEqual(len(candidates),num)
 
+	def test_removeAnalyzers_when_analyzer_is_unknown(self):
+		pl = PluginFileLocator()
+		pl.setPluginPlaces([self.plugin_directory])
+		pl.removeAnalyzers("nogo")
+
 	def test_removeAnalyzers(self):
 		pl = PluginFileLocator()
 		pl.setPluginPlaces([self.plugin_directory])
@@ -297,7 +349,7 @@ class PluginFileLocatorTest(unittest.TestCase):
 		candidates, num = pl.locatePlugins()
 		self.assertEqual(num,4)
 		self.assertEqual(len(candidates),num)
-
+		
 	def test_removeAllAnalyzers(self):
 		pl = PluginFileLocator()
 		pl.setPluginPlaces([self.plugin_directory])
@@ -306,7 +358,26 @@ class PluginFileLocatorTest(unittest.TestCase):
 		self.assertEqual(num,0)
 		self.assertEqual(len(candidates),num)
 
-
+	def test_setPluginInfoClass_for_named_analyzer(self):
+		class SpecificPluginInfo(PluginInfo):
+			pass
+		pl = PluginFileLocator()
+		pl.setPluginPlaces([self.plugin_directory])
+		newAnalyzer = PluginFileAnalyzerMathingRegex("mouf",r".*VersionedPlugin\d+\.py$")
+		pl.appendAnalyzer(newAnalyzer)
+		pl.setPluginInfoClass(SpecificPluginInfo,"info_ext")
+		candidates, num = pl.locatePlugins()
+		self.assertEqual(num,5)
+		self.assertEqual(len(candidates),num)
+		versioned_plugins = [c for c in candidates if "VersionedPlugin" in c[0]]
+		self.assertEqual(4,len(versioned_plugins))
+		for p in versioned_plugins:
+			self.assertTrue(isinstance(p[2],PluginInfo))
+		simple_plugins = [c for c in candidates if "VersionedPlugin" not in c[0]]
+		self.assertEqual(1,len(simple_plugins))
+		for p in simple_plugins:
+			self.assertTrue(isinstance(p[2],SpecificPluginInfo))
+		
 		
 suite = unittest.TestSuite([
 		unittest.TestLoader().loadTestsFromTestCase(PluginFileAnalyzerWithInfoFileTest),

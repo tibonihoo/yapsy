@@ -63,6 +63,9 @@ class ConfigTestCase(unittest.TestCase):
 			plugin_info_ext="yapsy-config-plugin",
 			configparser_instance=self.config_parser,
 			config_change_trigger=self.update_config)
+		# check that activating the plugin once again, won't cause an error
+		self.pluginManager.activatePluginByName(self.plugin_info.name,
+												self.plugin_info.category)
 		# Will be used later
 		self.plugin_info = None
 
