@@ -226,7 +226,7 @@ class SimplePluginDetectionTestsCase(unittest.TestCase):
 		self.assertEqual(len(spm.getCategories()),1)
 		sole_category = spm.getCategories()[0]
 		# check the getPluginsOfCategory
-		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
+		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),2)
 
 	def testNonRecursivePluginlocationNotFound(self):
 		"""

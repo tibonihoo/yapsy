@@ -3,9 +3,13 @@
 
 import test_settings
 import unittest
+import sys
 import os
+import tempfile
+import shutil
 from ConfigParser import ConfigParser
 
+from yapsy.PluginInfo import PluginInfo
 from yapsy.PluginFileLocator import PluginFileLocator
 from yapsy.PluginFileLocator import PluginFileAnalyzerWithInfoFile
 from yapsy.PluginFileLocator import PluginFileAnalyzerMathingRegex
@@ -98,14 +102,165 @@ class PluginFileLocatorTest(unittest.TestCase):
 		self.plugin_directory  = os.path.join(
 			os.path.dirname(os.path.abspath(__file__)),
 			"plugins")
+		self.plugin_as_dir_directory  = os.path.join(
+			os.path.dirname(os.path.abspath(__file__)),
+			"pluginsasdirs")
+		self.plugin_info_file = "simpleplugin.yapsy-plugin"
+		self.plugin_name = "SimplePlugin"
+		self.plugin_impl_file = self.plugin_name+".py"
 		
 	def test_locatePlugins(self):
 		pl = PluginFileLocator()
 		pl.setPluginPlaces([self.plugin_directory])
 		candidates, num = pl.locatePlugins()
 		self.assertEqual(num,1)
-		self.assertEqual(len(candidates),num)		
+		self.assertEqual(len(candidates),num)
+		self.assertEqual(os.path.join(self.plugin_directory,self.plugin_info_file),
+						 candidates[0][0])
+		self.assertEqual(os.path.join(self.plugin_directory,self.plugin_name),
+						 candidates[0][1])
+		self.assertTrue(isinstance(candidates[0][2],PluginInfo))
 		
+	def test_locatePlugins_when_plugin_is_symlinked(self):
+		if "win" in sys.platform:
+			return
+		temp_dir = tempfile.mkdtemp()
+		try:
+			plugin_info_file = "simpleplugin.yapsy-plugin"
+			plugin_impl_file = "SimplePlugin.py"
+			os.symlink(os.path.join(self.plugin_directory,plugin_info_file),
+					   os.path.join(temp_dir,plugin_info_file))
+			os.symlink(os.path.join(self.plugin_directory,plugin_impl_file),
+					   os.path.join(temp_dir,plugin_impl_file))			
+			pl = PluginFileLocator()
+			pl.setPluginPlaces([temp_dir])
+			candidates, num = pl.locatePlugins()
+			self.assertEqual(num,1)
+			self.assertEqual(len(candidates),num)
+			self.assertEqual(os.path.join(temp_dir,self.plugin_info_file),
+							 candidates[0][0])
+			self.assertEqual(os.path.join(temp_dir,self.plugin_name),
+							 candidates[0][1])
+			self.assertTrue(isinstance(candidates[0][2],PluginInfo))
+		finally:
+			shutil.rmtree(temp_dir)		
+			
+	def test_locatePlugins_when_plugin_is_a_directory(self):
+		pl = PluginFileLocator()
+		pl.setPluginPlaces([self.plugin_as_dir_directory])
+		candidates, num = pl.locatePlugins()
+		self.assertEqual(num,1)
+		self.assertEqual(len(candidates),num)
+		self.assertEqual(os.path.join(self.plugin_as_dir_directory,self.plugin_info_file),
+						 candidates[0][0])
+		self.assertEqual(os.path.join(self.plugin_as_dir_directory,self.plugin_name,
+									  "__init__"),
+						 candidates[0][1])
+		self.assertTrue(isinstance(candidates[0][2],PluginInfo))
+	
+	def test_locatePlugins_when_plugin_is_a_symlinked_directory(self):
+		if "win" in sys.platform:
+			return
+		temp_dir = tempfile.mkdtemp()
+		try:
+			plugin_info_file = "simpleplugin.yapsy-plugin"
+			plugin_impl_dir = "SimplePlugin"
+			os.symlink(os.path.join(self.plugin_as_dir_directory,plugin_info_file),
+					   os.path.join(temp_dir,plugin_info_file))
+			os.symlink(os.path.join(self.plugin_as_dir_directory,plugin_impl_dir),
+					   os.path.join(temp_dir,plugin_impl_dir))			
+			pl = PluginFileLocator()
+			pl.setPluginPlaces([temp_dir])
+			candidates, num = pl.locatePlugins()
+			self.assertEqual(num,1)
+			self.assertEqual(len(candidates),num)
+			self.assertEqual(os.path.join(temp_dir,self.plugin_info_file),
+							 candidates[0][0])
+			self.assertEqual(os.path.join(temp_dir,self.plugin_name,"__init__"),
+							 candidates[0][1])
+			self.assertTrue(isinstance(candidates[0][2],PluginInfo))
+		finally:
+			shutil.rmtree(temp_dir)
+			
+	def test_locatePlugins_recursively_when_plugin_is_a_directory(self):
+		temp_dir = tempfile.mkdtemp()
+		try:
+			temp_sub_dir = os.path.join(temp_dir,"plugins")
+			shutil.copytree(self.plugin_as_dir_directory,temp_sub_dir)
+			pl = PluginFileLocator()
+			pl.setPluginPlaces([temp_dir])
+			candidates, num = pl.locatePlugins()
+			self.assertEqual(num,1)
+			self.assertEqual(len(candidates),num)
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_info_file),
+							 candidates[0][0])
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_name,
+										  "__init__"),
+							 candidates[0][1])
+			self.assertTrue(isinstance(candidates[0][2],PluginInfo))
+		finally:
+			shutil.rmtree(temp_dir)
+	
+	def test_locatePlugins_recursively_fails_when_recursion_is_disabled(self):
+		temp_dir = tempfile.mkdtemp()
+		try:
+			temp_sub_dir = os.path.join(temp_dir,"plugins")
+			shutil.copytree(self.plugin_as_dir_directory,temp_sub_dir)
+			pl = PluginFileLocator()
+			pl.disableRecursiveScan()
+			pl.setPluginPlaces([temp_dir])
+			candidates, num = pl.locatePlugins()
+			self.assertEqual(num,0)
+			self.assertEqual(len(candidates),num)
+		finally:
+			shutil.rmtree(temp_dir)
+			
+	def test_locatePlugins_recursively_when_plugin_is_a_symlinked_directory(self):
+		temp_dir = tempfile.mkdtemp()
+		try:
+			temp_sub_dir = os.path.join(temp_dir,"plugins")
+			os.mkdir(temp_sub_dir)
+			plugin_info_file = "simpleplugin.yapsy-plugin"
+			plugin_impl_dir = "SimplePlugin"
+			os.symlink(os.path.join(self.plugin_as_dir_directory,plugin_info_file),
+					   os.path.join(temp_sub_dir,plugin_info_file))
+			os.symlink(os.path.join(self.plugin_as_dir_directory,plugin_impl_dir),
+					   os.path.join(temp_sub_dir,plugin_impl_dir))
+			pl = PluginFileLocator()
+			pl.setPluginPlaces([temp_dir])
+			candidates, num = pl.locatePlugins()
+			self.assertEqual(num,1)
+			self.assertEqual(len(candidates),num)
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_info_file),
+							 candidates[0][0])
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_name,
+										  "__init__"),
+							 candidates[0][1])
+			self.assertTrue(isinstance(candidates[0][2],PluginInfo))
+		finally:
+			shutil.rmtree(temp_dir)
+	
+	def test_locatePlugins_recursively_when_plugin_parent_dir_is_a_symlinked_directory(self):
+		# This actually reproduced the "Plugin detection doesn't follow symlinks" bug
+		# at http://sourceforge.net/p/yapsy/bugs/19/
+		temp_dir = tempfile.mkdtemp()
+		try:
+			temp_sub_dir = os.path.join(temp_dir,"plugins")
+			os.symlink(self.plugin_as_dir_directory,temp_sub_dir)
+			pl = PluginFileLocator()
+			pl.setPluginPlaces([temp_dir])
+			candidates, num = pl.locatePlugins()
+			self.assertEqual(num,1)
+			self.assertEqual(len(candidates),num)
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_info_file),
+							 candidates[0][0])
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_name,
+										  "__init__"),
+							 candidates[0][1])
+			self.assertTrue(isinstance(candidates[0][2],PluginInfo))
+		finally:
+			shutil.rmtree(temp_dir)
+	
 	def test_gatherCorePluginInfo(self):
 		pl = PluginFileLocator()
 		plugin_info,cf_parser = pl.gatherCorePluginInfo(self.plugin_directory,"simpleplugin.yapsy-plugin")

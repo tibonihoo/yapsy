@@ -331,13 +331,13 @@ class PluginFileLocator(IPluginLocator):
 		self._plugin_info_cls_map = {}
 		self._max_size = 1e3*1024 # in octets (by default 1 Mo)
 		self.recursive = True
-
+		
 	def disableRecursiveScan(self):
 		"""
 		Disable recursive scan of the directories given as plugin places.
 		"""
-		self.recursive = False
-		
+		self.recursive = False		
+	
 	def setAnalyzers(self, analyzers):
 		"""
 		Sets a new set of analyzers.
@@ -404,10 +404,10 @@ class PluginFileLocator(IPluginLocator):
 				continue
 			if self.recursive:
 				debug_txt_mode = "recursively"
-				walk_iter = os.walk(directory)
+				walk_iter = os.walk(directory, followlinks=True)
 			else:
 				debug_txt_mode = "non-recursively"
-				walk_iter = [(directory,[],os.listdir(directory))]				
+				walk_iter = [(directory,[],os.listdir(directory))]
 			# iteratively walks through the directory
 			log.debug("%s walks (%s) into directory: %s" % (self.__class__.__name__, debug_txt_mode, directory))
 			for item in walk_iter:
