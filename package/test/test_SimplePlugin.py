@@ -8,8 +8,24 @@ import os
 from yapsy.PluginManager import PluginManager
 from yapsy.IPlugin import IPlugin
 from yapsy.PluginFileLocator import PluginFileLocator
+from yapsy import NormalizePluginNameForModuleName
 
-class SimpleTestsCase(unittest.TestCase):
+class YapsyUtils(unittest.TestCase):
+
+	def test_NormalizePluginNameForModuleName_on_ok_name(self):
+		self.assertEqual("moufGlop2",NormalizePluginNameForModuleName("moufGlop2"))
+
+	def test_NormalizePluginNameForModuleName_on_empty_name(self):
+		self.assertEqual("_",NormalizePluginNameForModuleName(""))
+		
+	def test_NormalizePluginNameForModuleName_on_name_with_space(self):
+		self.assertEqual("mouf_glop",NormalizePluginNameForModuleName("mouf glop"))
+
+	def test_NormalizePluginNameForModuleName_on_name_with_nonalphanum(self):
+		self.assertEqual("mouf__glop_a_é",NormalizePluginNameForModuleName("mouf+?glop:a/é"))
+
+		
+class SimpleTestCase(unittest.TestCase):
 	"""
 	Test the correct loading of a simple plugin as well as basic
 	commands.
@@ -226,9 +242,9 @@ class SimplePluginDetectionTestsCase(unittest.TestCase):
 		self.assertEqual(len(spm.getCategories()),1)
 		sole_category = spm.getCategories()[0]
 		# check the getPluginsOfCategory
-		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
+		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),2)
 
-	def testNonRecursivePluginlocationNotFound(self):
+	def testDisablingRecursivePluginLocationIsEnforced(self):
 		"""
 		Test detection of plugins when the detection is non recursive.
 		Here we test that it cannot look into subdirectories of the
@@ -248,8 +264,8 @@ class SimplePluginDetectionTestsCase(unittest.TestCase):
 		# check the getPluginsOfCategory
 		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),0)
 
-
-	def testNonRecursivePluginlocationNotFound(self):
+	
+	def testDisablingRecursivePluginLocationAllowsFindingTopLevelPlugins(self):
 		"""
 		Test detection of plugins when the detection is non
 		recursive. Here we test that if we give test/plugin as the
@@ -272,7 +288,8 @@ class SimplePluginDetectionTestsCase(unittest.TestCase):
 
 		
 suite = unittest.TestSuite([
-		unittest.TestLoader().loadTestsFromTestCase(SimpleTestsCase),
+		unittest.TestLoader().loadTestsFromTestCase(YapsyUtils),
+		unittest.TestLoader().loadTestsFromTestCase(SimpleTestCase),
 		unittest.TestLoader().loadTestsFromTestCase(SimplePluginAdvancedManipulationTestsCase),
 		unittest.TestLoader().loadTestsFromTestCase(SimplePluginDetectionTestsCase),
 		])
