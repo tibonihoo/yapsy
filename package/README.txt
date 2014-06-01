@@ -1,9 +1,9 @@
 Yapsy is a small library implementing the core mechanisms needed to
 build a plugin system into a wider application.
 
-The main purpose is to depend only on Python's standard libraries (at
-least version 2.3) and to implement only the basic functionalities
-needed to detect, load and keep track of several plugins.
+The main purpose is to depend only on Python's standard libraries and
+to implement only the basic functionalities needed to detect, load and
+keep track of several plugins. It supports both Python 2 and 3.
 
 To use yapsy, make sure that the "yapsy" directory is in your Python
 loading path and just import the needed class from yapsy (e.g. "from
@@ -25,4 +25,4 @@ List of Contributors:
   - Mark Fickett
   - agustinhenze
   - qitta
-
+  - Roberto Alsina
