@@ -20,6 +20,19 @@ from yapsy.PluginFileLocator import PluginFileAnalyzerWithInfoFile
 from yapsy.PluginFileLocator import PluginFileAnalyzerMathingRegex
 
 
+class IPluginLocatorTest(unittest.TestCase):
+
+
+	def test_deprecated_method_dont_raise_notimplemetederror(self):
+		class DummyPluginLocator(IPluginLocator):
+			pass
+		dpl = DummyPluginLocator()
+		self.assertEqual((None,None,None),dpl.getPluginNameAndModuleFromStream(None))
+		dpl.setPluginInfoClass(PluginInfo)
+		self.assertEqual(None,dpl.getPluginInfoClass())
+		dpl.setPluginPlaces([])
+		dpl.updatePluginPlaces([])
+	
 class PluginFileAnalyzerWithInfoFileTest(unittest.TestCase):
 	"""
 	Test that the "info file" analyzer enforces the correct policy.
@@ -467,6 +480,7 @@ class PluginManagerSetUpTest(unittest.TestCase):
 
 
 suite = unittest.TestSuite([
+		unittest.TestLoader().loadTestsFromTestCase(IPluginLocatorTest),
 		unittest.TestLoader().loadTestsFromTestCase(PluginFileAnalyzerWithInfoFileTest),
 		unittest.TestLoader().loadTestsFromTestCase(PluginFileAnalyzerMathingRegexTest),
 		unittest.TestLoader().loadTestsFromTestCase(PluginFileLocatorTest),
