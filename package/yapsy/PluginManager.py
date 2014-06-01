@@ -177,14 +177,15 @@ class PluginManager(object):
 		You may look at these function's documentation for the meaning
 		of each corresponding arguments.
 		"""
-		# many Python experienced users told me not to use mutable objects
-		# as default values for function/method arguments, but rather use None.
+		# as a good practice we don't use mutable objects as default
+		# values (these objects would become like static variables)
+		# for function/method arguments, but rather use None.
 		if categories_filter is None:
 			categories_filter = {"Default":IPlugin}
 		self.setCategoriesFilter(categories_filter)
 		plugin_locator = self._locatorDecide(plugin_info_ext, plugin_locator)
 		# plugin_locator could be either a dict defining strategies, or directly
-		# a IPluginLocator object
+		# an IPluginLocator object
 		self.setPluginLocator(plugin_locator, directories_list)
 
 	def _locatorDecide(self, plugin_info_ext, plugin_locator):
@@ -406,7 +407,7 @@ class PluginManager(object):
 		.. warning: locatePlugins must be called before !
 		"""
 		if not hasattr(self, '_candidates'):
-			raise ValueError("locatePlugins must be called before getPluginCandidates")
+			raise RuntimeError("locatePlugins must be called before getPluginCandidates")
 		return self._candidates[:]
 
 	def removePluginCandidate(self,candidateTuple):
