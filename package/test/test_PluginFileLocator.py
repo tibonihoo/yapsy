@@ -11,7 +11,10 @@ from ConfigParser import ConfigParser
 from StringIO import StringIO
 
 from yapsy import PLUGIN_NAME_FORBIDEN_STRING
+from yapsy.PluginManager import PluginManager
+from yapsy.PluginManager import IPlugin
 from yapsy.PluginInfo import PluginInfo
+from yapsy.IPluginLocator import IPluginLocator
 from yapsy.PluginFileLocator import PluginFileLocator
 from yapsy.PluginFileLocator import PluginFileAnalyzerWithInfoFile
 from yapsy.PluginFileLocator import PluginFileAnalyzerMathingRegex
@@ -156,6 +159,11 @@ class PluginFileLocatorTest(unittest.TestCase):
 		self.plugin_name = "SimplePlugin"
 		self.plugin_impl_file = self.plugin_name+".py"
 		
+	def test_default_plugins_place_is_parent_dir(self):
+		"""Test a non-trivial default behaviour introduced some time ago :S"""
+		pl = PluginFileLocator()
+		self.assertTrue("package/yapsy" in pl.plugins_places[0])
+	
 	def test_locatePlugins(self):
 		pl = PluginFileLocator()
 		pl.setPluginPlaces([self.plugin_directory])
@@ -378,9 +386,89 @@ class PluginFileLocatorTest(unittest.TestCase):
 		for p in simple_plugins:
 			self.assertTrue(isinstance(p[2],SpecificPluginInfo))
 		
+
+class PluginManagerSetUpTest(unittest.TestCase):
+
+	def test_default_init(self):
+		pm = PluginManager()
+		self.assertEqual(["Default"],pm.getCategories())
+		self.assertTrue(isinstance(pm.getPluginLocator(),PluginFileLocator))
+	
+	def test_init_with_category_filter(self):
+		pm = PluginManager(categories_filter={"Mouf": IPlugin})
+		self.assertEqual(["Mouf"],pm.getCategories())
+		self.assertTrue(isinstance(pm.getPluginLocator(),PluginFileLocator))
 		
+	def test_init_with_plugin_info_ext(self):
+		pm = PluginManager(plugin_info_ext="bla")
+		self.assertEqual(["Default"],pm.getCategories())
+		self.assertTrue(isinstance(pm.getPluginLocator(),PluginFileLocator))
+	
+	def test_init_with_plugin_locator(self):
+		class SpecificLocator(IPluginLocator):
+			pass
+		pm = PluginManager(plugin_locator=SpecificLocator())
+		self.assertEqual(["Default"],pm.getCategories())
+		self.assertTrue(isinstance(pm.getPluginLocator(),SpecificLocator))
+
+	def test_init_with_plugin_info_ext_and_locator(self):
+		class SpecificLocator(IPluginLocator):
+			pass
+		self.assertRaises(ValueError,
+						  PluginManager,plugin_info_ext="bla",
+						  plugin_locator=SpecificLocator())
+
+	def test_updatePluginPlaces(self):
+		class SpecificLocator(IPluginLocator):
+			pass
+		pm = PluginManager()
+		pm.setPluginPlaces(["bla/bli"])
+		pm.updatePluginPlaces(["mif/maf"])
+		self.assertEqual(set(["bla/bli","mif/maf"]),set(pm.getPluginLocator().plugins_places))
+
+	def test_getPluginCandidates_too_early(self):
+		pm = PluginManager()
+		self.assertRaises(RuntimeError,pm.getPluginCandidates)
+
+	def test_setPluginLocator_with_plugin_info_class(self):
+		class SpecificLocator(IPluginLocator):
+
+			def getPluginInfoClass(self):
+				return self.picls
+
+			def setPluginInfoClass(self,picls):
+				self.picls = picls
+			
+		class SpecificPluginInfo(PluginInfo):
+			pass
+		pm = PluginManager()
+		pm.setPluginLocator(SpecificLocator(),picls=SpecificPluginInfo)
+		self.assertEqual(SpecificPluginInfo,pm.getPluginInfoClass())
+		
+	def test_setPluginLocator_with_invalid_locator(self):
+		class SpecificLocator:
+			pass
+		pm = PluginManager()
+		self.assertRaises(TypeError,
+						  pm.setPluginLocator,SpecificLocator())
+
+	def test_setPluginInfoClass_with_strategies(self):
+		class SpecificPluginInfo(PluginInfo):
+			pass
+		class SpecificLocator(IPluginLocator):
+			def setPluginInfoClass(self,cls,name):
+				if not hasattr(self,"icls"):
+					self.icls = {}
+				self.icls[name] = cls
+		loc = SpecificLocator()
+		pm = PluginManager(plugin_locator=loc)
+		pm.setPluginInfoClass(SpecificPluginInfo,["mouf","hop"])
+		self.assertEqual({"mouf":SpecificPluginInfo,"hop":SpecificPluginInfo},loc.icls)
+
+
 suite = unittest.TestSuite([
 		unittest.TestLoader().loadTestsFromTestCase(PluginFileAnalyzerWithInfoFileTest),
 		unittest.TestLoader().loadTestsFromTestCase(PluginFileAnalyzerMathingRegexTest),
 		unittest.TestLoader().loadTestsFromTestCase(PluginFileLocatorTest),
+		unittest.TestLoader().loadTestsFromTestCase(PluginManagerSetUpTest),
 		])

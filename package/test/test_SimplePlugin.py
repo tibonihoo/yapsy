@@ -24,6 +24,7 @@ class YapsyUtils(unittest.TestCase):
 	def test_NormalizePluginNameForModuleName_on_name_with_nonalphanum(self):
 		self.assertEqual("mouf__glop_a___",NormalizePluginNameForModuleName("mouf+?glop:a/é"))
 
+
 		
 class SimpleTestCase(unittest.TestCase):
 	"""
