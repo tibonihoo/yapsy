@@ -21,11 +21,11 @@ class AutoInstallTestsCase(unittest.TestCase):
 		init
 		"""
 		# create the plugin manager
-		storing_dir = os.path.join(
+		self.storing_dir = os.path.join(
 			os.path.dirname(os.path.abspath(__file__)),"plugins")
 		self.pluginManager = AutoInstallPluginManager(
-			storing_dir,
-			directories_list=[storing_dir],
+			self.storing_dir,
+			directories_list=[self.storing_dir],
 			plugin_info_ext="yapsy-autoinstall-plugin")
 		# load the plugins that may be found
 		self.pluginManager.collectPlugins()
@@ -88,6 +88,15 @@ class AutoInstallTestsCase(unittest.TestCase):
 		else:
 			self.assert_(True)
 
+	def testGetSetInstallDir(self):
+		"""
+		Test getting and setting install dir.
+		"""
+		self.assertEqual(self.storing_dir,self.pluginManager.getInstallDir())
+		self.pluginManager.setInstallDir("mouf/bla")
+		self.assertEqual("mouf/bla",self.pluginManager.getInstallDir())
+		
+		
 	def testNoneLoaded(self):
 		"""
 		Test if the correct plugin has been loaded.
@@ -211,10 +220,11 @@ class AutoInstallZIPTestsCase(unittest.TestCase):
 		"""
 		Test if the correct plugin (define by a zip file) can be installed and loaded.
 		"""
+		test_file = os.path.join(self.new_plugins_waiting_dir,"autoinstallZIPplugin.zip")
 		if sys.version_info < (2, 6):
-			self.assertRaises(NotImplementedError,self.pluginManager.installFromZIP,os.path.join(self.new_plugins_waiting_dir,"autoinstallZIPplugin.zip"))
+			self.assertRaises(NotImplementedError,self.pluginManager.installFromZIP,test_file)
 			return
-		install_success = self.pluginManager.installFromZIP(os.path.join(self.new_plugins_waiting_dir,"autoinstallZIPplugin.zip"))
+		install_success = self.pluginManager.installFromZIP(test_file)
 		self.assert_(install_success)
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check("Auto Install ZIP Plugin")
@@ -223,22 +233,50 @@ class AutoInstallZIPTestsCase(unittest.TestCase):
 		"""
 		Test if, when the zip file does not contain what is required the installation fails.
 		"""
+		test_file = os.path.join(self.new_plugins_waiting_dir,"autoinstallWRONGzipplugin.zip")
 		if sys.version_info < (2, 6):
-			self.assertRaises(NotImplementedError,self.pluginManager.installFromZIP,os.path.join(self.new_plugins_waiting_dir,"autoinstallWRONGzipplugin.zip"))
+			self.assertRaises(NotImplementedError,self.pluginManager.installFromZIP,test_file)
 			return
-		install_success = self.pluginManager.installFromZIP(os.path.join(self.new_plugins_waiting_dir,"autoinstallWRONGzipplugin.zip"))
+		install_success = self.pluginManager.installFromZIP(test_file)
 		self.assertFalse(install_success)
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check_none()
-	
+
+	def testInstallZIPFailOnInexistingFile(self):
+		"""
+		Test if, when the zip file is not a file.
+		"""
+		test_file = os.path.join(self.new_plugins_waiting_dir,"doesNotExists.zip")
+		if sys.version_info < (2, 6):
+			self.assertRaises(NotImplementedError,self.pluginManager.installFromZIP,test_file)
+			return
+		install_success = self.pluginManager.installFromZIP(test_file)
+		self.assertFalse(install_success)
+		self.pluginManager.collectPlugins()
+		self.plugin_loading_check_none()
+
+	def testInstallZIPFailOnNotAZipFile(self):
+		"""
+		Test if, when the zip file is not a valid zip.
+		"""
+		test_file = os.path.join(self.new_plugins_waiting_dir,"AutoInstallPlugin.py")
+		if sys.version_info < (2, 6):
+			self.assertRaises(NotImplementedError,self.pluginManager.installFromZIP,test_file)
+			return
+		install_success = self.pluginManager.installFromZIP(test_file)
+		self.assertFalse(install_success)
+		self.pluginManager.collectPlugins()
+		self.plugin_loading_check_none()
+		
 	def testActivationAndDeactivation(self):
 		"""
 		Test if the activation procedure works.
 		"""
+		test_file = os.path.join(self.new_plugins_waiting_dir,"autoinstallZIPplugin.zip")
 		if sys.version_info < (2, 6):
-			self.assertRaises(NotImplementedError,self.pluginManager.installFromZIP,os.path.join(self.new_plugins_waiting_dir,"autoinstallZIPplugin.zip"))
+			self.assertRaises(NotImplementedError,self.pluginManager.installFromZIP,test_file)
 			return
-		install_success = self.pluginManager.installFromZIP(os.path.join(self.new_plugins_waiting_dir,"autoinstallZIPplugin.zip"))
+		install_success = self.pluginManager.installFromZIP(test_file)
 		self.assert_(install_success)
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check("Auto Install ZIP Plugin")
