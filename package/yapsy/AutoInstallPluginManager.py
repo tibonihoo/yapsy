@@ -138,9 +138,10 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 			return False
 		try:
 			candidateZipFile = zipfile.ZipFile(plugin_ZIP_filename)
+			first_bad_file = candidateZipFile.testzip()
+			if first_bad_file:
+				raise Exception("Corrupted ZIP with first bad file '%s'" % first_bad_file)
 		except Exception,e:
-			candidateZipFile = None
-		if candidateZipFile is None or candidateZipFile.testzip() is not None:
 			log.warning("Invalid zip file '%s' (error: %s)." % (plugin_ZIP_filename,e))
 			return False
 		zipContent = candidateZipFile.namelist()

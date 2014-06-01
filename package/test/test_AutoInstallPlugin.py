@@ -242,7 +242,7 @@ class AutoInstallZIPTestsCase(unittest.TestCase):
 		self.pluginManager.collectPlugins()
 		self.plugin_loading_check_none()
 
-	def testInstallZIPFailOnInexistingFile(self):
+	def testInstallZIPFailOnUnexistingFile(self):
 		"""
 		Test if, when the zip file is not a file.
 		"""
