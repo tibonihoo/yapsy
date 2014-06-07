@@ -2,6 +2,7 @@ version-1.10.423 [2014-06-07]
 
   - code: Speed optimisation for the regexp compiled in __init__.py (see https://sourceforge.net/p/yapsy/patches/4/)
   - code: fix bug "Plugin detection doesn't follow symlinks" (see https://sourceforge.net/p/yapsy/bugs/19/)
+  - doc: add links to coveralls.io for code coverage
 
 version-1.10.323 [2014-03-23]
 
