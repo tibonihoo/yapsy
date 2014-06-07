@@ -15,6 +15,5 @@ Yapsy's development is [hosted at Sourceforge](http://sourceforge.net/projects/y
 
 Yapsy is also continuously tested on [travis-ci](https://travis-ci.org): 
 
-[![Build Status](https://travis-ci.org/tibonihoo/yapsy.png?branch=python3)](https://travis-ci.org/tibonihoo/yapsy)
-
-[![Coverage Status](https://coveralls.io/repos/tibonihoo/yapsy/badge.png?branch=master)](https://coveralls.io/r/tibonihoo/yapsy?branch=master)
+[![Build Status](https://travis-ci.org/tibonihoo/yapsy.png?branch=python3)](https://travis-ci.org/tibonihoo/yapsy) 
+[![Coverage Status](https://coveralls.io/repos/tibonihoo/yapsy/badge.png?branch=python3)](https://coveralls.io/r/tibonihoo/yapsy?branch=python3)
