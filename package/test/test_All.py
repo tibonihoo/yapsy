@@ -11,8 +11,8 @@ import unittest
 
 # set correct loading path for test files
 sys.path.append(
-		os.path.dirname(
-			os.path.abspath(__file__)))
+    os.path.dirname(
+        os.path.abspath(__file__)))
 
 
 # load the tests
@@ -29,15 +29,14 @@ from . import test_PluginInfo
 
 # add them to a common test suite
 MainTestSuite = unittest.TestSuite(
-	[ # add the tests suites below
-		test_SimplePlugin.suite,
-		test_Singleton.suite,
-		test_ConfigPlugin.suite,
-		test_VersionedPlugin.suite,
-		test_AutoInstallPlugin.suite,
-		test_FilterPlugin.suite,
-		test_ErrorInPlugin.suite,
-		test_PluginFileLocator.suite,
-		test_PluginInfo.suite,
-		])
-
+    [  # add the tests suites below
+        test_SimplePlugin.suite,
+        test_Singleton.suite,
+        test_ConfigPlugin.suite,
+        test_VersionedPlugin.suite,
+        test_AutoInstallPlugin.suite,
+        test_FilterPlugin.suite,
+        test_ErrorInPlugin.suite,
+        test_PluginFileLocator.suite,
+        test_PluginInfo.suite,
+    ])
