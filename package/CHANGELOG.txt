@@ -1,3 +1,9 @@
+version-X.XX.XXX [unreleased]
+
+  - code: one branch for python3 and python2
+  - code: pep8 with 'autopep8 -aaa -i  -r .'
+  - code: PluginManger can also throw other exceptions in issubclass  
+
 version-1.10.423 [2014-06-07]
 
   - code: Speed optimisation for the regexp compiled in __init__.py (see https://sourceforge.net/p/yapsy/patches/4/)
