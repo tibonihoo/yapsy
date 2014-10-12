@@ -11,33 +11,32 @@ import unittest
 
 # set correct loading path for test files
 sys.path.append(
-		os.path.dirname(
-			os.path.abspath(__file__)))
+    os.path.dirname(
+        os.path.abspath(__file__)))
 
 
 # load the tests
-import test_SimplePlugin
-import test_Singleton
-import test_ConfigPlugin
-import test_VersionedPlugin
-import test_AutoInstallPlugin
-import test_FilterPlugin
-import test_ErrorInPlugin
-import test_PluginFileLocator
-import test_PluginInfo
+from . import test_SimplePlugin
+from . import test_Singleton
+from . import test_ConfigPlugin
+from . import test_VersionedPlugin
+from . import test_AutoInstallPlugin
+from . import test_FilterPlugin
+from . import test_ErrorInPlugin
+from . import test_PluginFileLocator
+from . import test_PluginInfo
 
 
 # add them to a common test suite
 MainTestSuite = unittest.TestSuite(
-	[ # add the tests suites below
-		test_SimplePlugin.suite,
-		test_Singleton.suite,
-		test_ConfigPlugin.suite,
-		test_VersionedPlugin.suite,
-		test_AutoInstallPlugin.suite,
-		test_FilterPlugin.suite,
-		test_ErrorInPlugin.suite,
-		test_PluginFileLocator.suite,
-		test_PluginInfo.suite,
-		])
-
+    [  # add the tests suites below
+        test_SimplePlugin.suite,
+        test_Singleton.suite,
+        test_ConfigPlugin.suite,
+        test_VersionedPlugin.suite,
+        test_AutoInstallPlugin.suite,
+        test_FilterPlugin.suite,
+        test_ErrorInPlugin.suite,
+        test_PluginFileLocator.suite,
+        test_PluginInfo.suite,
+    ])

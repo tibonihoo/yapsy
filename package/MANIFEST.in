@@ -1,6 +1,7 @@
 include README.txt
 include LICENSE.txt
 include CHANGELOG.txt
+include runtests.py
 
 recursive-include test *.py *-plugin *.zip
 

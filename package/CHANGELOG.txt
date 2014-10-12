@@ -1,3 +1,9 @@
+version-X.XX.XXX [unreleased]
+
+  - code: one branch for python3 and python2
+  - code: pep8 with 'autopep8 -aaa -i  -r .'
+  - code: PluginManger can also throw other exceptions in issubclass  
+
 version-1.10.423 [2014-06-07]
 
   - code: Speed optimisation for the regexp compiled in __init__.py (see https://sourceforge.net/p/yapsy/patches/4/)
@@ -18,6 +24,8 @@ version-1.10.2 [2013-05-22]
 
   - code: fix compatibility with python2.5
   - doc: add links to travis-ci and readthedocs.org
+  - code: fix AutoInstall test failures [contrib. Agustin Henze]
+  - code: replace deprecated methods usage (for Python3)
 
 version-1.10.1 [2013-01-13]
 

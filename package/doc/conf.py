@@ -11,7 +11,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys
+import os
 
 SRC_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path = [SRC_DIR] + sys.path
@@ -19,9 +20,9 @@ sys.path = [SRC_DIR] + sys.path
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.append(os.path.abspath('.'))
+# sys.path.append(os.path.abspath('.'))
 
-# -- General configuration -----------------------------------------------------
+# -- General configuration -----------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
@@ -40,8 +41,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Yapsy'
-copyright = u'2010-2014, Thibauld Nion'
+project = 'Yapsy'
+copyright = '2010-2014, Thibauld Nion'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -49,7 +50,7 @@ copyright = u'2010-2014, Thibauld Nion'
 #
 
 import sys
-sys.path.insert(0,os.path.dirname(__file__))
+sys.path.insert(0, os.path.dirname(__file__))
 import yapsy
 # The short X.Y version.
 version = yapsy.__version__
@@ -94,7 +95,7 @@ pygments_style = 'sphinx'
 #modindex_common_prefix = []
 
 
-# -- Options for HTML output ---------------------------------------------------
+# -- Options for HTML output ---------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
 # Sphinx are currently 'default' and 'sphinxdoc'.
@@ -104,14 +105,14 @@ html_theme = 'default'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    "sidebarbgcolor" : "#777",
+    "sidebarbgcolor": "#777",
     "sidebarlinkcolor": "#e0cede",
-    "relbarbgcolor" : "#999",
+    "relbarbgcolor": "#999",
     "relbarlinkcolor": "#e0cede",
-    "footerbgcolor" : "#777",
-    "headtextcolor" : "#5c3566",
+    "footerbgcolor": "#777",
+    "headtextcolor": "#5c3566",
     "linkcolor": "#5c3566",
-    }
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
@@ -125,12 +126,12 @@ html_theme_options = {
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = os.path.join(SRC_DIR,"artwork","yapsy-big.png")
+html_logo = os.path.join(SRC_DIR, "artwork", "yapsy-big.png")
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = os.path.join(SRC_DIR,"artwork","yapsy-favicon.ico")
+html_favicon = os.path.join(SRC_DIR, "artwork", "yapsy-favicon.ico")
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -176,7 +177,7 @@ html_last_updated_fmt = '%b %d, %Y'
 htmlhelp_basename = 'Yapsydoc'
 
 
-# -- Options for LaTeX output --------------------------------------------------
+# -- Options for LaTeX output --------------------------------------------
 
 # The paper size ('letter' or 'a4').
 #latex_paper_size = 'letter'
@@ -187,8 +188,8 @@ htmlhelp_basename = 'Yapsydoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'Yapsy.tex', u'Yapsy Documentation',
-   u'Thibauld Nion', 'manual'),
+    ('index', 'Yapsy.tex', 'Yapsy Documentation',
+     'Thibauld Nion', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

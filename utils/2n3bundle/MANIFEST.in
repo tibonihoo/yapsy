@@ -1,0 +1,28 @@
+include test_switch.py
+
+include src2/package/README.txt
+include src2/package/LICENSE.txt
+include src2/package/CHANGELOG.txt
+
+recursive-include src2/package/test *.py *-plugin *.zip
+
+recursive-include src2/package/yapsy *.py
+
+recursive-include src2/package/artwork *
+recursive-include src2/package/doc *
+prune src2/package/doc/_build
+
+
+
+include src3/package/README.txt
+include src3/package/LICENSE.txt
+include src3/package/CHANGELOG.txt
+include src3/package/runtests.py
+
+recursive-include src3/package/test *.py *-plugin *.zip
+
+recursive-include src3/package/yapsy *.py
+
+recursive-include src3/package/artwork *
+recursive-include src3/package/doc *
+prune src3/package/doc/_build
