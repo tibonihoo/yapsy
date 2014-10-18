@@ -501,7 +501,7 @@ class PluginManager(object):
 				for category_name in self.categories_interfaces:
 					try:
 						is_correct_subclass = issubclass(element, self.categories_interfaces[category_name])
-					except TypeError:
+					except Exception:
 						continue
 					if is_correct_subclass and element is not self.categories_interfaces[category_name]:
 							current_category = category_name
