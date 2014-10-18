@@ -5,11 +5,11 @@ from . import test_settings
 
 import os 
 import unittest
-import configparser
 
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.VersionedPluginManager import VersionedPluginManager
 from yapsy.PluginManager import PluginManagerSingleton
+from yapsy.compat import ConfigParser
 
 
 """
@@ -30,7 +30,7 @@ class ConfigSingletonTestsCase(unittest.TestCase):
 		"""
 		# create a config file
 		self.config_file = self.CONFIG_FILE
-		self.config_parser = configparser.ConfigParser()
+		self.config_parser = ConfigParser()
 		self.plugin_info = None
 
 		# create the plugin manager

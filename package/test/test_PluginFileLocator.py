@@ -5,10 +5,9 @@ from . import test_settings
 import unittest
 import sys
 import os
-from configparser import ConfigParser
+from yapsy.compat import ConfigParser, StringIO
 import tempfile
 import shutil
-from io import StringIO
 
 from yapsy import PLUGIN_NAME_FORBIDEN_STRING
 from yapsy.PluginManager import PluginManager

@@ -12,7 +12,7 @@ API
 ===
 """
 
-from configparser import ConfigParser
+from yapsy.compat import ConfigParser
 from distutils.version import StrictVersion
 
 

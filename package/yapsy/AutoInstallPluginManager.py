@@ -22,6 +22,7 @@ import io
 from yapsy.IPlugin import IPlugin
 from yapsy.PluginManagerDecorator import PluginManagerDecorator
 from yapsy import log
+from yapsy.compat import StringIO, str
 
 
 class AutoInstallPluginManager(PluginManagerDecorator):
@@ -180,7 +181,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 		for infoFileName in infoFileCandidates:
 			infoFile = candidateZipFile.read(infoFileName)
 			log.info("Assuming the zipped plugin info file to be '%s'" % infoFileName)
-			pluginName,moduleName,_ = self._getPluginNameAndModuleFromStream(io.StringIO(str(infoFile,encoding="utf-8")))
+			pluginName,moduleName,_ = self._getPluginNameAndModuleFromStream(StringIO(str(infoFile,encoding="utf-8")))
 			if moduleName is None:
 					continue
 			log.info("Checking existence of the expected module '%s' in the zip file" % moduleName)

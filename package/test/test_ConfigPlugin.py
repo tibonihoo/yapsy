@@ -5,8 +5,8 @@ from . import test_settings
 
 import os 
 import unittest
-import configparser
 
+from yapsy.compat import ConfigParser
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 
 class ConfigTestCase(unittest.TestCase):
@@ -24,7 +24,7 @@ class ConfigTestCase(unittest.TestCase):
 		"""
 		# create a config file
 		self.config_file = self.CONFIG_FILE
-		self.config_parser = configparser.ConfigParser()
+		self.config_parser = ConfigParser()
 		self.plugin_info = None
 		# create the plugin manager
 		self.pluginManager = ConfigurablePluginManager(
@@ -52,7 +52,7 @@ class ConfigTestCase(unittest.TestCase):
 		# get rid of the plugin manager and create a new one
 		del self.pluginManager
 		del self.config_parser
-		self.config_parser = configparser.ConfigParser()
+		self.config_parser = ConfigParser()
 		self.config_parser.read(self.config_file)
 		self.assertTrue(self.config_parser.has_section("Plugin Management"))
 		self.assertTrue(self.config_parser.has_option("Plugin Management", 

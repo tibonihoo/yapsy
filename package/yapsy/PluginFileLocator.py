@@ -52,7 +52,7 @@ All analyzers must enforce the policy represented by the ``IPluginFileAnalyzer``
 import os
 import re
 from yapsy import log
-import configparser
+from yapsy.compat import ConfigParser, is_py2
 
 from yapsy.PluginInfo import PluginInfo
 from yapsy import PLUGIN_NAME_FORBIDEN_STRING
@@ -175,9 +175,12 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 			      and decorators.
 		"""
 		# parse the information buffer to get info about the plugin
-		config_parser = configparser.ConfigParser()
+		config_parser = ConfigParser()
 		try:
-			config_parser.read_file(infoFileObject)
+			if is_py2:
+				config_parser.readfp(infoFileObject)
+			else:
+				config_parser.read_file(infoFileObject)
 		except Exception as e:
 			log.debug("Could not parse the plugin file '%s' (exception raised was '%s')" % (candidate_infofile,e))
 			return (None, None, None)
@@ -298,7 +301,7 @@ class PluginFileAnalyzerMathingRegex(IPluginFileAnalyzer):
 			plugin_filename = dirpath
 		infos["name"] = "%s" % module_name
 		infos["path"] = plugin_filename
-		cf_parser = configparser.ConfigParser()
+		cf_parser = ConfigParser()
 		cf_parser.add_section("Core")
 		cf_parser.set("Core","Name",infos["name"])
 		cf_parser.set("Core","Module",infos["path"])

@@ -71,8 +71,13 @@ PLUGIN_NAME_FORBIDEN_STRING=";;"
 """
 
 import re
+from yapsy.compat import is_py2, str
 
-RE_NON_ALPHANUM = re.compile("\W")
+if is_py2:
+	RE_NON_ALPHANUM = re.compile("\W", re.U)
+else:
+	RE_NON_ALPHANUM = re.compile("\W")
+
 
 def NormalizePluginNameForModuleName(pluginName):
 	"""
@@ -81,8 +86,13 @@ def NormalizePluginNameForModuleName(pluginName):
 	.. note:: may do a little more modifications than strictly
 	          necessary and is not optimized for speed.
 	"""
+	if is_py2:
+		pluginName = str(pluginName, 'utf-8')
 	if len(pluginName)==0:
 		return "_"
 	if pluginName[0].isdigit():
 		pluginName = "_" + pluginName
-	return RE_NON_ALPHANUM.sub("_",pluginName)
+	ret = RE_NON_ALPHANUM.sub("_",pluginName)
+	if is_py2:
+		ret = ret.encode('utf-8')
+	return ret
