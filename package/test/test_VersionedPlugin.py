@@ -96,18 +96,17 @@ class VersionedTestsCase(unittest.TestCase):
 		
 		
 	def testDirectActivationAndDeactivation(self):
-		 """
-		 Test if the activation procedure works when directly activating a plugin.
-		 """
-		 self.plugin_loading_check()
-		 self.assertTrue(not self.plugin_info.plugin_object.is_activated)
-		 TEST_MESSAGE("plugin object = %s" % self.plugin_info.plugin_object)
-		 self.plugin_info.plugin_object.activate()
-		 self.assertTrue(self.plugin_info.plugin_object.is_activated)
-		 self.plugin_info.plugin_object.deactivate()
-		 self.assertTrue(not self.plugin_info.plugin_object.is_activated)
-
-
+		"""
+		Test if the activation procedure works when directly activating a plugin.
+		"""
+		self.plugin_loading_check()
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
+		TEST_MESSAGE("plugin object = %s" % self.plugin_info.plugin_object)
+		self.plugin_info.plugin_object.activate()
+		self.assertTrue(self.plugin_info.plugin_object.is_activated)
+		self.plugin_info.plugin_object.deactivate()
+		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
+		 
 
 	
 		
