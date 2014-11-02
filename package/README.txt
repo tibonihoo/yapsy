@@ -26,3 +26,5 @@ List of Contributors:
   - agustinhenze
   - qitta
   - Roberto Alsina
+  - delijati 
+
