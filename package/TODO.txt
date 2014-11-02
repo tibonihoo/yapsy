@@ -4,7 +4,6 @@
 
 Next Release
 
-- follow evolutions from default branch
 
 Later
 

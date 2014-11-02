@@ -1,3 +1,8 @@
+version-1.10.523 [20??-??-??]
+
+  - code: fix exception catching to support flask usae case (contrib delijati: https://github.com/tibonihoo/yapsy/pull/4)
+  - code: merge python3 and default branch (contrib delijati)
+
 version-1.10.423 [2014-06-07]
 
   - code: Speed optimisation for the regexp compiled in __init__.py (see https://sourceforge.net/p/yapsy/patches/4/)
@@ -12,7 +17,8 @@ version-1.10.323 [2014-03-23]
 
 version-1.10.223 [2013-12-06]
 
-  - packaging: version name change to comply with PEP440 and resolve pip install problems.  - code: fix compatibility with python2.5
+  - packaging: version name change to comply with PEP440 and resolve pip install problems.
+  - code: fix compatibility with python2.5
 
 version-1.10.2 [2013-05-22]
 
