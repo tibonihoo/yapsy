@@ -1,10 +1,21 @@
+Yapsy is provided under the BSD-2 clause license (see text below),
+with the following two exceptions:
+
+- the "yapsy" icons in artwork/ is licensed under the Creative Commons
+  Attribution-Share Alike 3.0 by Thibauld Nion (see
+  artwork/LICENSE.txt)
+
+- the compat.py file is licensed under the ISC License by Kenneth
+  Reitz (see yapsy/compat.py).
+
+
+--------------------
+BSD 2-clause license
+--------------------
+
 Copyright (c) 2007-2014, Thibauld Nion
 
 All rights reserved.
-
-
-Except for the "yapsy" icon, the program is licensed under the "new"
-BSD license (see text below).
 
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

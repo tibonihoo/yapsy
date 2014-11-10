@@ -5,6 +5,8 @@ This is the top directory of the Yapsy project.
 
 Yapsy is a fat-free DIY Python plugin management toolkit.
 
+It is provided under the [BSD license](./package/LICENSE.txt).
+
 To get more details about the sources please look: 
   * [inside the package](./package/README.txt).
   * [in the documentation](http://yapsy.sourceforge.net/)
