@@ -508,8 +508,14 @@ class PluginManager(object):
 							if candidate_infofile not in self._category_file_mapping[current_category]:
 								# we found a new plugin: initialise it and search for the next one
 								if not plugin_info_reference:
-									plugin_info.plugin_object = element()
-									plugin_info_reference = plugin_info
+									try:
+										plugin_info.plugin_object = element()
+										plugin_info_reference = plugin_info
+									except Exception:
+										exc_info = sys.exc_info()
+										log.error("Unable to create plugin object: %s" % candidate_filepath, exc_info=exc_info)
+										plugin_info.error = exc_info
+										break # If it didn't work once it wont again
 								plugin_info.categories.append(current_category)
 								self.category_mapping[current_category].append(plugin_info_reference)
 								self._category_file_mapping[current_category].append(candidate_infofile)
