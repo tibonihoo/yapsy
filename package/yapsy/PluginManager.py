@@ -508,7 +508,7 @@ class PluginManager(object):
 							if candidate_infofile not in self._category_file_mapping[current_category]:
 								# we found a new plugin: initialise it and search for the next one
 								if not plugin_info_reference:
-									plugin_info.plugin_object = element()
+									plugin_info.plugin_object = self.instanciateElement(element)
 									plugin_info_reference = plugin_info
 								plugin_info.categories.append(current_category)
 								self.category_mapping[current_category].append(plugin_info_reference)
@@ -517,6 +517,12 @@ class PluginManager(object):
 		# don't need to take up the space
 		delattr(self, '_candidates')
 		return processed_plugins
+
+	def instanciateElement(self, element):
+		"""
+		Override this method to customize how plugins are instanciated
+		"""
+		return element()
 
 	def collectPlugins(self):
 		"""

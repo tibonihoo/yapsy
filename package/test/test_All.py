@@ -25,7 +25,7 @@ from . import test_FilterPlugin
 from . import test_ErrorInPlugin
 from . import test_PluginFileLocator
 from . import test_PluginInfo
-
+from . import test_SimpleMultiprocessPlugin
 
 # add them to a common test suite
 MainTestSuite = unittest.TestSuite(
@@ -39,5 +39,6 @@ MainTestSuite = unittest.TestSuite(
 		test_ErrorInPlugin.suite,
 		test_PluginFileLocator.suite,
 		test_PluginInfo.suite,
+		test_SimpleMultiprocessPlugin.suite,
 		])
 
