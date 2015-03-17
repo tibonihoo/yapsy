@@ -37,7 +37,7 @@ class SimpleMultiprocessTestCase(unittest.TestCase):
 			plugin.plugin_object.child_pipe.send(content_from_parent)
 			if plugin.plugin_object.child_pipe.poll(5):
 				content_from_child = plugin.plugin_object.child_pipe.recv()
-			self.assertEqual(content_from_child, "{}|echo_from_child".format(content_from_parent))
+			self.assertEqual(content_from_child, "{0}|echo_from_child".format(content_from_parent))
 
 
 suite = unittest.TestSuite([
