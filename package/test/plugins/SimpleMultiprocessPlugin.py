@@ -17,4 +17,4 @@ class SimpleMultiprocessPlugin(IMultiprocessChildPlugin):
 
 	def run(self):
 		content_from_parent = self.parent_pipe.recv()
-		self.parent_pipe.send("{}|echo_from_child".format(content_from_parent))
+		self.parent_pipe.send("{0}|echo_from_child".format(content_from_parent))
