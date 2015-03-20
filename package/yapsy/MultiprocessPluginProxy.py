@@ -19,6 +19,7 @@ API
 
 from yapsy.IPlugin import IPlugin
 
+
 class MultiprocessPluginProxy(IPlugin):
 	"""
 	This class contains two members that are initialized by the :doc:`MultiprocessPluginManager`.

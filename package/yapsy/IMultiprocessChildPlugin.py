@@ -29,17 +29,19 @@ API
 ===
 """
 
+from multiprocessing import Process
 from yapsy.IPlugin import IPlugin
 
-class IMultiprocessChildPlugin(IPlugin):
+
+class IMultiprocessChildPlugin(IPlugin, Process):
 	"""
 	Base class for multiprocessed plugin.
 	"""
 
-	def __init__(self, parent_pipe=None):
-		IPlugin.__init__(self)
+	def __init__(self, parent_pipe):
 		self.parent_pipe = parent_pipe
-		self.run()
+		IPlugin.__init__(self)
+		Process.__init__(self)
 
 	def run(self):
 		"""

@@ -50,7 +50,7 @@ class MultiprocessPluginManager(PluginManager):
 		"""
 		instanciated_element = MultiprocessPluginProxy()
 		parent_pipe, child_pipe = mproc.Pipe()
-		instanciated_element.proc = mproc.Process(target=element, args=(child_pipe,))
+		instanciated_element.proc = element(child_pipe)
 		instanciated_element.child_pipe = parent_pipe
 		instanciated_element.proc.start()
 		return instanciated_element
