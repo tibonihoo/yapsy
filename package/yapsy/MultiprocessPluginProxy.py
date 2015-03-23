@@ -26,9 +26,9 @@ class MultiprocessPluginProxy(IPlugin):
 
 	self.proc is a reference that holds the multiprocessing.Process instance of the child process.
 
-	self.child_pipe is a reference that holds the multiprocessing.Poll instance to communicate with the child.
+	self.child_pipe is a reference that holds the multiprocessing.Pipe instance to communicate with the child.
 	"""
 	def __init__(self):
 		IPlugin.__init__(self)
 		self.proc = None		# This attribute holds the multiprocessing.Process instance
-		self.child_pipe = None  # This attribute holds the multiprocessing.Poll instance
+		self.child_pipe = None  # This attribute holds the multiprocessing.Pipe instance
