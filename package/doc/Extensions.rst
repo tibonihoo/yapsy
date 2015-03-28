@@ -13,6 +13,7 @@ functionality you need for your plugin manager:
    ConfigurablePluginManager
    AutoInstallPluginManager
    FilteredPluginManager
+   MultiprocessPluginManager
 
 
 The following item offer customization for the way plugins are
