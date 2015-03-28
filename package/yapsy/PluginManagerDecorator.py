@@ -49,8 +49,8 @@ class PluginManagerDecorator(object):
 	def __init__(self, decorated_object=None,
 				 # The following args will only be used if we need to
 				 # create a default PluginManager
-				 categories_filter={"Default":IPlugin}, 
-				 directories_list=[os.path.dirname(__file__)], 
+				 categories_filter=None, 
+				 directories_list=None, 
 				 plugin_info_ext="yapsy-plugin"):
 		"""
 		Mimics the PluginManager's __init__ method and wraps an
@@ -70,7 +70,10 @@ class PluginManagerDecorator(object):
 		object passed to the init function under the exact keyword
 		``decorated_object``.
 		"""
-		
+		if directories_list is None:
+			directories_list = [os.path.dirname(__file__)]
+		if categories_filter is None:
+			categories_filter = {"Default": IPlugin}
 		if decorated_object is None:
 			log.debug("Creating a default PluginManager instance to be decorated.")
 			from yapsy.PluginManager import PluginManager

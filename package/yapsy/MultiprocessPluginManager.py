@@ -25,13 +25,15 @@ class MultiprocessPluginManager(PluginManager):
 	"""
 
 	def __init__(self,
-				 categories_filter={"Default":IMultiprocessChildPlugin},
+				 categories_filter=None,
 				 directories_list=None,
 				 plugin_info_ext=None,
 				 plugin_locator=None):
 		"""
 		init
 		"""
+		if categories_filter is None:
+			categories_filter = {"Default": IMultiprocessChildPlugin}
 		PluginManager.__init__(self,
 								 categories_filter=categories_filter,
 								 directories_list=directories_list,

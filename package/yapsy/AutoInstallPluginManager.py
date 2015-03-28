@@ -34,7 +34,7 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 				 decorated_manager=None,
 				 # The following args will only be used if we need to
 				 # create a default PluginManager
-				 categories_filter={"Default":IPlugin}, 
+				 categories_filter=None, 
 				 directories_list=None, 
 				 plugin_info_ext="yapsy-plugin"):
 		"""
@@ -51,6 +51,8 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 		             appended to the later.
 			
 		"""
+		if categories_filter is None:
+			categories_filter = {"Default":IPlugin}
 		# Create the base decorator class
 		PluginManagerDecorator.__init__(self,
 										decorated_manager,
