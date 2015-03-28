@@ -1,10 +1,8 @@
-#!/usr/bin/python
 # -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; python-indent: 4 -*-
 
 import unittest
 import os 
 
-from yapsy.PluginManager import PluginManager
 from yapsy.MultiprocessPluginManager import MultiprocessPluginManager
 
 class SimpleMultiprocessTestCase(unittest.TestCase):
@@ -31,6 +29,7 @@ class SimpleMultiprocessTestCase(unittest.TestCase):
 		"""
 		Test if the plugin is loaded and if the communication pipe is properly setuped.
 		"""
+		numTestedPlugins = 0
 		for plugin in self.mpPluginManager.getAllPlugins():
 			content_from_parent = "hello-from-parent"
 			content_from_child = False
@@ -38,7 +37,8 @@ class SimpleMultiprocessTestCase(unittest.TestCase):
 			if plugin.plugin_object.child_pipe.poll(5):
 				content_from_child = plugin.plugin_object.child_pipe.recv()
 			self.assertEqual(content_from_child, "{0}|echo_from_child".format(content_from_parent))
-
+			numTestedPlugins += 1
+		self.assertGreaterEqual(numTestedPlugins, 1)
 
 suite = unittest.TestSuite([
 		unittest.TestLoader().loadTestsFromTestCase(SimpleMultiprocessTestCase),
