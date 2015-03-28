@@ -1,0 +1,9 @@
+[Core]
+Name = Simple Multiprocess Plugin
+Module = SimpleMultiprocessPlugin
+
+[Documentation]
+Author = Pierre-Yves Langlois
+Version = 0.1
+Description = A minimal plugin to test multiprocessing
+Copyright = 2015
