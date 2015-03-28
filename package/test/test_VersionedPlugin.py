@@ -116,7 +116,7 @@ class VersionedTestsCase(unittest.TestCase):
 		newCategory = "Mouf"
 		# Pre-requisite for the test
 		previousCategories = self.versionedPluginManager.getCategories()
-		self.assertGreaterEqual(len(previousCategories),1)
+		self.assertTrue(len(previousCategories) >= 1)
 		self.assertTrue(newCategory not in previousCategories)
 		# change the category and see what's happening
 		self.versionedPluginManager.setCategoriesFilter({newCategory: IPlugin})
