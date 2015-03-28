@@ -38,7 +38,7 @@ class SimpleMultiprocessTestCase(unittest.TestCase):
 				content_from_child = plugin.plugin_object.child_pipe.recv()
 			self.assertEqual(content_from_child, "{0}|echo_from_child".format(content_from_parent))
 			numTestedPlugins += 1
-		self.assertGreaterEqual(numTestedPlugins, 1)
+		self.assertTrue(numTestedPlugins >= 1)
 
 suite = unittest.TestSuite([
 		unittest.TestLoader().loadTestsFromTestCase(SimpleMultiprocessTestCase),

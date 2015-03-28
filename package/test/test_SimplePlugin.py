@@ -131,14 +131,14 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		newCategory = "Mouf"
 		# Pre-requisite for the test
 		previousCategories = spm.getCategories()
-		self.assertGreaterEqual(len(previousCategories),1)
+		self.assertTrue(len(previousCategories) >= 1)
 		self.assertTrue(newCategory not in previousCategories)
 		# change the category and see what's happening
 		spm.setCategoriesFilter({newCategory: IPlugin})
 		spm.collectPlugins()
 		for categoryName in previousCategories:
 			self.assertRaises(KeyError, spm.getPluginsOfCategory, categoryName)
-		self.assertGreaterEqual(1, len(spm.getPluginsOfCategory(newCategory)))
+		self.assertTrue(len(spm.getPluginsOfCategory(newCategory)) >= 1)
 	
 		
 	def testCandidatesManipulation(self):
