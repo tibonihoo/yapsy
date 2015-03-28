@@ -5,6 +5,7 @@ from .test_settings import TEST_MESSAGE
 import unittest
 import os 
 
+from yapsy.IPlugin import IPlugin
 from yapsy.VersionedPluginManager import VersionedPluginManager
 
 
@@ -107,8 +108,26 @@ class VersionedTestsCase(unittest.TestCase):
 		self.assertTrue(not self.plugin_info.plugin_object.is_activated)
 		 
 
-	
-		
+	def testAtticConsistencyAfterCategoryFilterUpdate(self):
+		"""
+		Test that changing the category filer doesn't make the attic inconsistent.
+		"""
+		self.plugin_loading_check()
+		newCategory = "Mouf"
+		# Pre-requisite for the test
+		previousCategories = self.versionedPluginManager.getCategories()
+		self.assertGreaterEqual(len(previousCategories),1)
+		self.assertTrue(newCategory not in previousCategories)
+		# change the category and see what's happening
+		self.versionedPluginManager.setCategoriesFilter({newCategory: IPlugin})
+		self.versionedPluginManager.collectPlugins()
+		for categoryName in previousCategories:
+			self.assertRaises(KeyError, self.versionedPluginManager\
+							  .getPluginsOfCategory, categoryName)
+		self.assertEqual(len(self.versionedPluginManager\
+							 .getPluginsOfCategoryFromAttic(newCategory)),4)
+
+
 suite = unittest.TestSuite([
 		unittest.TestLoader().loadTestsFromTestCase(VersionedTestsCase),
 		])

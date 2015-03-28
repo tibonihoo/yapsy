@@ -118,6 +118,29 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		spm.appendPluginToCategory(plugin_info,sole_category)
 		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
 
+	
+	def testChangingCategoriesFilter(self):
+		"""
+		Test the effect of setting a new category filer.
+		"""
+		spm = PluginManager(directories_list=[
+				os.path.join(
+					os.path.dirname(os.path.abspath(__file__)),"plugins")])
+		# load the plugins that may be found
+		spm.collectPlugins()
+		newCategory = "Mouf"
+		# Pre-requisite for the test
+		previousCategories = spm.getCategories()
+		self.assertGreaterEqual(len(previousCategories),1)
+		self.assertTrue(newCategory not in previousCategories)
+		# change the category and see what's happening
+		spm.setCategoriesFilter({newCategory: IPlugin})
+		spm.collectPlugins()
+		for categoryName in previousCategories:
+			self.assertRaises(KeyError, spm.getPluginsOfCategory, categoryName)
+		self.assertGreaterEqual(1, len(spm.getPluginsOfCategory(newCategory)))
+	
+		
 	def testCandidatesManipulation(self):
 		"""
 		Test querying, removing and adding plugins from/to the lkist

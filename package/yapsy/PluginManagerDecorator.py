@@ -87,7 +87,7 @@ class PluginManagerDecorator(object):
 # 		print "looking for %s in %s" % (name, self.__class__)
 		return getattr(self._component,name)
 		
-		
+	
 	def collectPlugins(self):
 		"""
 		This function will usually be a shortcut to successively call

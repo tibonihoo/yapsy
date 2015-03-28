@@ -60,14 +60,8 @@ class VersionedPluginManager(PluginManagerDecorator):
 				 directories_list=None, 
 				 plugin_info_ext="yapsy-plugin"):
 		"""
-		Create the plugin manager and record the ConfigParser instance
-		that will be used afterwards.
-		
-		The ``config_change_trigger`` argument can be used to set a
-		specific method to call when the configuration is
-		altered. This will let the client application manage the way
-		they want the configuration to be updated (e.g. write on file
-		at each change or at precise time intervalls or whatever....)
+		Create the plugin manager and instancitate the attic where
+		obsolete plugins will be stored.
 		"""
 		# Create the base decorator class
 		PluginManagerDecorator.__init__(self,decorated_manager,
@@ -79,7 +73,7 @@ class VersionedPluginManager(PluginManagerDecorator):
 		# for which only the latest version is the one that will be
 		# kept in the "core" plugin storage.
 		self._prepareAttic()
-
+		
 	def _prepareAttic(self):
 		"""
 		Create and correctly initialize the storage where the wrong
@@ -88,8 +82,17 @@ class VersionedPluginManager(PluginManagerDecorator):
 		self._attic = {}
 		for categ in self.getCategories():
 			self._attic[categ] = []
-		
+	
+	def setCategoriesFilter(self, categories_filter):
+		"""
+		Set the categories of plugins to be looked for as well as the
+		way to recognise them.
 
+		Note: will also reset the attic toa void inconsistencies.
+		"""
+		self._component.setCategoriesFilter(categories_filter)
+		self._prepareAttic()
+	
 	def getLatestPluginsOfCategory(self,category_name):
 		"""
 		DEPRECATED(>1.8): Please consider using getPluginsOfCategory
@@ -107,6 +110,7 @@ class VersionedPluginManager(PluginManagerDecorator):
 		In addition to the baseclass functionality, this subclass also
 		needs to find the latest version of each plugin.
 		"""
+		self._prepareAttic()
 		self._component.loadPlugins(callback)
 		for categ in self.getCategories():
 			latest_plugins = {}
