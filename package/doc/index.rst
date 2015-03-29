@@ -253,7 +253,7 @@ A few alternative sites are available:
   * To use `pip for a development install`_ you can do something like::
 
     pip install -e "git+https://github.com/tibonihoo/yapsy.git#egg=yapsy&subdirectory=package"
-    pip install -e "hg+https://tibonihoo@hg.code.sf.net/p/yapsy/code#egg=yapsy&subdirectory=package"
+    pip install -e "hg+http://hg.code.sf.net/p/yapsy/code#egg=yapsy&subdirectory=package"
 
   * A development version of the documentation is available on `ReadTheDoc`_.
 
