@@ -246,14 +246,21 @@ Yapsy is also tested on the continous integration service `TravisCI`_:
                        :alt: Coverage of Python3 version
                        :target: https://coveralls.io/r/tibonihoo/yapsy?branch=python3
 
-And if you're looking for the development version of the
-documentation, it is continuously updated on `ReadTheDoc`_.
+A few alternative sites are available:
 
-.. _`ReadTheDoc`: https://yapsy.readthedocs.org
+  * Yapsy's sources are mirrored on `GitHub`_.
 
-Last but not least, Yapsy's sources are mirrored on `GitHub`_.
+  * To use `pip for a development install`_ you can do something like::
+
+    pip install -e "git+https://github.com/tibonihoo/yapsy.git#egg=yapsy&subdirectory=package"
+    pip install -e "hg+https://tibonihoo@hg.code.sf.net/p/yapsy/code#egg=yapsy&subdirectory=package"
+
+  * A development version of the documentation is available on `ReadTheDoc`_.
+
 
 .. _`GitHub`: https://github.com/tibonihoo/yapsy/
+.. _`pip for a development install`: http://pip.readthedocs.org/en/latest/reference/pip_install.html#vcs-support
+.. _`ReadTheDoc`: https://yapsy.readthedocs.org
 
 
 
