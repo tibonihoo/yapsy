@@ -33,3 +33,13 @@ interfaces:
 
    IPluginLocator
    PluginManagerDecorator
+
+If you want to isolate your plugins in separate processes with the
+``MultiprocessPluginManager``, you should look at the following
+classes too:
+
+.. toctree::
+   :maxdepth: 1
+
+   IMultiprocessChildPlugin
+   MultiprocessPluginProxy
