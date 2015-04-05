@@ -9,5 +9,6 @@ cd $THIS_FILE_DIR/../package
 
 # generate package
 rm -r build 
+rm -r dist
 python setup.py sdist bdist_egg upload
 python3 setup.py bdist_egg upload
