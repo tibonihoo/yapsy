@@ -6,15 +6,8 @@
 THIS_FILE_DIR=$( cd "$( dirname $0 )" && pwd )
 
 cd $THIS_FILE_DIR/../package
-rm -r build
 
-# generate doc
-python setup.py build_sphinx
-
-if [ "$1" = "upload" ]; then
-  echo "Uploading to Python Packages Index"
-  python setup.py upload_docs
-  echo "Uploading to Sourceforge"
-  scp -r build/sphinx/html/* tibonihoo@web.sourceforge.net:/home/project-web/yapsy/htdocs/
-fi;
-
+# generate package
+rm -r build 
+python setup.py sdist bdist_egg upload
+python3 setup.py bdist_egg upload
