@@ -13,7 +13,7 @@ with the following two exceptions:
 BSD 2-clause license
 --------------------
 
-Copyright (c) 2007-2014, Thibauld Nion
+Copyright (c) 2007-2015, Thibauld Nion
 
 All rights reserved.
 
