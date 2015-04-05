@@ -1,7 +1,12 @@
-version-1.10.523 [20??-??-??]
+version-1.11.023 [2015-04-05]
 
-  - code: fix exception catching to support flask usae case (contrib delijati: https://github.com/tibonihoo/yapsy/pull/4)
   - code: merge python3 and default branch (contrib delijati)
+  - code: fix exception catching to support flask use case (contrib delijati: https://github.com/tibonihoo/yapsy/pull/4)
+  - code: fix error reporting (contrib frmdstryr: https://github.com/tibonihoo/yapsy/pull/5)
+  - code: allow plugins to run in separate processes (contrib pylanglois: https://github.com/tibonihoo/yapsy/pull/6)
+  - code: fix dangerous usage of mutable objects as default arguments
+  - doc: added a few badges
+  - doc: added an example of fetching yapsy's development version with pip
 
 version-1.10.423 [2014-06-07]
 
