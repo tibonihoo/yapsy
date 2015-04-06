@@ -231,20 +231,14 @@ The project is hosted by `Sourceforge`_ where you can access the code, documenta
 **Any suggestion and help are much welcome !**
 
 Yapsy is also tested on the continous integration service `TravisCI`_:
-  * with Python-2.x: |TravisPy2| |CoveragePy2|
-  * with Python-3.x: |TravisPy3| |CoveragePy3|
+|CITests| |Coverage|
 
 .. _`TravisCI`: https://travis-ci.org/tibonihoo/yapsy
-.. |TravisPy2| image:: https://travis-ci.org/tibonihoo/yapsy.png?branch=master
-                     :alt: Tests with Python2
-.. |TravisPy3| image:: https://travis-ci.org/tibonihoo/yapsy.png?branch=python3
-                     :alt: Tests with Python3
-.. |CoveragePy2| image:: https://coveralls.io/repos/tibonihoo/yapsy/badge.png?branch=master
-                       :alt: Coverage of Python2 version
-                       :target: https://coveralls.io/r/tibonihoo/yapsy?branch=master
-.. |CoveragePy3| image:: https://coveralls.io/repos/tibonihoo/yapsy/badge.png?branch=python3
-                       :alt: Coverage of Python3 version
-                       :target: https://coveralls.io/r/tibonihoo/yapsy?branch=python3
+.. |CITests| image:: https://travis-ci.org/tibonihoo/yapsy.png?branch=master
+             :alt: Continuous integration tests
+.. |Coverage| image:: https://coveralls.io/repos/tibonihoo/yapsy/badge.png?branch=master
+              :alt: Code coverage from continuous integration tests.
+              :target: https://coveralls.io/r/tibonihoo/yapsy?branch=master
 
 A few alternative sites are available:
 
