@@ -162,7 +162,7 @@ project but it is now used in other (more advanced) projects like:
 .. _MathBench: http://mathbench.sourceforge.net
 .. _peppy: http://www.flipturn.org/peppy/
 .. _MysteryMachine: http://trac.backslashat.org/MysteryMachine
-.. _Aranduka: http://code.google.com/p/aranduka/
+.. _Aranduka: https://github.com/ralsina/aranduka
 .. _err: http://gbin.github.com/err/
 .. _nikola: http://nikola.ralsina.com.ar/
 
@@ -175,9 +175,9 @@ If you're interested in using yapsy, feel free to look into the following links:
 - `Making your app modular: Yapsy`_ (applied to Qt apps)
 - `Python plugins with yapsy`_ (applied to GTK apps)
 
-.. _`Making your app modular: Yapsy`: http://lateral.netmanagers.com.ar/weblog/posts/BB923.html
+.. _`Making your app modular: Yapsy`: http://ralsina.me/weblog/posts/BB923.html
 .. _`A minimal example on stackoverflow`: http://stackoverflow.com/questions/5333128/yapsy-minimal-example
-.. _`Python plugins with yapsy`: http://www.micahcarrick.com/python-gtk-plugins-with-yapsy.html
+.. _`Python plugins with yapsy`: https://github.com/MicahCarrick/yapsy-gtk-example
 
 
 Development
@@ -285,7 +285,7 @@ plugin system should look like, I wanted to implement my own
   depends on zope which considered what I want to do here is way too
   much.
 
-.. _PlugBoard: http://developer.berlios.de/projects/plugboard/ 
+.. _PlugBoard: https://pypi.python.org/pypi/PlugBoard
 
 - `Marty Alchin's simple plugin framework`_ is a quite interesting
   description of a plugin architecture with code snippets as
@@ -296,11 +296,7 @@ plugin system should look like, I wanted to implement my own
 - stevedor_ looks quite promising and actually seems to make
   setuptools relevant to build plugin systems.
 
-.. _stevedor: http://stevedore.readthedocs.org
-
-- `Evan Fosmark's A simple event-driven plugin system in Python`_ where "plugins are just functions that get registered through the use of a decorator". 
-
-.. _`Evan Fosmark's A simple event-driven plugin system in Python`: http://www.evanfosmark.com/2009/07/simple-event-driven-plugin-system-in-python/
+.. _stevedor: https://pypi.python.org/pypi/stevedore
 
 - You can look up more example on a `stackoverflow's discution about minimal plugin systems in Python`_
 
