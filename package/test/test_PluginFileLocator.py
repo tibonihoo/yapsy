@@ -69,6 +69,24 @@ class PluginFileAnalyzerWithInfoFileTest(unittest.TestCase):
 		self.assertFalse(analyzer.isValidPlugin(self.version_plugin_path))
 		self.assertTrue(analyzer.isValidPlugin(self.yapsy_filter_plugin_path))
 
+	def test__extractCorePluginInfo_with_str_filename(self):
+		plugin_desc_content = "simpleplugin.yapsy-plugin"
+		analyzer = PluginFileAnalyzerWithInfoFile("mouf", ("yapsy-plugin"))
+		infos, parser = analyzer._extractCorePluginInfo(self.plugin_directory,
+														plugin_desc_content)
+		self.assertEqual("Simple Plugin", infos["name"])
+		self.assertEqual(os.path.join(self.plugin_directory, "SimplePlugin"), infos["path"])
+
+	def test__extractCorePluginInfo_with_unicode_filename(self):
+		"""Note: this test is redundant with its 'str' counterpart on Python3
+		but not on Python2"""
+		plugin_desc_content = u"simpleplugin.yapsy-plugin"
+		analyzer = PluginFileAnalyzerWithInfoFile("mouf", ("yapsy-plugin"))
+		infos, parser = analyzer._extractCorePluginInfo(self.plugin_directory,
+														plugin_desc_content)
+		self.assertEqual("Simple Plugin", infos["name"])
+		self.assertEqual(os.path.join(self.plugin_directory, "SimplePlugin"), infos["path"])
+		
 	def test__extractCorePluginInfo_with_minimal_description(self):
 		plugin_desc_content = StringIO("""\
 [Core]
