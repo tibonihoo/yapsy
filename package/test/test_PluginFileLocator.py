@@ -4,7 +4,7 @@ from . import test_settings
 import unittest
 import sys
 import os
-from yapsy.compat import ConfigParser, StringIO
+from yapsy.compat import ConfigParser, StringIO, is_py2
 import tempfile
 import shutil
 
@@ -80,12 +80,13 @@ class PluginFileAnalyzerWithInfoFileTest(unittest.TestCase):
 	def test__extractCorePluginInfo_with_unicode_filename(self):
 		"""Note: this test is redundant with its 'str' counterpart on Python3
 		but not on Python2"""
-		plugin_desc_content = u"simpleplugin.yapsy-plugin"
-		analyzer = PluginFileAnalyzerWithInfoFile("mouf", ("yapsy-plugin"))
-		infos, parser = analyzer._extractCorePluginInfo(self.plugin_directory,
-														plugin_desc_content)
-		self.assertEqual("Simple Plugin", infos["name"])
-		self.assertEqual(os.path.join(self.plugin_directory, "SimplePlugin"), infos["path"])
+		if is_py2:
+			plugin_desc_content = u"simpleplugin.yapsy-plugin"
+			analyzer = PluginFileAnalyzerWithInfoFile("mouf", ("yapsy-plugin"))
+			infos, parser = analyzer._extractCorePluginInfo(self.plugin_directory,
+															plugin_desc_content)
+			self.assertEqual("Simple Plugin", infos["name"])
+			self.assertEqual(os.path.join(self.plugin_directory, "SimplePlugin"), infos["path"])
 		
 	def test__extractCorePluginInfo_with_minimal_description(self):
 		plugin_desc_content = StringIO("""\
