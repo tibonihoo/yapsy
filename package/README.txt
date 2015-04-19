@@ -7,8 +7,11 @@ keep track of several plugins. It supports both Python 2 and 3.
 
 To use yapsy, make sure that the "yapsy" directory is in your Python
 loading path and just import the needed class from yapsy (e.g. "from
-yapsy.PluginManager import PluginManager"). To see more examples, you
-may want to have a look at the unit tests inside the "test" directory.
+yapsy.PluginManager import PluginManager"). 
+
+To see more examples, you can have a look at the unit tests inside the
+"test" directory or at the "Showcase and tutorials" section of the
+documentation (http://yapsy.sourceforge.net/#showcase-and-tutorials).
 
 Please let me know if you find this useful.
 
@@ -29,3 +32,6 @@ List of Contributors:
   - Pierre-Yves Langlois
 
 
+Contributions are welcome as pull requests, patches or tickets on the
+forge (https://sourceforge.net/projects/yapsy/) or on github
+(https://github.com/tibonihoo/yapsy).
