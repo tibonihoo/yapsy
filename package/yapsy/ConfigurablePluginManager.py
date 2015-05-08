@@ -41,9 +41,9 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 	at each change or at precise time intervalls or whatever....)
 	
 	.. warning:: when no ``config_change_trigger`` is given and if
-	the provided ``configparser_instance`` doesn't handle it
-	implicitely, recording the changes persistently (ie writing on
-	the config file) won't happen.
+	             the provided ``configparser_instance`` doesn't handle it
+	             implicitely, recording the changes persistently (ie writing on 
+	             the config file) won't happen.
 	"""
 	
 	CONFIG_SECTION_NAME = "Plugin Management"
