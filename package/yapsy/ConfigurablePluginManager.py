@@ -40,7 +40,7 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 
 	def __init__(self,
 				 configparser_instance=None,
-				 config_change_trigger= lambda x:True,
+				 config_change_trigger= lambda :True,
 				 decorated_manager=None,
 				 # The following args will only be used if we need to
 				 # create a default PluginManager
