@@ -26,10 +26,6 @@ class VersionedPluginInfo(PluginInfo):
 	"""
 	
 	def __init__(self, plugin_name, plugin_path):
-		"""
-		Set the name and path of the plugin as well as the default
-		values for other usefull variables.
-		"""
 		PluginInfo.__init__(self, plugin_name, plugin_path)
 		# version number is now required to be a StrictVersion object
 		self.version	= StrictVersion("0.0")
@@ -59,10 +55,6 @@ class VersionedPluginManager(PluginManagerDecorator):
 				 categories_filter={"Default":IPlugin}, 
 				 directories_list=None, 
 				 plugin_info_ext="yapsy-plugin"):
-		"""
-		Create the plugin manager and instancitate the attic where
-		obsolete plugins will be stored.
-		"""
 		# Create the base decorator class
 		PluginManagerDecorator.__init__(self,decorated_manager,
 										categories_filter,
