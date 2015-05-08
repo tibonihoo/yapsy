@@ -1,3 +1,8 @@
+version-1.11.123 [2015-05-08]
+
+  - code: Make _extractCorePluginInfo accept Unicode filenames (bug https://sourceforge.net/p/yapsy/bugs/30/)
+  - code: fix default change trigger for ConfigurablePluginManager (see https://sourceforge.net/p/yapsy/support-requests/9/)
+
 version-1.11.023 [2015-04-05]
 
   - code: merge python3 and default branch (contrib delijati)
