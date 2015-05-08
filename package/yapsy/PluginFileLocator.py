@@ -46,6 +46,11 @@ It enforces the ``plugin locator`` policy as defined by ``IPluginLocator`` and u
         User just needs to provide the regular pattern expression.
 
 All analyzers must enforce the policy represented by the ``IPluginFileAnalyzer`` interface.
+
+
+API
+===
+
 """
 
 import os
