@@ -110,15 +110,14 @@ class PluginFileAnalyzerWithInfoFile(IPluginFileAnalyzer):
 	    Website = url_for_plugin
 	    Description = A simple one-sentence description
 
-	"""
-	def __init__(self, name, extensions="yapsy-plugin"):
-		"""
-		Creates a new analyzer named *name* and dedicated to check and analyze plugins described by a textual "info file".
+	Ctor Arguments:
 		
-		*name* name of the plugin.
+		*name* name of the analyzer.
 
 		*extensions* the expected extensions for the plugin info file. May be a string or a tuple of strings if several extensions are expected.
-		"""
+	"""
+	
+	def __init__(self, name, extensions="yapsy-plugin"):
 		IPluginFileAnalyzer.__init__(self,name)
 		self.setPluginInfoExtension(extensions)
 
@@ -320,10 +319,8 @@ class PluginFileLocator(IPluginLocator):
 	recursively. You can change that by a call to
 	``disableRecursiveScan``.
 	"""
+	
 	def __init__(self, analyzers=None, plugin_info_cls=PluginInfo):
-		"""
-		Defines the strategies, and the places for plugins to look into.
-		"""
 		IPluginLocator.__init__(self)
 		self._discovered_plugins = {}
 		self.setPluginPlaces(None)

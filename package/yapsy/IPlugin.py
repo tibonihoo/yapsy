@@ -40,9 +40,6 @@ class IPlugin(object):
 	"""
 
 	def __init__(self):
-		"""
-		Set the basic variables.
-		"""
 		self.is_activated = False
 
 	def activate(self):

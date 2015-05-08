@@ -156,7 +156,20 @@ class PluginManager(object):
 	
 	The file describing a plugin must be written in the syntax
 	compatible with Python's ConfigParser module as in the
-	`Plugin Info File Format`_  
+	`Plugin Info File Format`_
+
+	About the __init__:
+
+	Initialize the mapping of the categories and set the list of
+	directories where plugins may be. This can also be set by
+	direct call the methods: 
+		
+	- ``setCategoriesFilter`` for ``categories_filter``
+	- ``setPluginPlaces`` for ``directories_list``
+	- ``setPluginInfoExtension`` for ``plugin_info_ext``
+
+	You may look at these function's documentation for the meaning
+	of each corresponding arguments.
 	"""
 
 	def __init__(self,
@@ -164,18 +177,6 @@ class PluginManager(object):
 				 directories_list=None,
 				 plugin_info_ext=None,
 				 plugin_locator=None):
-		"""
-		Initialize the mapping of the categories and set the list of
-		directories where plugins may be. This can also be set by
-		direct call the methods: 
-		
-		- ``setCategoriesFilter`` for ``categories_filter``
-		- ``setPluginPlaces`` for ``directories_list``
-		- ``setPluginInfoExtension`` for ``plugin_info_ext``
-
-		You may look at these function's documentation for the meaning
-		of each corresponding arguments.
-		"""
 		# as a good practice we don't use mutable objects as default
 		# values (these objects would become like static variables)
 		# for function/method arguments, but rather use None.
@@ -606,18 +607,6 @@ class PluginManagerSingleton(object):
 	__decoration_chain = None
 
 	def __init__(self):
-		"""
-		Initialisation: this class should not be initialised
-		explicitly and the ``get`` classmethod must be called instead.
-
-		To set up the various configurables variables of the
-		PluginManager's behaviour please call explicitly the following
-		methods:
-
-		  - ``setCategoriesFilter`` for ``categories_filter``
-		  - ``setPluginPlaces`` for ``directories_list``
-		  - ``setPluginInfoExtension`` for ``plugin_info_ext``
-		"""
 		if self.__instance is not None:
 			raise Exception("Singleton can't be created twice !")
 				
