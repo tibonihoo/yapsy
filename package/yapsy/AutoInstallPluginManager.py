@@ -26,6 +26,15 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 	"""
 	A plugin manager that also manages the installation of the plugin
 	files into the appropriate directory.
+
+	Ctor Arguments:
+		
+	    ``plugin_install_dir``
+  	    The directory where new plugins to be installed will be copied.
+
+	.. warning:: If ``plugin_install_dir`` does not correspond to
+	             an element of the ``directories_list``, it is
+	             appended to the later.			
 	"""
 
 
@@ -37,20 +46,6 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 				 categories_filter=None, 
 				 directories_list=None, 
 				 plugin_info_ext="yapsy-plugin"):
-		"""
-		Create the plugin manager and set up the directory where to
-		install new plugins.
-
-		Arguments
-		
-	        ``plugin_install_dir``
-		    The directory where new plugins to be installed will be copied.
-
-		.. warning:: If ``plugin_install_dir`` does not correspond to
-		             an element of the ``directories_list``, it is
-		             appended to the later.
-			
-		"""
 		if categories_filter is None:
 			categories_filter = {"Default":IPlugin}
 		# Create the base decorator class

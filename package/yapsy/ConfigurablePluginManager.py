@@ -33,6 +33,17 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 	.. warning:: when giving/building the list of plugins to activate
 	             by default, there must not be any space in the list
 	             (neither in the names nor in between)
+
+	The ``config_change_trigger`` argument can be used to set a
+	specific method to call when the configuration is
+	altered. This will let the client application manage the way
+	they want the configuration to be updated (e.g. write on file
+	at each change or at precise time intervalls or whatever....)
+	
+	.. warning:: when no ``config_change_trigger`` is given and if
+	the provided ``configparser_instance`` doesn't handle it
+	implicitely, recording the changes persistently (ie writing on
+	the config file) won't happen.
 	"""
 	
 	CONFIG_SECTION_NAME = "Plugin Management"
@@ -47,20 +58,6 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 				 categories_filter=None, 
 				 directories_list=None, 
 				 plugin_info_ext="yapsy-plugin"):
-		"""Create the plugin manager and record the ConfigParser instance
-		that will be used afterwards.
-		
-		The ``config_change_trigger`` argument can be used to set a
-		specific method to call when the configuration is
-		altered. This will let the client application manage the way
-		they want the configuration to be updated (e.g. write on file
-		at each change or at precise time intervalls or whatever....)
-		
-		.. warning:: when no ``config_change_trigger`` is given and if
-		the provided ``configparser_instance`` doesn't handle it
-		implicitely, recording the changes persistently (ie writing on
-		the config file) won't happen.
-		"""
 		if categories_filter is None:
 			categories_filter = {"Default":IPlugin}
 		# Create the base decorator class
