@@ -433,7 +433,7 @@ class PluginFileLocator(IPluginLocator):
 #						print candidate_infofile
 						plugin_info = self._getInfoForPluginFromAnalyzer(analyzer, dirpath, filename)
 						if plugin_info is None:
-							log.warning("Plugin candidate '%s'  rejected by strategy '%s'" % (candidate_infofile, analyzer.name))
+							log.debug("Plugin candidate '%s'  rejected by strategy '%s'" % (candidate_infofile, analyzer.name))
 							break # we consider this was the good strategy to use for: it failed -> not a plugin -> don't try another strategy
 						# now determine the path of the file to execute,
 						# depending on wether the path indicated is a
