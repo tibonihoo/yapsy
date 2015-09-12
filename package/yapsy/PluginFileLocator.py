@@ -332,7 +332,7 @@ class PluginFileLocator(IPluginLocator):
 		self._analyzers = analyzers      # analyzers used to locate plugins
 		if self._analyzers is None:
 			self._analyzers = [PluginFileAnalyzerWithInfoFile("info_ext")]
-		self._default_plugin_info_cls = PluginInfo
+		self._default_plugin_info_cls = plugin_info_cls
 		self._plugin_info_cls_map = {}
 		self._max_size = 1e3*1024 # in octets (by default 1 Mo)
 		self.recursive = True
