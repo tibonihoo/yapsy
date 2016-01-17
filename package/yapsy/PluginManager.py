@@ -442,16 +442,16 @@ class PluginManager(object):
 		"""
 		self._candidates, npc = self.getPluginLocator().locatePlugins()
 	
-	def loadPlugins(self, callback=None):
+	def loadPlugins(self, callback=None, callback_after=None):
 		"""
 		Load the candidate plugins that have been identified through a
 		previous call to locatePlugins.  For each plugin candidate
 		look for its category, load it and store it in the appropriate
 		slot of the ``category_mapping``.
 
-		If a callback function is specified, call it before every load
+		You can specify 2 callbacks: callback, and callback_after. If either of these are passed a function, (in the case of callback), it will get called before each plugin load attempt and (for callback_after), after each 
 		attempt.  The ``plugin_info`` instance is passed as an argument to
-		the callback.
+		each callback. This is meant to facilitate code that needs to run for each plugin, such as adding the directory it resides in to sys.path (so imports of other files in the plugin's directory work correctly). You can use callback_after to remove anything you added to the path.
 		"""
 # 		print "%s.loadPlugins" % self.__class__
 		if not hasattr(self, '_candidates'):
@@ -519,6 +519,9 @@ class PluginManager(object):
 								plugin_info.categories.append(current_category)
 								self.category_mapping[current_category].append(plugin_info_reference)
 								self._category_file_mapping[current_category].append(candidate_infofile)
+								#Everything is loaded and instantiated for this plugin now
+								if callback_after is not None:
+									callback_after(plugin_info)
 		# Remove candidates list since we don't need them any more and
 		# don't need to take up the space
 		delattr(self, '_candidates')
