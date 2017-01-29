@@ -266,8 +266,6 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		# load the plugins that may be found
 		spm.collectPlugins()
 		# check the getPluginsOfCategory
-		self.assertEqual(len(spm.getPluginsOf(category="Default")), 1)
-		self.assertEqual(len(spm.getPluginsOf(category="IP")), 0)
 		self.assertEqual(len(spm.getPluginsOf(categories="IP")), 1)
 		self.assertEqual(len(spm.getPluginsOf(categories="Default")), 1)
 		self.assertEqual(len(spm.getPluginsOf(name="Simple Plugin")), 1)
@@ -276,7 +274,9 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		self.assertEqual(len(spm.getPluginsOf(categories="IP", is_activated=False)), 1)
 		self.assertEqual(len(spm.getPluginsOf(categories="IP", pouet=False)), 0)
 		self.assertEqual(len(spm.getPluginsOf(categories=["IP"])), 0)
-		self.assertEqual(len(spm.getPluginsOf(categories=["IP", "Default"])), 0)
+        # The order in the categories are added to plugin info is random in this setup, hence the strange formula below
+		self.assertEqual(len(spm.getPluginsOf(categories=["IP", "Default"]) | spm.getPluginsOf(categories=["Default", "IP"])), 1)
+		self.assertEqual(len(spm.getPluginsOf(category="Default") | spm.getPluginsOf(category="IP")), 1)
 
 class SimplePluginDetectionTestsCase(unittest.TestCase):
 	"""
