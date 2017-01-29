@@ -189,7 +189,7 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		self.assertEqual(loadedPlugins[0].error,None)
 		self.assertEqual(loadedPlugins[0],callback_infos[0])
 		self.assertEqual(len(callback_after_infos),1)
-		self.assertEqual(loadedPlugins[0],callback_after_infos[0])
+		self.assertEqual(loadedPlugins[0],callback_infos[0])
 		# check that the getCategories works
 		self.assertEqual(len(spm.getCategories()),1)
 		sole_category = spm.getCategories()[0]
@@ -250,7 +250,31 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		spm.appendPluginToCategory(plugin_info, "Default")
 		self.assertEqual(len(spm.getPluginsOfCategory("Default")),1)
 		self.assertEqual(len(spm.getPluginsOfCategory("IP")),1)
-		
+
+    def testGetPluginOf(self):
+		"""
+		Test the plugin query function.
+		"""
+		spm = PluginManager(
+			categories_filter = {
+				"Default": IPlugin,
+				"IP": IPlugin,
+				},
+			directories_list=[
+				os.path.join(
+					os.path.dirname(os.path.abspath(__file__)),"plugins")])
+		# load the plugins that may be found
+		spm.collectPlugins()
+		# check the getPluginsOfCategory
+		self.assertEqual(len(spm.getPluginsOf(category="Default")), 1)
+		self.assertEqual(len(spm.getPluginsOf(category="IP")), 0)
+		self.assertEqual(len(spm.getPluginsOf(categories="IP")), 1)
+		self.assertEqual(len(spm.getPluginsOf(categories="Default")), 1)
+		self.assertEqual(len(spm.getPluginsOf(name="Simple Plugin")), 1)
+		self.assertEqual(len(spm.getPluginsOf(is_activated=False)), 1)
+		self.assertEqual(len(spm.getPluginsOf(categories="IP", is_activated=True)), 0)
+        self.assertEqual(len(spm.getPluginsOf(categories="IP", is_activated=False)), 1)
+
 class SimplePluginDetectionTestsCase(unittest.TestCase):
 	"""
 	Test particular aspects of plugin detection

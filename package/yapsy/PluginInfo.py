@@ -167,7 +167,7 @@ class PluginInfo(object):
 	def __setCategory(self,c):
 		"""
 		DEPRECATED (>1.9): Mimic former behaviour by making so
-		that if a category is set as it it was the only category to
+		that if a category is set as if it were the only category to
 		which the plugin belongs, then a __getCategory will return
 		this newly set category.
 		"""

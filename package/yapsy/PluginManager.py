@@ -381,7 +381,7 @@ class PluginManager(object):
 		Append a new plugin to the given category.
 		"""
 		self.category_mapping[category_name].append(plugin)
-
+		
 	def getPluginsOfCategory(self, category_name):
 		"""
 		Return the list of all plugins belonging to a category.
@@ -397,6 +397,29 @@ class PluginManager(object):
 				allPlugins.update(pluginsOfOneCategory)
 		return list(allPlugins)
 
+	def getPluginsOf(self, **kwargs):
+        """
+		Returns a set of plugins whose properties match the named arguments provided here along with their correspoding values.
+        """
+		selectedPLugins = set()
+		for plugin in self.getAllPlugins():
+			for (attrName, attrValue) in kwargs.iteritems():
+				if not hasattr(plugin, attrName):
+					break
+				pluginValue = getattr(plugin, attrName)
+				if pluginValue == attrValue:
+					continue
+				if type(pluginValue) == type(attrValue):
+					break
+				try:
+					if attrValue in pluginValue:
+						continue
+                except:
+                    break
+            else:
+				selectedPLugins.add(plugin)
+        return selectedPLugins
+	
 	def getPluginCandidates(self):
 		"""
 		Return the list of possible plugins.
