@@ -403,9 +403,10 @@ class PluginManager(object):
 		"""
 		selectedPLugins = set()
 		for plugin in self.getAllPlugins():
-			for (attrName, attrValue) in kwargs.iteritems():
+			for attrName in kwargs:
 				if not hasattr(plugin, attrName):
 					break
+				attrValue = kwargs[attrName]
 				pluginValue = getattr(plugin, attrName)
 				if pluginValue == attrValue:
 					continue
