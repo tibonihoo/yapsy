@@ -251,7 +251,7 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		self.assertEqual(len(spm.getPluginsOfCategory("Default")),1)
 		self.assertEqual(len(spm.getPluginsOfCategory("IP")),1)
 
-    def testGetPluginOf(self):
+	def testGetPluginOf(self):
 		"""
 		Test the plugin query function.
 		"""
@@ -273,7 +273,10 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		self.assertEqual(len(spm.getPluginsOf(name="Simple Plugin")), 1)
 		self.assertEqual(len(spm.getPluginsOf(is_activated=False)), 1)
 		self.assertEqual(len(spm.getPluginsOf(categories="IP", is_activated=True)), 0)
-        self.assertEqual(len(spm.getPluginsOf(categories="IP", is_activated=False)), 1)
+		self.assertEqual(len(spm.getPluginsOf(categories="IP", is_activated=False)), 1)
+		self.assertEqual(len(spm.getPluginsOf(categories="IP", pouet=False)), 0)
+		self.assertEqual(len(spm.getPluginsOf(categories=["IP"])), 0)
+		self.assertEqual(len(spm.getPluginsOf(categories=["IP", "Default"])), 0)
 
 class SimplePluginDetectionTestsCase(unittest.TestCase):
 	"""
