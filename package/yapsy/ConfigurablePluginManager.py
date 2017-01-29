@@ -250,13 +250,13 @@ class ConfigurablePluginManager(PluginManagerDecorator):
 				return plugin_object
 		return None
 
-	def loadPlugins(self,callback=None):
+	def loadPlugins(self,callback=None, callback_after=None):
 		"""
 		Walk through the plugins' places and look for plugins.  Then
 		for each plugin candidate look for its category, load it and
 		stores it in the appropriate slot of the ``category_mapping``.
 		"""
-		self._component.loadPlugins(callback)
+		self._component.loadPlugins(callback, callback_after)
 		# now load the plugins according to the recorded configuration
 		if self.config_parser.has_section(self.CONFIG_SECTION_NAME):
 			# browse all the categories

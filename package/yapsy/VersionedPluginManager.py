@@ -94,7 +94,7 @@ class VersionedPluginManager(PluginManagerDecorator):
 		"""
 		return self.getPluginsOfCategory(category_name)
 	
-	def loadPlugins(self, callback=None):
+	def loadPlugins(self, callback=None, callback_after=None):
 		"""
 		Load the candidate plugins that have been identified through a
 		previous call to locatePlugins.
@@ -103,7 +103,7 @@ class VersionedPluginManager(PluginManagerDecorator):
 		needs to find the latest version of each plugin.
 		"""
 		self._prepareAttic()
-		self._component.loadPlugins(callback)
+		self._component.loadPlugins(callback, callback_after)
 		for categ in self.getCategories():
 			latest_plugins = {}
 			allPlugins = self.getPluginsOfCategory(categ)

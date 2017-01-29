@@ -31,6 +31,9 @@ class ErrorTestCase(unittest.TestCase):
 		callback_infos = []
 		def preload_cbk(i_plugin_info):
 			callback_infos.append(i_plugin_info)
+		callback_after_infos = []
+		def postload_cbk(i_plugin_info):
+			callback_after_infos.append(i_plugin_info)
 		# - gather infos about the processed plugins (loaded or not)
 		# and for the test, monkey patch the logger
 		originalLogLevel = log.getEffectiveLevel()
@@ -41,7 +44,7 @@ class ErrorTestCase(unittest.TestCase):
 		originalErrorMethod = log.error
 		log.error = errorMock 
 		try:
-			loadedPlugins = spm.loadPlugins(callback=preload_cbk)
+			loadedPlugins = spm.loadPlugins(callback=preload_cbk, callback_after=postload_cbk)
 		finally:
 			log.setLevel(originalLogLevel)
 			log.error = originalErrorMethod
@@ -51,6 +54,7 @@ class ErrorTestCase(unittest.TestCase):
 		self.assertTrue(isinstance(callback_infos[0].error,tuple))
 		self.assertEqual(loadedPlugins[0],callback_infos[0])
 		self.assertTrue(issubclass(callback_infos[0].error[0],ImportError))
+		self.assertEqual(len(callback_after_infos),0)
 		# check that the getCategories works
 		self.assertEqual(len(spm.getCategories()),1)
 		sole_category = spm.getCategories()[0]

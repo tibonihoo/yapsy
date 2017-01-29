@@ -179,12 +179,17 @@ class SimplePluginAdvancedManipulationTestsCase(unittest.TestCase):
 		callback_infos = []
 		def preload_cbk(plugin_info):
 			callback_infos.append(plugin_info)
+		callback_after_infos = []
+		def postload_cbk(plugin_info):
+			callback_after_infos.append(plugin_info)
 		# - gather infos about the processed plugins (loaded or not)
-		loadedPlugins = spm.loadPlugins(callback=preload_cbk)
+		loadedPlugins = spm.loadPlugins(callback=preload_cbk, callback_after=postload_cbk)
 		self.assertEqual(len(loadedPlugins),1)
 		self.assertEqual(len(callback_infos),1)
 		self.assertEqual(loadedPlugins[0].error,None)
 		self.assertEqual(loadedPlugins[0],callback_infos[0])
+		self.assertEqual(len(callback_after_infos),1)
+		self.assertEqual(loadedPlugins[0],callback_after_infos[0])
 		# check that the getCategories works
 		self.assertEqual(len(spm.getCategories()),1)
 		sole_category = spm.getCategories()[0]
