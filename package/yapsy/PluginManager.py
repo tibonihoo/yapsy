@@ -398,9 +398,9 @@ class PluginManager(object):
 		return list(allPlugins)
 
 	def getPluginsOf(self, **kwargs):
-        """
+		"""
 		Returns a set of plugins whose properties match the named arguments provided here along with their correspoding values.
-        """
+		"""
 		selectedPLugins = set()
 		for plugin in self.getAllPlugins():
 			for (attrName, attrValue) in kwargs.iteritems():
@@ -414,11 +414,11 @@ class PluginManager(object):
 				try:
 					if attrValue in pluginValue:
 						continue
-                except:
-                    break
-            else:
+				except:
+					break
+			else:
 				selectedPLugins.add(plugin)
-        return selectedPLugins
+		return selectedPLugins
 	
 	def getPluginCandidates(self):
 		"""
