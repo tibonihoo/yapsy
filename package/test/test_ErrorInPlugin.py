@@ -50,7 +50,7 @@ class ErrorTestCase(unittest.TestCase):
 		self.assertEqual(len(callback_infos),1)
 		self.assertTrue(isinstance(callback_infos[0].error,tuple))
 		self.assertEqual(loadedPlugins[0],callback_infos[0])
-		self.assertEqual(callback_infos[0].error[0],ImportError)
+		self.assertTrue(issubclass(callback_infos[0].error[0],ImportError))
 		# check that the getCategories works
 		self.assertEqual(len(spm.getCategories()),1)
 		sole_category = spm.getCategories()[0]
