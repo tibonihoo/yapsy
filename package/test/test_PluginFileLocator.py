@@ -214,7 +214,7 @@ class PluginFileLocatorTest(unittest.TestCase):
 		self.assertTrue(isinstance(candidates[0][2],PluginInfo))
 		
 	def test_locatePlugins_when_plugin_is_symlinked(self):
-		if "win" in sys.platform:
+		if sys.platform.startswith("win"):
 			return
 		temp_dir = tempfile.mkdtemp()
 		try:
@@ -251,7 +251,7 @@ class PluginFileLocatorTest(unittest.TestCase):
 		self.assertTrue(isinstance(candidates[0][2],PluginInfo))
 	
 	def test_locatePlugins_when_plugin_is_a_symlinked_directory(self):
-		if "win" in sys.platform:
+		if sys.platform.startswith("win"):
 			return
 		temp_dir = tempfile.mkdtemp()
 		try:
@@ -308,6 +308,8 @@ class PluginFileLocatorTest(unittest.TestCase):
 			shutil.rmtree(temp_dir)
 			
 	def test_locatePlugins_recursively_when_plugin_is_a_symlinked_directory(self):
+		if sys.platform.startswith("win"):
+			return
 		temp_dir = tempfile.mkdtemp()
 		try:
 			temp_sub_dir = os.path.join(temp_dir,"plugins")
@@ -333,6 +335,8 @@ class PluginFileLocatorTest(unittest.TestCase):
 			shutil.rmtree(temp_dir)
 	
 	def test_locatePlugins_recursively_when_plugin_parent_dir_is_a_symlinked_directory(self):
+		if sys.platform.startswith("win"):
+			return
 		# This actually reproduced the "Plugin detection doesn't follow symlinks" bug
 		# at http://sourceforge.net/p/yapsy/bugs/19/
 		temp_dir = tempfile.mkdtemp()
