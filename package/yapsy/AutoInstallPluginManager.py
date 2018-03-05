@@ -179,8 +179,19 @@ class AutoInstallPluginManager(PluginManagerDecorator):
 			if moduleName is None:
 					continue
 			log.info("Checking existence of the expected module '%s' in the zip file" % moduleName)
-			if moduleName in zipContent or os.path.join(moduleName,"__init__.py") in zipContent:
-				isValid = True
+			candidate_module_paths = [
+				moduleName,
+				# Try path consistent with the platform specific one
+				os.path.join(moduleName,"__init__.py"),
+				# Try typical paths (unix and windows)
+				"%s/__init__.py" % moduleName,
+				"%s\\__init__.py" % moduleName
+				]
+			for candidate in candidate_module_paths:
+				if candidate in zipContent:
+					isValid = True
+					break
+			if isValid:
 				break
 		if not isValid:
 			log.warning("Zip file structure seems wrong in '%s', "

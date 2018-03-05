@@ -8,7 +8,6 @@ import shutil
 
 from yapsy.AutoInstallPluginManager import AutoInstallPluginManager
 
-
 class AutoInstallTestsCase(unittest.TestCase):
 	"""
 	Test the correct installation and loading of a simple plugin.
@@ -92,8 +91,9 @@ class AutoInstallTestsCase(unittest.TestCase):
 		Test getting and setting install dir.
 		"""
 		self.assertEqual(self.storing_dir,self.pluginManager.getInstallDir())
-		self.pluginManager.setInstallDir("mouf/bla")
-		self.assertEqual("mouf/bla",self.pluginManager.getInstallDir())
+		custom_install_dir = os.path.join("mouf", "bla")
+		self.pluginManager.setInstallDir(custom_install_dir)
+		self.assertEqual(custom_install_dir, self.pluginManager.getInstallDir())
 		
 		
 	def testNoneLoaded(self):

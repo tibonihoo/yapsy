@@ -60,7 +60,14 @@ class PluginFileAnalyzerWithInfoFileTest(unittest.TestCase):
 		analyzer = PluginFileAnalyzerWithInfoFile("mouf")
 		info_dict,cf_parser =  analyzer.getInfosDictFromPlugin(self.plugin_directory,
 															   os.path.basename(self.yapsy_plugin_path))
-		self.assertEqual(info_dict,{'website': 'http://mathbench.sourceforge.net', 'description': 'A simple plugin usefull for basic testing', 'author': 'Thibauld Nion', 'version': '0.1', 'path': '%s/SimplePlugin' % self.plugin_directory, 'name': 'Simple Plugin', 'copyright': '2014'})
+		self.assertEqual(info_dict,
+						 {'website': 'http://mathbench.sourceforge.net',
+	                      'description': 'A simple plugin usefull for basic testing',
+						  'author': 'Thibauld Nion',
+						  'version': '0.1',
+						  'path': '%s' % os.path.join(self.plugin_directory,"SimplePlugin"),
+						  'name': 'Simple Plugin',
+						  'copyright': '2014'})
 		self.assertTrue(isinstance(cf_parser,ConfigParser))
 		
 	def test_isValid_WithMultiExtensions(self):
@@ -192,7 +199,7 @@ class PluginFileLocatorTest(unittest.TestCase):
 	def test_default_plugins_place_is_parent_dir(self):
 		"""Test a non-trivial default behaviour introduced some time ago :S"""
 		pl = PluginFileLocator()
-		self.assertTrue("package/yapsy" in pl.plugins_places[0])
+		self.assertTrue(os.path.join("package","yapsy") in pl.plugins_places[0])
 	
 	def test_locatePlugins(self):
 		pl = PluginFileLocator()
