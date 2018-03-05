@@ -29,17 +29,18 @@ class SimpleMultiprocessTestCase(unittest.TestCase):
 		"""
 		Test if the plugin is loaded and if the communication pipe is properly setuped.
 		"""
-		numTestedPlugins = 0
-		for plugin in self.mpPluginManager.getAllPlugins():
-			content_from_parent = "hello-from-parent"
+		for plugin_index, plugin in enumerate(self.mpPluginManager.getAllPlugins()):
+			child_pipe = plugin.plugin_object.child_pipe
+			content_from_parent = "hello-{0}-from-parent".format(plugin_index)
+			child_pipe.send(content_from_parent)
 			content_from_child = False
-			plugin.plugin_object.child_pipe.send(content_from_parent)
-			if plugin.plugin_object.child_pipe.poll(5):
-				content_from_child = plugin.plugin_object.child_pipe.recv()
-			self.assertEqual(content_from_child, "{0}|echo_from_child".format(content_from_parent))
-			numTestedPlugins += 1
-		self.assertTrue(numTestedPlugins >= 1)
-
+			if child_pipe.poll(5):
+				content_from_child = child_pipe.recv()
+			self.assertEqual("{0}|echo_from_child".format(content_from_parent),
+							 content_from_child)
+		num_tested_plugin = plugin_index+1
+		self.assertEqual(2, num_tested_plugin)
+		
 suite = unittest.TestSuite([
 		unittest.TestLoader().loadTestsFromTestCase(SimpleMultiprocessTestCase),
 		])

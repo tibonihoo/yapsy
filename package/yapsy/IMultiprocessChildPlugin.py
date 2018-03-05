@@ -5,41 +5,38 @@
 Role
 ====
 
-Defines the basic interfaces for multiprocessed plugins.
+Originally defined the basic interfaces for multiprocessed plugins.
 
-Extensibility
-=============
+Deprecation Note
+================
 
-In your own software, you'll probably want to build derived classes of
-the ``IMultiprocessChildPlugin`` class as it is a mere interface with no specific
-functionality.
+This class is deprecated and replaced by :doc:`IMultiprocessChildPlugin`.
 
-Your software's plugins should then inherit your very own plugin class
-(itself derived from ``IMultiprocessChildPlugin``).
+Child classes of `IMultiprocessChildPlugin` used to be an `IPlugin` as well as
+a `multiprocessing.Process`, possibly playing with the functionalities of both,
+which make maintenance harder than necessary.
 
-Override the run method to include your code. Use the self.parent_pipe to send
-and receive data with the parent process or create your own communication
-mecanism.
-
-Where and how to code these plugins is explained in the section about
-the :doc:`PluginManager`.
+And indeed following a bug fix to make multiprocess plugins work on Windows,
+instances of IMultiprocessChildPlugin inherit Process but are not exactly the
+running process (there is a new wrapper process).
 
 API
 ===
 """
 
 from multiprocessing import Process
-from yapsy.IPlugin import IPlugin
+from yapsy.IMultiprocessPlugin import IMultiprocessPlugin
 
 
-class IMultiprocessChildPlugin(IPlugin, Process):
+class IMultiprocessChildPlugin(IMultiprocessPlugin, Process):
 	"""
 	Base class for multiprocessed plugin.
+
+	DEPRECATED(>1.11): Please use IMultiProcessPluginBase instead !
 	"""
 
 	def __init__(self, parent_pipe):
-		self.parent_pipe = parent_pipe
-		IPlugin.__init__(self)
+		IMultiprocessPlugin.__init__(self, parent_pipe)
 		Process.__init__(self)
 
 	def run(self):
