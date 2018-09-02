@@ -8,6 +8,7 @@ from yapsy.compat import ConfigParser, StringIO, str, builtin_str
 import tempfile
 import shutil
 
+import yapsy
 from yapsy import PLUGIN_NAME_FORBIDEN_STRING
 from yapsy.PluginManager import PluginManager
 from yapsy.PluginManager import IPlugin
@@ -199,7 +200,9 @@ class PluginFileLocatorTest(unittest.TestCase):
 	def test_default_plugins_place_is_parent_dir(self):
 		"""Test a non-trivial default behaviour introduced some time ago :S"""
 		pl = PluginFileLocator()
-		self.assertTrue(os.path.join("package","yapsy") in pl.plugins_places[0])
+		expected_yapsy_module_path = os.path.dirname(yapsy.__file__)
+		first_plugin_place = pl.plugins_places[0]
+		self.assertEqual(expected_yapsy_module_path, first_plugin_place)
 	
 	def test_given_string_as_plugin_places_raises_error(self):
 		pl = PluginFileLocator()
