@@ -30,6 +30,10 @@ List of Contributors:
   - Josip Delic (delijati)
   - frmdstryr
   - Pierre-Yves Langlois
+  - Guillaume Binet (gbin)
+  - Blake Oliver (Oliver2213)
+  - Xuecheng Zhang (csuzhangxc)
+  
 
 
 Contributions are welcome as pull requests, patches or tickets on the
