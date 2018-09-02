@@ -514,6 +514,8 @@ class PluginFileLocator(IPluginLocator):
 		"""
 		Set the list of directories where to look for plugin places.
 		"""
+		if isinstance(directories_list, basestring):
+			raise ValueError("'directories_list' given as a string, but expected to be a list or enumeration of strings")
 		if directories_list is None:
 			directories_list = [os.path.dirname(__file__)]
 		self.plugins_places = directories_list

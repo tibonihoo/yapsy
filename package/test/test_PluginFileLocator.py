@@ -201,6 +201,10 @@ class PluginFileLocatorTest(unittest.TestCase):
 		pl = PluginFileLocator()
 		self.assertTrue(os.path.join("package","yapsy") in pl.plugins_places[0])
 	
+	def test_given_string_as_plugin_places_raises_error(self):
+		pl = PluginFileLocator()
+		self.assertRaises(ValueError, pl.setPluginPlaces, "/mouf")
+
 	def test_locatePlugins(self):
 		pl = PluginFileLocator()
 		pl.setPluginPlaces([self.plugin_directory])
