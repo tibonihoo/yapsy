@@ -296,12 +296,15 @@ class PluginManager(object):
 		"""
 		Sets the strategy used to locate the basic information.
 
+		.. note: If a dir_list is provided it overrides the directory list
+		that may have been previously set in the locator.
+
 		See ``IPluginLocator`` for the policy that plugin_locator must enforce.
 		"""
 		if isinstance(plugin_locator, IPluginLocator):
 			self._plugin_locator = plugin_locator
 			if dir_list is not None:
-				self._plugin_locator.updatePluginPlaces(dir_list)
+				self._plugin_locator.setPluginPlaces(dir_list)
 			if picls is not None:
 				self.setPluginInfoClass(picls)
 		else:

@@ -7,7 +7,9 @@ import os
 from yapsy.PluginManager import PluginManager
 from yapsy.IPlugin import IPlugin
 from yapsy.PluginFileLocator import PluginFileLocator
+from yapsy.PluginFileLocator import IPluginFileAnalyzer
 from yapsy import NormalizePluginNameForModuleName
+from yapsy.compat import ConfigParser
 
 class YapsyUtils(unittest.TestCase):
 
@@ -286,7 +288,7 @@ class SimplePluginDetectionTestsCase(unittest.TestCase):
 	def testRecursivePluginlocation(self):
 		"""
 		Test detection of plugins which by default must be
-		recusrive. Here we give the test directory as a plugin place
+		recursive. Here we give the test directory as a plugin place
 		whereas we expect the plugins to be in test/plugins.
 		"""
 		spm = PluginManager(directories_list=[
@@ -341,6 +343,40 @@ class SimplePluginDetectionTestsCase(unittest.TestCase):
 		# check the getPluginsOfCategory
 		self.assertEqual(len(spm.getPluginsOfCategory(sole_category)),1)
 
+	def testEnforcingPluginDirsDoesNotKeepDefaultDir(self):
+		"""
+		Test that providing the directories list override the default search directory
+		instead of extending the default list.
+		"""
+
+		class AcceptAllPluginFileAnalyzer(IPluginFileAnalyzer):
+
+			def __init__(self):
+				IPluginFileAnalyzer.__init__(self, "AcceptAll")
+				
+			def isValidPlugin(self, filename):
+				return True
+
+			def getInfosDictFromPlugin(self, dirpath, filename):
+				return { "name": filename, "path": dirpath}, ConfigParser()
+				
+		pluginLocator = PluginFileLocator()
+		pluginLocator.setAnalyzers([AcceptAllPluginFileAnalyzer()])
+
+		spm_default_dirs = PluginManager(plugin_locator= pluginLocator)
+		spm_default_dirs.locatePlugins()
+		candidates_in_default_dir = spm_default_dirs.getPluginCandidates()
+		candidates_files_in_default_dir = set([c[0] for c in candidates_in_default_dir])
+
+		pluginLocator = PluginFileLocator()
+		pluginLocator.setAnalyzers([AcceptAllPluginFileAnalyzer()])
+		spm = PluginManager(plugin_locator= pluginLocator,
+							directories_list=[os.path.dirname(os.path.abspath(__file__)),"does-not-exists"])
+		spm.locatePlugins()
+		candidates = spm.getPluginCandidates()
+		candidates_files = set([c[0] for c in candidates])
+
+		self.assertFalse(set(candidates_files_in_default_dir).issubset(set(candidates_files)))
 		
 suite = unittest.TestSuite([
 		unittest.TestLoader().loadTestsFromTestCase(YapsyUtils),
