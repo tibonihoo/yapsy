@@ -12,8 +12,6 @@ rm -r build
 python setup.py build_sphinx
 
 if [ "$1" = "upload" ]; then
-  echo "Uploading to Python Packages Index"
-  python setup.py upload_docs
   echo "Uploading to Sourceforge"
   scp -r build/sphinx/html/* tibonihoo@web.sourceforge.net:/home/project-web/yapsy/htdocs/
 fi;
