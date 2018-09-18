@@ -1,3 +1,17 @@
+version-1.12.0 [2018-09-02]
+  - code: fix yapsy on python3.6
+  - code: Make the test more robust to "unusual" unpacking of the module (see: https://sourceforge.net/p/yapsy/bugs/32/)
+  - code: Protect against providing a single string to setPluginPlaces (see: https://sourceforge.net/p/yapsy/bugs/38/)
+  - code: Enforce the exact directory list provided at construction time (see: https://sourceforge.net/p/yapsy/bugs/36/)
+  - code: Make multiprocess plugin work on windows too ! (see: https://sourceforge.net/p/yapsy/bugs/33/)
+  - code: add a filter-based getter selecting plugins on plugininfo properties (see: https://sourceforge.net/p/yapsy/feature-requests/16/)
+  - code: Add callback_after argument to the LoadPlugins method in PluginManager (contrib https://sourceforge.net/p/yapsy/feature-requests/9/)
+  - code: Rejecting a candidate should not be a warning (contrib Guillaume Binet:  https://github.com/tibonihoo/yapsy/pull/7)
+  - code: fix PluginFileLocator __init__ should assignment of plugin_info_cls (contrib Xuecheng Zhang: https://github.com/tibonihoo/yapsy/pull/8)
+
+version-1.11.223 [2015-06-25]
+  - doc: minor doc fixes
+
 version-1.11.123 [2015-05-08]
 
   - code: Make _extractCorePluginInfo accept Unicode filenames (bug https://sourceforge.net/p/yapsy/bugs/30/)
