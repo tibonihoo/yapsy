@@ -128,7 +128,10 @@ API
 
 import sys
 import os
-import imp
+try:
+	import importlib as imp
+except ImportError:
+	import imp
 
 from yapsy import log
 from yapsy import NormalizePluginNameForModuleName
