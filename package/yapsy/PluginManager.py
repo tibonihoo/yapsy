@@ -129,7 +129,7 @@ API
 import sys
 import os
 try:
-	import importlib as imp
+	import importlib.abc.Loader as imp
 except ImportError:
 	import imp
 
