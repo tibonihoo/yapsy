@@ -52,7 +52,7 @@ should get you a fully working plugin management system::
 
 """
 
-__version__="1.12.1"
+__version__="1.12.2"
 
 # tell epydoc that the documentation is in the reStructuredText format
 __docformat__ = "restructuredtext en"
