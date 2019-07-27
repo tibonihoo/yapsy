@@ -33,7 +33,7 @@ List of Contributors:
   - Guillaume Binet (gbin)
   - Blake Oliver (Oliver2213)
   - Xuecheng Zhang (csuzhangxc)
-  
+  - Marc Brooks (mbrooks-public)
 
 
 Contributions are welcome as pull requests, patches or tickets on the
