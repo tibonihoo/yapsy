@@ -300,10 +300,10 @@ class PluginManager(object):
 		Sets the strategy used to locate the basic information.
 
 		.. note: 
-		    If a dir_list is provided it overrides the directory list
+		    If a `dir_list` is provided it overrides the directory list
 		    that may have been previously set in the locator.
 
-		See ``IPluginLocator`` for the policy that plugin_locator must enforce.
+		See :doc:`IPluginLocator` for the policy that `plugin_locator` must enforce.
 		"""
 		if isinstance(plugin_locator, IPluginLocator):
 			self._plugin_locator = plugin_locator
@@ -348,24 +348,28 @@ class PluginManager(object):
 		content of the info file that describes it and which
 		is stored in infoFileObject.
 		
-		.. note:: Prefer using ``_gatherCorePluginInfo``
-		instead, whenever possible...
+		.. note:: 
+		    Prefer using ``_gatherCorePluginInfo``
+		    instead, whenever possible...
 		
-		.. warning:: ``infoFileObject`` must be a file-like
-		object: either an opened file for instance or a string
-		buffer wrapped in a StringIO instance as another
-		example.
+		.. warning:: 
+		    ``infoFileObject`` must be a file-like
+		    object: either an opened file for instance or a string
+			buffer wrapped in a StringIO instance as another
+			example.
 
-		.. note:: ``candidate_infofile`` must be provided
-		whenever possible to get better error messages.
+		.. note:: 
+		    ``candidate_infofile`` must be provided
+			whenever possible to get better error messages.
 			
 		Return a 3-uple with the name of the plugin, its
 		module and the config_parser used to gather the core
 		data *in a tuple*, if the required info could be
 		localised, else return ``(None,None,None)``.
 
-		.. note:: This is supposed to be used internally by subclasses
-		and decorators.
+		.. note:: 
+		    This is supposed to be used internally by subclasses
+			and decorators.
 		"""
 		return self.getPluginLocator().getPluginNameAndModuleFromStream(infoFileObject, candidate_infofile)
 	
@@ -435,7 +439,7 @@ class PluginManager(object):
 		Each possible plugin (ie a candidate) is described by a 3-uple:
 		(info file path, python file path, plugin info instance)
 
-		.. warning: locatePlugins must be called before !
+		.. warning: ``locatePlugins`` must be called before !
 		"""
 		if not hasattr(self, '_candidates'):
 			raise RuntimeError("locatePlugins must be called before getPluginCandidates")
@@ -448,7 +452,7 @@ class PluginManager(object):
 		The candidate must be represented by the same tuple described
 		in ``getPluginCandidates``.
 
-		.. warning: locatePlugins must be called before !
+		.. warning: ``locatePlugins`` must be called before !
 		"""
 		if not hasattr(self, '_candidates'):
 			raise ValueError("locatePlugins must be called before removePluginCandidate")
@@ -461,7 +465,7 @@ class PluginManager(object):
 		The candidate must be represented by the same tuple described
 		in ``getPluginCandidates``.
 
-		.. warning: locatePlugins must be called before !
+		.. warning: ``locatePlugins`` must be called before !
 		"""
 		if not hasattr(self, '_candidates'):
 			raise ValueError("locatePlugins must be called before removePluginCandidate")
@@ -593,13 +597,13 @@ class PluginManager(object):
 	
 	def instanciateElement(self, element):
 		"""
-		DEPRECATED(>1.11): reimplement instead `instanciateElementWithImportInfo` !
+		DEPRECATED(>1.11): reimplement instead ``instanciateElementWithImportInfo`` !
 		
 		Override this method to customize how plugins are instanciated.
 
 		.. warning::
 		    This method is called only if
-		    `instanciateElementWithImportInfo` has not been reimplemented !
+		    ``instanciateElementWithImportInfo`` has not been reimplemented !
 		"""
 		return element()
 	
