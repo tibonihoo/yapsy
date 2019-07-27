@@ -49,13 +49,14 @@ class MultiprocessPluginManager(PluginManager):
 		the ``MultiprocessPluginProxy`` class that hold the information
 		about the child process and the pipe to communicate with it.
 
-		:warning: The plugin code should only use the pipe to
-		communicate with the rest of the applica`tion and should not
-		assume any kind of shared memory, not any specific functionality
-		of the `multiprocessing.Process` parent class (its behaviour is
-		different between platforms !)
+		.. warning:: 
+		    The plugin code should only use the pipe to
+			communicate with the rest of the applica`tion and should not
+			assume any kind of shared memory, not any specific functionality
+			of the `multiprocessing.Process` parent class (its behaviour is
+			different between platforms !)
 		
-		See :doc:`IMultiprocessPlugin`
+		See ``IMultiprocessPlugin``.
 		"""
 		if element is IMultiprocessChildPlugin:
 			# The following will keep retro compatibility for IMultiprocessChildPlugin

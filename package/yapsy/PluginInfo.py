@@ -29,27 +29,29 @@ class PluginInfo(object):
 	still be accessed though the ``details`` member variables that
 	behaves like Python's ``ConfigParser.ConfigParser``.
 
-	Warning: the instance associated with the ``details`` member
-	variable is never copied and used to store all plugin infos. If
-	you set it to a custom instance, it will be modified as soon as
-	another member variale of the plugin info is
-	changed. Alternatively, if you change the instance "outside" the
-	plugin info, it will also change the plugin info.
-
+	.. warning:: 
+	    The instance associated with the ``details`` member
+		variable is never copied and used to store all plugin infos. If
+		you set it to a custom instance, it will be modified as soon as
+		another member variale of the plugin info is
+		changed. Alternatively, if you change the instance "outside" the
+		plugin info, it will also change the plugin info.
+		
 	Ctor Arguments:
 
-		*plugin_name* is  a simple string describing the name of
-         the plugin.
+	:plugin_name: is  a simple string describing the name of
+	              the plugin.
 
-		*plugin_path* describe the location where the plugin can be
-         found.
+	:plugin_path: describe the location where the plugin can be
+                  found.
 		
-	.. warning:: The ``path`` attribute is the full path to the
-	             plugin if it is organised as a directory or the
-	             full path to a file without the ``.py`` extension
-	             if the plugin is defined by a simple file. In the
-	             later case, the actual plugin is reached via
-	             ``plugin_info.path+'.py'``.
+	.. warning:: 
+	    The ``path`` attribute is the full path to the
+		plugin if it is organised as a directory or the
+		full path to a file without the ``.py`` extension
+		if the plugin is defined by a simple file. In the
+		later case, the actual plugin is reached via
+		``plugin_info.path+'.py'``.
 	"""
 	
 	def __init__(self, plugin_name, plugin_path):
@@ -67,11 +69,12 @@ class PluginInfo(object):
 		"""
 		Fill in all details by storing a ``ConfigParser`` instance.
 
-		.. warning: The values for ``plugin_name`` and
-		            ``plugin_path`` given a init time will superseed
-		            any value found in ``cfDetails`` in section
-		            'Core' for the options 'Name' and 'Module' (this
-		            is mostly for backward compatibility).
+		.. warning:: 
+		    The values for ``plugin_name`` and
+			``plugin_path`` given a init time will superseed
+			any value found in ``cfDetails`` in section
+			'Core' for the options 'Name' and 'Module' (this
+			is mostly for backward compatibility).
 		"""	
 		bkp_name = self.name
 		bkp_path = self.path

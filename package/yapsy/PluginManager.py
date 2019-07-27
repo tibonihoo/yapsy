@@ -299,8 +299,9 @@ class PluginManager(object):
 		"""
 		Sets the strategy used to locate the basic information.
 
-		.. note: If a dir_list is provided it overrides the directory list
-		that may have been previously set in the locator.
+		.. note: 
+		    If a dir_list is provided it overrides the directory list
+		    that may have been previously set in the locator.
 
 		See ``IPluginLocator`` for the policy that plugin_locator must enforce.
 		"""
@@ -569,7 +570,7 @@ class PluginManager(object):
 		"""
 		Import a module, trying either to find it as a single file or as a directory.
 
-		:note: Isolated and provided to be reused, but not to be reimplemented !
+		.. note:: Isolated and provided to be reused, but not to be reimplemented !
 		"""
 		# use imp to correctly load the plugin as a module
 		if os.path.isdir(candidate_filepath):
@@ -583,9 +584,10 @@ class PluginManager(object):
 										 plugin_module_name, candidate_filepath):
 		"""Override this method to customize how plugins are instanciated.
 		
-		:note: This methods recieves the 'element' that is a candidate
-		as the plugin's main file, but also enough information to reload
-		its containing module and this element.
+		.. note:: 
+		    This methods recieves the 'element' that is a candidate
+		    as the plugin's main file, but also enough information to reload
+		    its containing module and this element.
 		"""
 		return self.instanciateElement(element)
 	
@@ -595,8 +597,9 @@ class PluginManager(object):
 		
 		Override this method to customize how plugins are instanciated.
 
-		:warning: This method is called only if
-		`instanciateElementWithImportInfo` has not been reimplemented !
+		.. warning::
+		    This method is called only if
+		    `instanciateElementWithImportInfo` has not been reimplemented !
 		"""
 		return element()
 	
