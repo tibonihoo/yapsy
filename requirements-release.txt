@@ -1,0 +1,4 @@
+sphinx
+setuptools
+twine
+

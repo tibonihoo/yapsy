@@ -10,4 +10,5 @@ package/dist/*
 package/Yapsy.egg-info/*
 htmlcov/*
 .coverage
+release_env/*
 
