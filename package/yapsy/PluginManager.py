@@ -575,16 +575,16 @@ class PluginManager(object):
 		"""
 		# use imp to correctly load the plugin as a module
 		candidate_module = None
+		filepath_base = candidate_filepath.split('/')[-1]
 		if os.path.isdir(candidate_filepath):
-			if (spec := importlib.util.spec_from_file_location(candidate_filepath.split('/')[-1], candidate_filepath + "/__init__.py")) is not None:
-				candidate_module = importlib.util.module_from_spec(spec)
-				sys.modules[plugin_module_name] = candidate_module
-				spec.loader.exec_module(candidate_module)
+			location = candidate_filepath + '/__init__.py'
 		else:
-			if (spec := importlib.util.spec_from_file_location(candidate_filepath.split('/')[-1], candidate_filepath + ".py")) is not None:
-				candidate_module = importlib.util.module_from_spec(spec)
-				sys.modules[plugin_module_name] = candidate_module
-				spec.loader.exec_module(candidate_module)
+			location = candidate_filepath + '.py'
+
+		if (spec := importlib.util.spec_from_file_location(filepath_base, location)):
+			candidate_module = importlib.util.module_from_spec(spec)
+			sys.modules[plugin_module_name] = candidate_module
+			spec.loader.exec_module(candidate_module)
 		return candidate_module
 	
 	def instanciateElementWithImportInfo(self, element, element_name,
