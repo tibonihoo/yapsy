@@ -580,8 +580,8 @@ class PluginManager(object):
 			location = candidate_filepath + '/__init__.py'
 		else:
 			location = candidate_filepath + '.py'
-
-		if (spec := importlib.util.spec_from_file_location(filepath_base, location)):
+		spec = importlib.util.spec_from_file_location(filepath_base, location)
+		if (spec):
 			candidate_module = importlib.util.module_from_spec(spec)
 			sys.modules[plugin_module_name] = candidate_module
 			spec.loader.exec_module(candidate_module)
