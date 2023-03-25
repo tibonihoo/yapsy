@@ -1,2 +1,5 @@
+
 coverage
-python-coveralls
+pytest
+flake8
+pytest-cov
