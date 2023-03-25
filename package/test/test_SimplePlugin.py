@@ -9,7 +9,7 @@ from yapsy.IPlugin import IPlugin
 from yapsy.PluginFileLocator import PluginFileLocator
 from yapsy.PluginFileLocator import IPluginFileAnalyzer
 from yapsy import NormalizePluginNameForModuleName
-from yapsy.compat import ConfigParser
+from configparser import ConfigParser
 
 class YapsyUtils(unittest.TestCase):
 

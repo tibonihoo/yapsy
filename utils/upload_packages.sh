@@ -10,7 +10,6 @@ activate_release_env
 # Generate package
 rm -r $PACKAGE_DIR/build 
 rm -r $PACKAGE_DIR/dist
-python $PACKAGE_DIR/setup.py sdist bdist_egg
 python3 $PACKAGE_DIR/setup.py bdist_egg
 
 # Upload the package

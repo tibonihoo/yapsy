@@ -5,9 +5,6 @@ with the following two exceptions:
   Attribution-Share Alike 3.0 by Thibauld Nion (see
   artwork/LICENSE.txt)
 
-- the compat.py file is licensed under the ISC License by Kenneth
-  Reitz (see yapsy/compat.py).
-
 
 --------------------
 BSD 2-clause license

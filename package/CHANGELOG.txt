@@ -1,3 +1,6 @@
+version-2.0.0 [????]
+  - code: Python2 support is dropped, compat.py and its variables are gone.
+
 version-1.12.0 [2018-09-02]
   - code: fix yapsy on python3.6
   - code: Make the test more robust to "unusual" unpacking of the module (see: https://sourceforge.net/p/yapsy/bugs/32/)

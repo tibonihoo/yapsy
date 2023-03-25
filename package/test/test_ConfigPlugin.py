@@ -5,7 +5,7 @@ from . import test_settings
 import os 
 import unittest
 
-from yapsy.compat import ConfigParser
+from configparser import ConfigParser
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 
 

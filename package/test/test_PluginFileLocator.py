@@ -4,7 +4,8 @@ from . import test_settings
 import unittest
 import sys
 import os
-from yapsy.compat import ConfigParser, StringIO, str, builtin_str
+from configparser import ConfigParser
+from io import StringIO
 import tempfile
 import shutil
 
@@ -77,18 +78,7 @@ class PluginFileAnalyzerWithInfoFileTest(unittest.TestCase):
 		self.assertFalse(analyzer.isValidPlugin(self.version_plugin_path))
 		self.assertTrue(analyzer.isValidPlugin(self.yapsy_filter_plugin_path))
 
-	def test__extractCorePluginInfo_with_builtin_str_filename(self):
-		plugin_desc_content = builtin_str("simpleplugin.yapsy-plugin")
-		analyzer = PluginFileAnalyzerWithInfoFile("mouf", ("yapsy-plugin"))
-		infos, parser = analyzer._extractCorePluginInfo(self.plugin_directory,
-														plugin_desc_content)
-		self.assertEqual("Simple Plugin", infos["name"])
-		self.assertEqual(os.path.join(self.plugin_directory, "SimplePlugin"), infos["path"])
-
-	def test__extractCorePluginInfo_with_unicode_filename(self):
-		"""Note: this test is redundant with its 'builtin_str' counterpart on Python3
-		but not on Python2"""
-		# Note: compat.py redefines str as unicode for Python2
+	def test__extractCorePluginInfo_with_str_filename(self):
 		plugin_desc_content = str("simpleplugin.yapsy-plugin")
 		analyzer = PluginFileAnalyzerWithInfoFile("mouf", ("yapsy-plugin"))
 		infos, parser = analyzer._extractCorePluginInfo(self.plugin_directory,

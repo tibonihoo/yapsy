@@ -8,7 +8,7 @@ import unittest
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.VersionedPluginManager import VersionedPluginManager
 from yapsy.PluginManager import PluginManagerSingleton
-from yapsy.compat import ConfigParser
+from configparser import ConfigParser
 
 
 """
