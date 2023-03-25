@@ -6,6 +6,7 @@ import unittest
 
 
 from yapsy.PluginInfo import PluginInfo
+from packaging.version import Version
 
 
 class PluginInfoTest(unittest.TestCase):
@@ -20,7 +21,7 @@ class PluginInfoTest(unittest.TestCase):
 		self.assertEqual(None,pi.plugin_object)
 		self.assertEqual([],pi.categories)
 		self.assertEqual(None,pi.error)
-		self.assertEqual("0.0",pi.version)
+		self.assertEqual(Version("0.0"),pi.version)
 		self.assertEqual("Unknown",pi.author)
 		self.assertEqual("Unknown",pi.copyright)
 		self.assertEqual("None",pi.website)

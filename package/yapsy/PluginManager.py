@@ -128,10 +128,7 @@ API
 
 import sys
 import os
-try:
-	import importlib.abc.Loader as imp
-except ImportError:
-	import imp
+import importlib
 
 from yapsy import log
 from yapsy import NormalizePluginNameForModuleName
@@ -577,11 +574,17 @@ class PluginManager(object):
 		.. note:: Isolated and provided to be reused, but not to be reimplemented !
 		"""
 		# use imp to correctly load the plugin as a module
+		candidate_module = None
+		filepath_base = candidate_filepath.split('/')[-1]
 		if os.path.isdir(candidate_filepath):
-			candidate_module = imp.load_module(plugin_module_name,None,candidate_filepath,("py","r",imp.PKG_DIRECTORY))
+			location = candidate_filepath + '/__init__.py'
 		else:
-			with open(candidate_filepath+".py","r") as plugin_file:
-				candidate_module = imp.load_module(plugin_module_name,plugin_file,candidate_filepath+".py",("py","r",imp.PY_SOURCE))
+			location = candidate_filepath + '.py'
+
+		if (spec := importlib.util.spec_from_file_location(filepath_base, location)):
+			candidate_module = importlib.util.module_from_spec(spec)
+			sys.modules[plugin_module_name] = candidate_module
+			spec.loader.exec_module(candidate_module)
 		return candidate_module
 	
 	def instanciateElementWithImportInfo(self, element, element_name,

@@ -11,8 +11,9 @@ API
 ===
 """
 
+
 from configparser import ConfigParser
-from distutils.version import StrictVersion
+from packaging.version import Version
 
 
 class PluginInfo(object):
@@ -105,7 +106,7 @@ class PluginInfo(object):
 
 	
 	def __getVersion(self):
-		return StrictVersion(self.details.get("Documentation","Version"))
+		return Version(self.details.get("Documentation","Version"))
 	
 	def setVersion(self, vstring):
 		"""
@@ -114,7 +115,7 @@ class PluginInfo(object):
 		Used by subclasses to provide different handling of the
 		version number.
 		"""
-		if isinstance(vstring,StrictVersion):
+		if isinstance(vstring,Version):
 			vstring = str(vstring)
 		if not self.details.has_section("Documentation"):
 			self.details.add_section("Documentation")
