@@ -11,4 +11,6 @@ package/Yapsy.egg-info/*
 htmlcov/*
 .coverage
 release_env/*
+.direnv/*
+.envrc
 
