@@ -16,7 +16,7 @@ Get more info on:
   * [ReadTheDoc](https://yapsy.readthedocs.org)
 
 
-Yapsy's development is [hosted at Sourceforge](http://sourceforge.net/projects/yapsy/) but pull requests are also welcome on [github](https://github.com/tibonihoo/yapsy).
+Yapsy's development is hosted on [github](https://github.com/tibonihoo/yapsy).
 
 
 
