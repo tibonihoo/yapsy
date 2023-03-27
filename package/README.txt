@@ -11,11 +11,11 @@ yapsy.PluginManager import PluginManager").
 
 To see more examples, you can have a look at the unit tests inside the
 "test" directory or at the "Showcase and tutorials" section of the
-documentation (http://yapsy.sourceforge.net/#showcase-and-tutorials).
+documentation (https://yapsy.readthedocs.io/en/latest/#showcase-and-tutorials).
 
 Please let me know if you find this useful.
 
-Site of the project: http://yapsy.sourceforge.net/
+Site of the project: hhttps://yapsy.readthedocs.io
 
 List of Contributors:
   - Thibauld Nion
@@ -36,6 +36,5 @@ List of Contributors:
   - Marc Brooks (mbrooks-public)
 
 
-Contributions are welcome as pull requests, patches or tickets on the
-forge (https://sourceforge.net/projects/yapsy/) or on github
+Contributions are welcome as pull requests, patches or tickets on github
 (https://github.com/tibonihoo/yapsy).
