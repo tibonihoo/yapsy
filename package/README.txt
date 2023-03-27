@@ -34,7 +34,7 @@ List of Contributors:
   - Blake Oliver (Oliver2213)
   - Xuecheng Zhang (csuzhangxc)
   - Marc Brooks (mbrooks-public)
-
+  - Ameya Vikram Singh (AmeyaVS)
 
 Contributions are welcome as pull requests, patches or tickets on github
 (https://github.com/tibonihoo/yapsy).
