@@ -14,7 +14,7 @@ class testFilter(FilteredPluginManager):
 	Test filter class.
 	Refused to load plugins whose Name starts with 'C'.
 	"""
-	_bannednames = re.compile("^C")
+	_bannednames = re.compile(r"^C")
 
 	def isPluginOk(self,info):
 		return not self._bannednames.match(info.name)
