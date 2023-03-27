@@ -219,35 +219,11 @@ Please note that the icon is not under the same license but under the
 Forge
 -----
 
-The project is hosted by `Sourceforge`_ where you can access the code, documentation and a tracker to share your feedback and ask for support.
-
-|SourceForge.net|
-
-.. _`Sourceforge`: http://sourceforge.net/projects/yapsy/
-.. |SourceForge.net| image:: http://sflogo.sourceforge.net/sflogo.php?group_id=208383&type=5
-                     :alt: SourceForge.net
-
-
-**Any suggestion and help are much welcome !**
-
-Yapsy is also tested on the continous integration service `TravisCI`_:
-|CITests| |Coverage|
-
-.. _`TravisCI`: https://travis-ci.org/tibonihoo/yapsy
-.. |CITests| image:: https://travis-ci.org/tibonihoo/yapsy.png?branch=master
-             :alt: Continuous integration tests
-.. |Coverage| image:: https://coveralls.io/repos/tibonihoo/yapsy/badge.png?branch=master
-              :alt: Code coverage from continuous integration tests.
-              :target: https://coveralls.io/r/tibonihoo/yapsy?branch=master
-
-A few alternative sites are available:
-
-  * Yapsy's sources are mirrored on `GitHub`_.
+The project is hosted on `GitHub`_.
 
   * To use `pip for a development install`_ you can do something like::
 
        pip install -e "git+https://github.com/tibonihoo/yapsy.git#egg=yapsy&subdirectory=package"
-       pip install -e "hg+http://hg.code.sf.net/p/yapsy/code#egg=yapsy&subdirectory=package"
 
   * A development version of the documentation is available on `ReadTheDoc`_.
 
