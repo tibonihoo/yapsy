@@ -70,7 +70,7 @@ PLUGIN_NAME_FORBIDEN_STRING=";;"
 """
 
 import re
-RE_NON_ALPHANUM = re.compile("\W")
+RE_NON_ALPHANUM = re.compile(r"\W")
 
 
 def NormalizePluginNameForModuleName(pluginName):
