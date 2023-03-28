@@ -15,7 +15,7 @@ documentation (https://yapsy.readthedocs.io/en/latest/#showcase-and-tutorials).
 
 Please let me know if you find this useful.
 
-Site of the project: hhttps://yapsy.readthedocs.io
+Site of the project: https://yapsy.readthedocs.io
 
 List of Contributors:
   - Thibauld Nion
