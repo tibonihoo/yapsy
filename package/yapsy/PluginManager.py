@@ -128,7 +128,7 @@ API
 
 import sys
 import os
-import importlib
+import importlib.util
 
 from yapsy import log
 from yapsy import NormalizePluginNameForModuleName
