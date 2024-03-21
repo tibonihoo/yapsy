@@ -63,7 +63,7 @@ try:
 					 'Topic :: Software Development :: Libraries :: Python Modules'],
 		platforms='All',
 		install_requires = [
-			"packaging"
+			"packaging",
 			]
 		)
 	
