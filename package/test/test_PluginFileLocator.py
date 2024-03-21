@@ -240,11 +240,11 @@ class PluginFileLocatorTest(unittest.TestCase):
 		candidates, num = pl.locatePlugins()
 		self.assertEqual(num,1)
 		self.assertEqual(len(candidates),num)
-		# self.assertEqual(os.path.join(self.plugin_as_dir_directory,self.plugin_info_file),
-		# 				 candidates[0][0])
-		# self.assertEqual(os.path.join(self.plugin_as_dir_directory,self.plugin_name,
-		#							  "__init__"),
-		#				 candidates[0][1])
+		self.assertEqual(os.path.join(self.plugin_as_dir_directory,self.plugin_info_file),
+						 candidates[0][0])
+		self.assertEqual(os.path.join(self.plugin_as_dir_directory,self.plugin_name,
+									  "__init__"),
+						 candidates[0][1])
 		self.assertTrue(isinstance(candidates[0][2],PluginInfo))
 	
 	def test_locatePlugins_when_plugin_is_a_symlinked_directory(self):
@@ -281,11 +281,11 @@ class PluginFileLocatorTest(unittest.TestCase):
 			candidates, num = pl.locatePlugins()
 			self.assertEqual(num,1)
 			self.assertEqual(len(candidates),num)
-			# self.assertEqual(os.path.join(temp_sub_dir,self.plugin_info_file),
-			# 				 candidates[0][0])
-			# self.assertEqual(os.path.join(temp_sub_dir,self.plugin_name,
-			# 							  "__init__"),
-			# 				 candidates[0][1])
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_info_file),
+							 candidates[0][0])
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_name,
+										  "__init__"),
+							 candidates[0][1])
 			self.assertTrue(isinstance(candidates[0][2],PluginInfo))
 		finally:
 			shutil.rmtree(temp_dir)
@@ -345,11 +345,11 @@ class PluginFileLocatorTest(unittest.TestCase):
 			candidates, num = pl.locatePlugins()
 			self.assertEqual(num,1)
 			self.assertEqual(len(candidates),num)
-			# self.assertEqual(os.path.join(temp_sub_dir,self.plugin_info_file),
-			# 				 candidates[0][0])
-			# self.assertEqual(os.path.join(temp_sub_dir,self.plugin_name,
-			# 							  "__init__"),
-			# 				 candidates[0][1])
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_info_file),
+							 candidates[0][0])
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_name,
+										  "__init__"),
+							 candidates[0][1])
 			self.assertTrue(isinstance(candidates[0][2],PluginInfo))
 		finally:
 			shutil.rmtree(temp_dir)
@@ -423,7 +423,232 @@ class PluginFileLocatorTest(unittest.TestCase):
 		self.assertEqual(1,len(simple_plugins))
 		for p in simple_plugins:
 			self.assertTrue(isinstance(p[2],SpecificPluginInfo))
+
+class PluginFileLocatorTest2(unittest.TestCase):
+	"""
+	Test that the "file" locator.
+
+	NB: backward compatible methods are not directly tested here. We
+	rely only on the 'indirect' tests made for the classes that still
+	depend on them.
+	"""
+	
+	def setUp(self):
+		"""
+		init
+		"""
+		self.plugin_directory  = os.path.join(
+			os.path.dirname(os.path.abspath(__file__)),
+			"plugins")
+		self.plugin_as_dir_directory  = os.path.join(
+			os.path.dirname(os.path.abspath(__file__)),
+			"pluginsasdirs2")
+		self.plugin_info_file = "simplepluginasdir.yapsy-plugin"
+		self.plugin_name = "SimplePluginAsDir"
+		self.plugin_impl_file = self.plugin_name+".py"
 		
+	def test_default_plugins_place_is_parent_dir(self):
+		"""Test a non-trivial default behaviour introduced some time ago :S"""
+		pl = PluginFileLocator()
+		expected_yapsy_module_path = os.path.dirname(yapsy.__file__)
+		first_plugin_place = pl.plugins_places[0]
+		self.assertEqual(expected_yapsy_module_path, first_plugin_place)
+	
+	def test_given_string_as_plugin_places_raises_error(self):
+		pl = PluginFileLocator()
+		self.assertRaises(ValueError, pl.setPluginPlaces, "/mouf")
+
+			
+	def test_locatePlugins_when_plugin_is_a_directory(self):
+		pl = PluginFileLocator()
+		pl.setPluginPlaces([self.plugin_as_dir_directory])
+		candidates, num = pl.locatePlugins()
+		self.assertEqual(num, 1)
+		self.assertEqual(len(candidates),num)
+		self.assertEqual(os.path.join(self.plugin_as_dir_directory,self.plugin_info_file),
+						 candidates[0][0])
+		self.assertEqual(os.path.join(self.plugin_as_dir_directory,self.plugin_name,
+									  "__init__"),
+						 candidates[0][1])
+		self.assertTrue(isinstance(candidates[0][2],PluginInfo))
+	
+	def test_locatePlugins_when_plugin_is_a_symlinked_directory(self):
+		if sys.platform.startswith("win"):
+			return
+		temp_dir = tempfile.mkdtemp()
+		try:
+			plugin_info_file = "simplepluginasdir.yapsy-plugin"
+			plugin_impl_dir = "SimplePluginAsDir"
+			os.symlink(os.path.join(self.plugin_as_dir_directory,plugin_info_file),
+					   os.path.join(temp_dir,plugin_info_file))
+			os.symlink(os.path.join(self.plugin_as_dir_directory,plugin_impl_dir),
+					   os.path.join(temp_dir,plugin_impl_dir))			
+			pl = PluginFileLocator()
+			pl.setPluginPlaces([temp_dir])
+			candidates, num = pl.locatePlugins()
+			self.assertEqual(num,1)
+			self.assertEqual(len(candidates),num)
+			self.assertEqual(os.path.join(temp_dir,self.plugin_info_file),
+							 candidates[0][0])
+			self.assertEqual(os.path.join(temp_dir,self.plugin_name,"__init__"),
+							 candidates[0][1])
+			self.assertTrue(isinstance(candidates[0][2],PluginInfo))
+		finally:
+			shutil.rmtree(temp_dir)
+			
+	def test_locatePlugins_recursively_when_plugin_is_a_directory(self):
+		temp_dir = tempfile.mkdtemp()
+		try:
+			temp_sub_dir = os.path.join(temp_dir,"plugins")
+			shutil.copytree(self.plugin_as_dir_directory,temp_sub_dir)
+			pl = PluginFileLocator()
+			pl.setPluginPlaces([temp_dir])
+			candidates, num = pl.locatePlugins()
+			self.assertEqual(num, 1)
+			self.assertEqual(len(candidates),num)
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_info_file),
+							 candidates[0][0])
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_name,
+										  "__init__"),
+							 candidates[0][1])
+			self.assertTrue(isinstance(candidates[0][2],PluginInfo))
+		finally:
+			shutil.rmtree(temp_dir)
+	
+	def test_locatePlugins_recursively_fails_when_recursion_is_disabled(self):
+		temp_dir = tempfile.mkdtemp()
+		try:
+			temp_sub_dir = os.path.join(temp_dir,"plugins")
+			shutil.copytree(self.plugin_as_dir_directory,temp_sub_dir)
+			pl = PluginFileLocator()
+			pl.disableRecursiveScan()
+			pl.setPluginPlaces([temp_dir])
+			candidates, num = pl.locatePlugins()
+			self.assertEqual(num,0)
+			self.assertEqual(len(candidates),num)
+		finally:
+			shutil.rmtree(temp_dir)
+			
+	def test_locatePlugins_recursively_when_plugin_is_a_symlinked_directory(self):
+		if sys.platform.startswith("win"):
+			return
+		temp_dir = tempfile.mkdtemp()
+		try:
+			temp_sub_dir = os.path.join(temp_dir,"plugins")
+			os.mkdir(temp_sub_dir)
+			plugin_info_file = "simplepluginasdir.yapsy-plugin"
+			plugin_impl_dir = "SimplePluginAsDir"
+			os.symlink(os.path.join(self.plugin_as_dir_directory,plugin_info_file),
+					   os.path.join(temp_sub_dir,plugin_info_file))
+			os.symlink(os.path.join(self.plugin_as_dir_directory,plugin_impl_dir),
+					   os.path.join(temp_sub_dir,plugin_impl_dir))
+			pl = PluginFileLocator()
+			pl.setPluginPlaces([temp_dir])
+			candidates, num = pl.locatePlugins()
+			self.assertEqual(num,1)
+			self.assertEqual(len(candidates),num)
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_info_file),
+							 candidates[0][0])
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_name,
+										  "__init__"),
+							 candidates[0][1])
+			self.assertTrue(isinstance(candidates[0][2],PluginInfo))
+		finally:
+			shutil.rmtree(temp_dir)
+	
+	def test_locatePlugins_recursively_when_plugin_parent_dir_is_a_symlinked_directory(self):
+		if sys.platform.startswith("win"):
+			return
+		# This actually reproduced the "Plugin detection doesn't follow symlinks" bug
+		# at http://sourceforge.net/p/yapsy/bugs/19/
+		temp_dir = tempfile.mkdtemp()
+		try:
+			temp_sub_dir = os.path.join(temp_dir,"plugins")
+			os.symlink(self.plugin_as_dir_directory,temp_sub_dir)
+			pl = PluginFileLocator()
+			pl.setPluginPlaces([temp_dir])
+			candidates, num = pl.locatePlugins()
+			self.assertEqual(num, 1)
+			self.assertEqual(len(candidates),num)
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_info_file),
+							 candidates[0][0])
+			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_name,
+										  "__init__"),
+							 candidates[0][1])
+			self.assertTrue(isinstance(candidates[0][2],PluginInfo))
+		finally:
+			shutil.rmtree(temp_dir)
+	
+	def test_gatherCorePluginInfo(self):
+		pl = PluginFileLocator()
+		plugin_info,cf_parser = pl.gatherCorePluginInfo(self.plugin_directory,"simpleplugin.yapsy-plugin")
+		self.assertTrue(plugin_info.name,"Simple Plugin")
+		self.assertTrue(isinstance(cf_parser,ConfigParser))
+		plugin_info,cf_parser = pl.gatherCorePluginInfo(self.plugin_directory,"notaplugin.atall")
+		self.assertEqual(plugin_info,None)
+		self.assertEqual(cf_parser,None)
+		
+	def test_setAnalyzer(self):
+		pl = PluginFileLocator()
+		pl.setPluginPlaces([self.plugin_directory])
+		newAnalyzer = PluginFileAnalyzerMathingRegex("mouf",r".*VersionedPlugin\d+\.py$")
+		pl.setAnalyzers([newAnalyzer])
+		candidates, num = pl.locatePlugins()
+		self.assertEqual(num,4)
+		self.assertEqual(len(candidates),num)
+		
+	def test_appendAnalyzer(self):
+		pl = PluginFileLocator()
+		pl.setPluginPlaces([self.plugin_directory])
+		newAnalyzer = PluginFileAnalyzerMathingRegex("mouf",r".*VersionedPlugin\d+\.py$")
+		pl.appendAnalyzer(newAnalyzer)
+		candidates, num = pl.locatePlugins()
+		self.assertEqual(num,5)
+		self.assertEqual(len(candidates),num)
+
+	def test_removeAnalyzers_when_analyzer_is_unknown(self):
+		pl = PluginFileLocator()
+		pl.setPluginPlaces([self.plugin_directory])
+		pl.removeAnalyzers("nogo")
+
+	def test_removeAnalyzers(self):
+		pl = PluginFileLocator()
+		pl.setPluginPlaces([self.plugin_directory])
+		newAnalyzer = PluginFileAnalyzerMathingRegex("mouf",r".*VersionedPlugin\d+\.py$")
+		pl.appendAnalyzer(newAnalyzer)
+		pl.removeAnalyzers("info_ext")
+		candidates, num = pl.locatePlugins()
+		self.assertEqual(num,4)
+		self.assertEqual(len(candidates),num)
+		
+	def test_removeAllAnalyzers(self):
+		pl = PluginFileLocator()
+		pl.setPluginPlaces([self.plugin_directory])
+		pl.removeAllAnalyzer()
+		candidates, num = pl.locatePlugins()
+		self.assertEqual(num,0)
+		self.assertEqual(len(candidates),num)
+
+	def test_setPluginInfoClass_for_named_analyzer(self):
+		class SpecificPluginInfo(PluginInfo):
+			pass
+		pl = PluginFileLocator()
+		pl.setPluginPlaces([self.plugin_directory])
+		newAnalyzer = PluginFileAnalyzerMathingRegex("mouf",r".*VersionedPlugin\d+\.py$")
+		pl.appendAnalyzer(newAnalyzer)
+		pl.setPluginInfoClass(SpecificPluginInfo,"info_ext")
+		candidates, num = pl.locatePlugins()
+		self.assertEqual(num,5)
+		self.assertEqual(len(candidates),num)
+		versioned_plugins = [c for c in candidates if "VersionedPlugin" in c[0]]
+		self.assertEqual(4,len(versioned_plugins))
+		for p in versioned_plugins:
+			self.assertTrue(isinstance(p[2],PluginInfo))
+		simple_plugins = [c for c in candidates if "VersionedPlugin" not in c[0]]
+		self.assertEqual(1,len(simple_plugins))
+		for p in simple_plugins:
+			self.assertTrue(isinstance(p[2],SpecificPluginInfo))
+
 
 class PluginManagerSetUpTest(unittest.TestCase):
 
