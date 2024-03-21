@@ -581,7 +581,7 @@ class PluginManager(object):
 			parent_name = os.path.relpath(parent_name).replace('/', '.')
 			#parent_name = parent_name.replace('/', '.')
 			# TODO: Remove Debug Prints
-			print(parent_name)
+			# print(parent_name)
 			absolute_name = importlib.util.resolve_name(f".{filepath_base}", f"{parent_name}")
 		else:
 			absolute_name = importlib.util.resolve_name(plugin_module_name, candidate_filepath)

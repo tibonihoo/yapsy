@@ -5,6 +5,7 @@ This is certainly the second simplest plugin ever.
 """
 
 from yapsy.IPlugin import IPlugin
+from .hello import hello
 
 class SimplePlugin(IPlugin):
 	"""
@@ -25,6 +26,7 @@ class SimplePlugin(IPlugin):
 		"""
 		# get the automatic procedure from IPlugin
 		IPlugin.activate(self)
+		hello.print()
 		return
 
 

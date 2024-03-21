@@ -28,6 +28,8 @@ class SimplePluginAsDir(IPlugin):
         """
         # get the automatic procedure from IPlugin
         IPlugin.activate(self)
+        s = somerandom()
+        s.print()
         return
 
     def deactivate(self):
