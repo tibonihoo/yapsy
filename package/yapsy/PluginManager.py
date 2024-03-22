@@ -583,7 +583,7 @@ class PluginManager(object):
 			location = candidate_filepath + '.py'
 		# spec = importlib.util.spec_from_file_location(filepath_base, location)
 		loader = importlib.machinery.SourceFileLoader(filepath_base, location)
-		##print(loader.is_package(filepath_base))
+		#print(loader.is_package(filepath_base))
 		is_package = loader.is_package(filepath_base)
 		spec = importlib.util.spec_from_loader(
 			filepath_base,
@@ -593,46 +593,11 @@ class PluginManager(object):
 		if (spec):
 			candidate_module = importlib.util.module_from_spec(spec)
 			sys.modules[plugin_module_name] = candidate_module
+			# TODO Need to review following line
 			sys.modules[filepath_base] = candidate_module
 			spec.loader.exec_module(candidate_module)
 		return candidate_module
-		# if(candidate_filepath != None):
-		# 	# For Importing Directory based Python Packages
-		# 	filepath_base = candidate_filepath.split('/')[-1]
-		# 	parent_name, _, child_name = candidate_filepath.rpartition('/')
-		# 	# Convert python style relative import statements
-		# 	parent_name = os.path.relpath(parent_name)
-		# 	print(parent_name)
-		# 	parent_name = os.path.realpath(parent_name).replace('/', '.')
-		# 	#parent_name = parent_name.replace('/', '.')
-		# 	# TODO: Remove Debug Prints
-		# 	# print(parent_name)
-		# 	absolute_name = importlib.util.resolve_name(f".{filepath_base}", f"{parent_name}")
-		# else:
-		# 	absolute_name = importlib.util.resolve_name(plugin_module_name, candidate_filepath)
-		# try:
-		# 	return sys.modules[plugin_module_name]
-		# except KeyError:
-		# 	pass
 
-		# path = None
-		# if '.' in absolute_name:
-		# 	parent_name, _, child_name = absolute_name.rpartition('.')
-		# 	parent_module = PluginManager._importModule(parent_name, None)
-		# 	path = parent_module.__spec__.submodule_search_locations
-		# for finder in sys.meta_path:
-		# 	spec = finder.find_spec(absolute_name, path)
-		# 	if spec is not None:
-		# 		break
-		# else:
-		# 	msg = f'No module named {absolute_name!r}'
-		# 	raise ModuleNotFoundError(msg, name=absolute_name)
-		# candidate_module = importlib.util.module_from_spec(spec)
-		# sys.modules[plugin_module_name] = candidate_module
-		# spec.loader.exec_module(candidate_module)
-		# if path is not None:
-		# 	setattr(parent_module, child_name, candidate_module)
-		# return candidate_module
 	
 	def instanciateElementWithImportInfo(self, element, element_name,
 										 plugin_module_name, candidate_filepath):
