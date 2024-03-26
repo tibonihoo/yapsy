@@ -145,6 +145,7 @@ from yapsy import PLUGIN_NAME_FORBIDEN_STRING
 # imported for backward compatibility (this PluginInfo was imported
 # here before 1.10)
 from yapsy.PluginInfo import PluginInfo
+import inspect
 
 
 class PluginManager(object):
@@ -530,7 +531,7 @@ class PluginManager(object):
 				plugin_info_reference = None
 				for category_name in self.categories_interfaces:
 					try:
-						is_correct_subclass = issubclass(element, self.categories_interfaces[category_name])
+						is_correct_subclass = inspect.isclass(element) and issubclass(element, self.categories_interfaces[category_name])
 					except Exception:
 						exc_info = sys.exc_info()
 						log.debug("correct subclass tests failed for: %s in %s" % (element_name, candidate_filepath), exc_info=exc_info)
