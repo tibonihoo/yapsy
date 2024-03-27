@@ -62,6 +62,9 @@ try:
 					 'Programming Language :: Python :: 3',
 					 'Topic :: Software Development :: Libraries :: Python Modules'],
 		platforms='All',
+		install_requires = [
+			"packaging",
+			]
 		)
 	
 finally:

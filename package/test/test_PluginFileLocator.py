@@ -238,7 +238,7 @@ class PluginFileLocatorTest(unittest.TestCase):
 		pl = PluginFileLocator()
 		pl.setPluginPlaces([self.plugin_as_dir_directory])
 		candidates, num = pl.locatePlugins()
-		self.assertEqual(num,1)
+		self.assertEqual(num,2)
 		self.assertEqual(len(candidates),num)
 		self.assertEqual(os.path.join(self.plugin_as_dir_directory,self.plugin_info_file),
 						 candidates[0][0])
@@ -279,7 +279,7 @@ class PluginFileLocatorTest(unittest.TestCase):
 			pl = PluginFileLocator()
 			pl.setPluginPlaces([temp_dir])
 			candidates, num = pl.locatePlugins()
-			self.assertEqual(num,1)
+			self.assertEqual(num,2)
 			self.assertEqual(len(candidates),num)
 			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_info_file),
 							 candidates[0][0])
@@ -343,7 +343,7 @@ class PluginFileLocatorTest(unittest.TestCase):
 			pl = PluginFileLocator()
 			pl.setPluginPlaces([temp_dir])
 			candidates, num = pl.locatePlugins()
-			self.assertEqual(num,1)
+			self.assertEqual(num,2)
 			self.assertEqual(len(candidates),num)
 			self.assertEqual(os.path.join(temp_sub_dir,self.plugin_info_file),
 							 candidates[0][0])
@@ -423,7 +423,7 @@ class PluginFileLocatorTest(unittest.TestCase):
 		self.assertEqual(1,len(simple_plugins))
 		for p in simple_plugins:
 			self.assertTrue(isinstance(p[2],SpecificPluginInfo))
-		
+
 
 class PluginManagerSetUpTest(unittest.TestCase):
 

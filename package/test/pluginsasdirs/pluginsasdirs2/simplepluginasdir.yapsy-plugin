@@ -1,0 +1,8 @@
+[Core]
+Name = Simple Plugin As Dir
+Module = SimplePluginAsDir
+
+[Documentation]
+Author = Ameya Vikram Singh
+Version = 0.1
+Description = A simple plugin useful for basic testing
