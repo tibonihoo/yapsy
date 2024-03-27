@@ -129,7 +129,6 @@ API
 import sys
 import os
 import importlib.util
-import importlib.machinery
 
 from yapsy import log
 from yapsy import NormalizePluginNameForModuleName
@@ -575,27 +574,17 @@ class PluginManager(object):
 
 		.. note:: Isolated and provided to be reused, but not to be reimplemented !
 		"""
-		# use imp to correctly load the plugin as a module
 		candidate_module = None
-		filepath_base = candidate_filepath.split('/')[-1]
+		submodule_search_locations = None
 		if os.path.isdir(candidate_filepath):
 			location = candidate_filepath + '/__init__.py'
+			submodule_search_locations = []
 		else:
 			location = candidate_filepath + '.py'
-		# spec = importlib.util.spec_from_file_location(filepath_base, location)
-		loader = importlib.machinery.SourceFileLoader(filepath_base, location)
-		#print(loader.is_package(filepath_base))
-		is_package = loader.is_package(filepath_base)
-		spec = importlib.util.spec_from_loader(
-			filepath_base,
-			loader,
-			is_package=is_package
-			)
-		if (spec):
+		spec = importlib.util.spec_from_file_location(plugin_module_name, location, submodule_search_locations=submodule_search_locations)
+		if spec != None:
 			candidate_module = importlib.util.module_from_spec(spec)
 			sys.modules[plugin_module_name] = candidate_module
-			# TODO Need to review following line
-			sys.modules[filepath_base] = candidate_module
 			spec.loader.exec_module(candidate_module)
 		return candidate_module
 
